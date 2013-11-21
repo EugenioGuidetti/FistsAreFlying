@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\MoveSelectedPlayer1.cs" />
      <Compile Include="Assets\Scripts\MoveSelectedPlayer2.cs" />
+     <Compile Include="Assets\Scripts\Shield.cs" />
      <Compile Include="Assets\Scripts\_gameLogic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
