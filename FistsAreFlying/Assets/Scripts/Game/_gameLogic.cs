@@ -10,61 +10,106 @@ public class _gameLogic : MonoBehaviour {
 		RightPunch,
 		RightKick,
 		Defense,
-		EmptyMove
+		EmptyMove,
+		NoChoose
 	};
+
 
 	public bool selectionPhase=false;
 	public float player1Health=20;
 	public float player2Health=20;
 	public int normalDamage=2;
+	public float countdownValue;
 
-	int numberChoose;
+	private int numberChoose;
 
-	GameObject player1Choose;
-	Move movePlayer1;
-	Sprite spritePlayer1;
-	GameObject player1Moves;
+	private GameObject countdownText;
+	private GameObject player1Choose;
+	private Move movePlayer1;
+	private Sprite spritePlayer1;
+	private GameObject player1Moves;
 
 
-	GameObject player2Choose;
-	Move movePlayer2;
-	Sprite spritePlayer2;
-	GameObject player2Moves;
+	private GameObject player2Choose;
+	private Move movePlayer2;
+	private Sprite spritePlayer2;
+	private GameObject player2Moves;
 
-	private int numberMoves=5;
+	private float healthUnit;
+	static private int numberMoves=5;
 	private int turn;
+	private int moveCount1,moveCount2;
 	private SpriteRenderer healthBar1;		
 	private SpriteRenderer healthBar2;
 	private Vector3 healthScale;
 	private Sprite coverCard;
+	private Sprite emptyMove;
 
-	Hashtable moves= new Hashtable();
-	Hashtable rules= new Hashtable();
-	ArrayList movesPlayer1= new ArrayList();
-	ArrayList movesPlayer2= new ArrayList();
-
+	private Hashtable moves= new Hashtable();
+	private Hashtable rules= new Hashtable();
+	private string[] movesPlayer1= new string[numberMoves];
+	private string[] movesPlayer2= new string[numberMoves];
+	private float countdown;
+	private bool chooseActive;
 
 	// Use this for initialization
 	void Start () {
+	
+		inizializeVariables();
+		inizializeGameObject();
+		inizializeHashTables();
+		//if is time turn match do this
+		StartCoroutine(StartCountdown());
+	}
 
+	void inizializeVariables(){		
+		//set the countdownValue if is turn time match
+		countdownValue=15;
+		//set chooseActive if is turn time match;
+		chooseActive=true;
 		turn=1;
+		healthUnit=1f/player1Health;
+		
+		moveCount1=0;
+		moveCount2=0;
+		movePlayer1=(Move) Move.NoChoose;
+		movePlayer2=(Move) Move.NoChoose;
+		
+		selectionPhase=true;
+		
+		numberChoose=0;
+		
+	}
 
-
-
+	void inizializeGameObject(){
+		
+		countdownText= GameObject.Find("Countdown");
+		
 		player1Choose= GameObject.Find("Player1Choose");
 		player1Moves= GameObject.Find ("Player1Moves");
 		player2Choose= GameObject.Find("Player2Choose");
 		player2Moves= GameObject.Find ("Player2Moves");
-
+		
 		coverCard=player1Choose.GetComponent<SpriteRenderer>().sprite;
+		emptyMove= GameObject.Find("EmptySprite").GetComponent<SpriteRenderer>().sprite;
 
+		healthBar1 = GameObject.Find("Player1HealthBar").GetComponent<SpriteRenderer>();
+		healthBar2 = GameObject.Find("Player2HealthBar").GetComponent<SpriteRenderer>();
+		healthScale = healthBar1.transform.localScale;
+
+		
+	}
+
+
+	void inizializeHashTables(){
+	
 		moves.Add("Left Kick",Move.LeftKick);
 		moves.Add("Right Kick",Move.RightKick);
 		moves.Add("Left Punch",Move.LeftPunch);
 		moves.Add("Right Punch",Move.RightPunch);
 		moves.Add("Defense",Move.Defense);
 		moves.Add("Empty Move",Move.EmptyMove);
-
+		
 		rules.Add (Move.LeftKick.ToString()+Move.LeftPunch.ToString(), "player1");
 		rules.Add (Move.LeftPunch.ToString()+Move.RightKick.ToString(), "player1");
 		rules.Add (Move.RightKick.ToString ()+Move.RightPunch.ToString(), "player1");
@@ -77,54 +122,95 @@ public class _gameLogic : MonoBehaviour {
 		rules.Add (Move.RightKick.ToString()+Move.LeftKick.ToString(), "scontro");
 		rules.Add (Move.RightPunch.ToString()+Move.LeftPunch.ToString(),"scontro");
 		rules.Add (Move.LeftPunch.ToString()+Move.RightPunch.ToString(),"scontro");
-
-		selectionPhase=true;
-
-		numberChoose=0;
-		healthBar1 = GameObject.Find("Player1HealthBar").GetComponent<SpriteRenderer>();
-		healthBar2 = GameObject.Find("Player2HealthBar").GetComponent<SpriteRenderer>();
-		healthScale = healthBar1.transform.localScale;
-		
-
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(chooseActive==false)
+		{
+			StartCoroutine(mainFlow ());
+			chooseActive=true;
+		}
+
 	}
 
 
 
 	public void setPlayerMove (string move, int player, Sprite sprite){
-		if (player==1){
-			movePlayer1= (Move) moves[move];
-			movesPlayer1.Add(movePlayer1);
-			spritePlayer1= sprite;
-			Debug.Log(movePlayer1.ToString()+" Player1");
-			numberChoose++;
+			if (player==1 && chooseActive){
+				movePlayer1= (Move) moves[move];
+				if(!(movePlayer1==Move.EmptyMove))
+				{
+					movesPlayer1[moveCount1]=move;
+					moveCount1++;
+				}
+				spritePlayer1= sprite;
+				Debug.Log(movePlayer1.ToString()+" Player1");
+				numberChoose++;
 
-		}
-		else {
-			movePlayer2= (Move) moves[move];
-			movesPlayer2.Add (movePlayer2);
-			spritePlayer2=sprite;
-			Debug.Log(movePlayer2.ToString()+" Player2");
-			numberChoose++;
-		}
-		if (numberChoose==2){
-			numberChoose=0;
-			selectionPhase=false;
-			StartCoroutine(Waiting());
+			}
+			if(player==2 && chooseActive) {
+				movePlayer2= (Move) moves[move];
+				if(!(movePlayer2==Move.EmptyMove))
+				{
+					movesPlayer1[moveCount2]=move;
+					moveCount2++;
+				}
+				spritePlayer2=sprite;
+				Debug.Log(movePlayer2.ToString()+" Player2");
+				numberChoose++;
+			}
+		if(numberChoose==2){
+			chooseActive=false;
+			selectionPhase=false;	
+			StopAllCoroutines();
 		}
 	}
 
-	IEnumerator Waiting(){
-		Debug.Log("Fin qui ci siamo");
+	void playerMoveChosen (){
+		if (movePlayer1==Move.NoChoose)
+			{
+				player1Moves.SetActive(false);
+				player1Choose.GetComponent<SpriteRenderer>().enabled=true;
+				movePlayer1=(Move) Move.EmptyMove;
+				spritePlayer1=emptyMove;
+			}
+		if (movePlayer2==Move.NoChoose)
+			{
+				player2Moves.SetActive(false);
+				player2Choose.GetComponent<SpriteRenderer>().enabled=true;
+				movePlayer2=(Move) Move.EmptyMove;
+				spritePlayer2=emptyMove;
+			}
+		Debug.Log(movePlayer1.ToString());
+		Debug.Log (movePlayer2.ToString());
+		selectionPhase=false;	
+		chooseActive=false;
+	}
+
+	IEnumerator StartCountdown()
+	{
+		countdown = countdownValue;
+		while (countdown >0)
+		{
+			yield return new WaitForSeconds(1.0f);
+			countdown --;
+			countdownText.GetComponent<GUIText>().text= countdown.ToString();
+		}
+		playerMoveChosen();
+	}
+	
+
+
+	IEnumerator mainFlow(){
+
 		yield return new WaitForSeconds(2);
-		Debug.Log("Sono passati 2 secondi spero");
 		flipCard ();
 		yield return new WaitForSeconds(2);
 		calculateDamage();
-		yield return new WaitForSeconds(2);
+		UpdateHealthBar(healthBar1, player1Health);
+		UpdateHealthBar(healthBar2, player2Health);
+		//yield return new WaitForSeconds(2);
 		prepareNextTurn();
 
 	}
@@ -173,24 +259,53 @@ public class _gameLogic : MonoBehaviour {
 
 	}
 
+
 	void prepareNextTurn(){
-		selectionPhase=true;
 		player1Moves.SetActive(true);
+		if(moveCount1==5){
+			enableSprite(player1Moves.GetComponentsInChildren<SpriteRenderer>());
+			enableCollider(player1Moves.GetComponentsInChildren<BoxCollider2D>());
+			moveCount1=0;
+		}
 		player2Moves.SetActive(true);
+		if(moveCount2==5){
+			enableSprite(player2Moves.GetComponentsInChildren<SpriteRenderer>());
+			enableCollider (player2Moves.GetComponentsInChildren<BoxCollider2D>());
+			moveCount2=0;
+		}
 		player1Choose.GetComponent<SpriteRenderer>().enabled=false;
 		player2Choose.GetComponent<SpriteRenderer>().enabled=false;
 		player1Choose.GetComponent<SpriteRenderer>().sprite= coverCard;
 		player2Choose.GetComponent<SpriteRenderer>().sprite= coverCard;
 		numberChoose=0;
+		countdownText.GetComponent<GUIText>().text="TIME";
+		movePlayer1=(Move) Move.NoChoose;
+		movePlayer2=(Move) Move.NoChoose;
+		//if is time turn match lunch this!
+		StartCoroutine(StartCountdown());
+		selectionPhase=true;
 	}
 
-	void UpdateHealthBar ()
+	private void enableSprite ( SpriteRenderer[] ourRenderer)
 	{
-		healthBar1.material.color = Color.Lerp(Color.green, Color.red, 1 - player1Health * 0.01f);
-		healthBar1.transform.localScale = new Vector3(healthScale.x * player1Health * 0.05f, 1, 1);
-		healthBar2.material.color = Color.Lerp(Color.green, Color.red, 1 - player2Health * 0.01f);
-		healthBar2.transform.localScale = new Vector3(healthScale.x * player2Health * 0.05f, 1, 1);
+		foreach(SpriteRenderer renderer in ourRenderer)
+		{
+			renderer.enabled = true;
+		}
+	}
 
+	private void enableCollider (BoxCollider2D[] ourCollider){
+		foreach(BoxCollider2D collider in ourCollider)
+		{
+			collider.enabled = true;
+		}
+	}
+
+	void UpdateHealthBar (SpriteRenderer healthBar, float playerHealth)
+	{
+	
+		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - playerHealth * healthUnit);
+		healthBar.transform.localScale = new Vector3(healthScale.x * playerHealth * healthUnit, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 	}
 
 
