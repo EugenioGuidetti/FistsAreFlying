@@ -16,9 +16,14 @@ public class MoveSelectedPlayer2 : MonoBehaviour {
 	void Update () {
 	}
 
-	void OnMouseDown() {
+	void OnMouseDown () {
 		if (gameLogic.selectionPhase){
 			player2Choose.GetComponent<SpriteRenderer>().enabled=true;
+			if(tag!="Empty Move")
+			{
+				GetComponent<SpriteRenderer>().enabled=false;
+				GetComponent<BoxCollider2D>().enabled=false;
+			}
 			player2Moves.SetActive(false);
 			gameLogic.setPlayerMove(this.tag.ToString(), 2, this.GetComponent<SpriteRenderer>().sprite);
 		}

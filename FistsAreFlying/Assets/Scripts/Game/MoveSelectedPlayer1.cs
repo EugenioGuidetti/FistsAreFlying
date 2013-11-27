@@ -12,30 +12,19 @@ public class MoveSelectedPlayer1 : MonoBehaviour {
 		player1Moves= GameObject.Find("Player1Moves");
 	}
 	
-	// Update is called once per frame
-	//void Update () {
-	//	if (Input.GetMouseButtonDown(0) && gameLogic.selectionPhase)
-	//	{
-			//Creating container for the raycast result
-	//		RaycastHit hitInfo = new RaycastHit();
-			//Making the raycast
-			//if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
-		//	{
-		//		if (hitInfo.transform.tag=="LeftPunch")
-		//		{
-		//			player1Choose.GetComponent<SpriteRenderer>().enabled=true;
-		//		}
-		//	}
-	//	}
+	void Update () {
+	}
 
-	//}
 	void OnMouseDown () {
 		if (gameLogic.selectionPhase){
 			player1Choose.GetComponent<SpriteRenderer>().enabled=true;
-			enabled=false;
+			if(tag!="Empty Move")
+			{
+				GetComponent<SpriteRenderer>().enabled=false;
+				GetComponent<BoxCollider2D>().enabled=false;
+			}
 			player1Moves.SetActive(false);
 			gameLogic.setPlayerMove(this.tag.ToString(), 1, this.GetComponent<SpriteRenderer>().sprite);
-	
 		}
 	}
 

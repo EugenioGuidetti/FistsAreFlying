@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 public class _gameLogic : MonoBehaviour {
 	enum Move
 	{
@@ -23,12 +22,13 @@ public class _gameLogic : MonoBehaviour {
 
 	private int numberChoose;
 
+	private GameObject globalObject;
 	private GameObject countdownText;
 	private GameObject player1Choose;
 	private Move movePlayer1;
 	private Sprite spritePlayer1;
 	private GameObject player1Moves;
-
+	private bool isTurnTimeGame;
 
 	private GameObject player2Choose;
 	private Move movePlayer2;
@@ -58,8 +58,12 @@ public class _gameLogic : MonoBehaviour {
 		inizializeVariables();
 		inizializeGameObject();
 		inizializeHashTables();
-		//if is time turn match do this
-		StartCoroutine(StartCountdown());
+		if(isTurnTimeGame){
+			StartCoroutine(StartCountdown());
+		}
+		else {
+			countdownText.SetActive(false);
+		}
 	}
 
 	void inizializeVariables(){		
@@ -84,7 +88,9 @@ public class _gameLogic : MonoBehaviour {
 	void inizializeGameObject(){
 		
 		countdownText= GameObject.Find("Countdown");
-		
+
+		globalObject=GameObject.Find("GlobalObject");
+		isTurnTimeGame= globalObject.GetComponent<GlobalObject>().turnTimeGame;
 		player1Choose= GameObject.Find("Player1Choose");
 		player1Moves= GameObject.Find ("Player1Moves");
 		player2Choose= GameObject.Find("Player2Choose");
@@ -170,6 +176,7 @@ public class _gameLogic : MonoBehaviour {
 	void playerMoveChosen (){
 		if (movePlayer1==Move.NoChoose)
 			{
+				Debug.Log("entrato");
 				player1Moves.SetActive(false);
 				player1Choose.GetComponent<SpriteRenderer>().enabled=true;
 				movePlayer1=(Move) Move.EmptyMove;
@@ -278,11 +285,12 @@ public class _gameLogic : MonoBehaviour {
 		player1Choose.GetComponent<SpriteRenderer>().sprite= coverCard;
 		player2Choose.GetComponent<SpriteRenderer>().sprite= coverCard;
 		numberChoose=0;
-		countdownText.GetComponent<GUIText>().text="TIME";
 		movePlayer1=(Move) Move.NoChoose;
 		movePlayer2=(Move) Move.NoChoose;
-		//if is time turn match lunch this!
-		StartCoroutine(StartCountdown());
+		if(isTurnTimeGame){
+			StartCoroutine(StartCountdown());
+			countdownText.GetComponent<GUIText>().text="TIME";
+		}
 		selectionPhase=true;
 	}
 

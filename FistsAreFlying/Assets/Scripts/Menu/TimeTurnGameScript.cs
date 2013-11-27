@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NormalGameScript : MonoBehaviour {
+public class TimeTurnGameScript : MonoBehaviour {
 	GameObject globalObject;
 	GameObject playChoice;
 	GameObject modeChoice;
@@ -12,18 +12,18 @@ public class NormalGameScript : MonoBehaviour {
 		playChoice= GameObject.Find("PlayChoice");
 		modeChoice= GameObject.Find("ModeChoice");
 		translateCoordinate=new Vector3(-20f,0f,0f);
-	
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
-
+	
 	void OnMouseDown(){
-		globalObject.GetComponent("GlobalObject").SendMessage("setTurnTimeGame", false);
+		globalObject.GetComponent("GlobalObject").SendMessage("setTurnTimeGame", true);
 		playChoice.GetComponent<Transform>().Translate(translateCoordinate);
 		modeChoice.GetComponent<Transform>().Translate(translateCoordinate);
 	}
-
+	
 }
