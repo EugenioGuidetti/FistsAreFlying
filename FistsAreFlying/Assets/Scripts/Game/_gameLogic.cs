@@ -52,6 +52,8 @@ public class _gameLogic : MonoBehaviour {
 	private float countdown;
 	private bool chooseActive;
 
+	private int round;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -67,9 +69,6 @@ public class _gameLogic : MonoBehaviour {
 	}
 
 	void inizializeVariables(){		
-		//set the countdownValue if is turn time match
-		countdownValue=15;
-		//set chooseActive if is turn time match;
 		chooseActive=true;
 		turn=1;
 		healthUnit=1f/player1Health;
@@ -91,6 +90,14 @@ public class _gameLogic : MonoBehaviour {
 
 		globalObject=GameObject.Find("GlobalObject");
 		isTurnTimeGame= globalObject.GetComponent<GlobalObject>().turnTimeGame;
+		round=globalObject.GetComponent<GlobalObject>().round;
+		if(round==1){
+			countdownValue= globalObject.GetComponent<GlobalObject>().turnTimeRound1;
+		} else if(round==2){
+			countdownValue= globalObject.GetComponent<GlobalObject>().turnTimeRound2;
+		} else if (round==3){
+			countdownValue= globalObject.GetComponent<GlobalObject>().turnTimeRound3;
+		}
 		player1Choose= GameObject.Find("Player1Choose");
 		player1Moves= GameObject.Find ("Player1Moves");
 		player2Choose= GameObject.Find("Player2Choose");
@@ -102,7 +109,7 @@ public class _gameLogic : MonoBehaviour {
 		healthBar1 = GameObject.Find("Player1HealthBar").GetComponent<SpriteRenderer>();
 		healthBar2 = GameObject.Find("Player2HealthBar").GetComponent<SpriteRenderer>();
 		healthScale = healthBar1.transform.localScale;
-
+		
 		
 	}
 
@@ -137,7 +144,15 @@ public class _gameLogic : MonoBehaviour {
 			StartCoroutine(mainFlow ());
 			chooseActive=true;
 		}
-
+		if(player1Health<=0){
+			countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE IL ROUND!";
+			globalObject.GetComponent<GlobalObject>().round++;
+			Application.LoadLevel("GameNormal");
+		}
+		if(round==4){
+			countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE LA PARTITA!";
+			Application.LoadLevel("MainMenu");
+		}
 	}
 
 
