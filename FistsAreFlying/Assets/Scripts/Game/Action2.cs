@@ -42,10 +42,11 @@ public class Action2 : MonoBehaviour {
 			mouseMovement = currentMousePosition + offsetInit;
 			//			mouseMovement2 = currentMousePosition - oldMousePosition;
 			//			movimentDistance = Mathf.Sqrt(Mathf.Pow(mouseMovement2.x, 2f) + Mathf.Pow(mouseMovement2.y, 2f));
-			speed_vector = new Vector3 (mouseMovement.x, mouseMovement.y, 0f);
-			speed_vector.Normalize ();
 			finalTime = Time.time; 
 			totalTime = finalTime - initialTime; 
+			speed_vector = new Vector3 (mouseMovement.x*1000/totalTime, mouseMovement.y*1000/totalTime, 0f);
+			speed_vector.Normalize ();
+
 			
 			speed =  5/(totalTime);
 			
