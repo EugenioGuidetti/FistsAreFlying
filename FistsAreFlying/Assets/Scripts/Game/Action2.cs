@@ -48,7 +48,7 @@ public class Action2 : MonoBehaviour {
 			speed_vector.Normalize ();
 
 			
-			speed =  5/(totalTime);
+			speed =  5/totalTime;
 			
 		}
 	}
