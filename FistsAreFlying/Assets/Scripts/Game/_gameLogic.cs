@@ -15,8 +15,8 @@ public class _gameLogic : MonoBehaviour {
 
 
 	public bool selectionPhase=false;
-	public float player1Health=20;
-	public float player2Health=20;
+	public float player1Health=8;
+	public float player2Health=8;
 	public int normalDamage=2;
 	public float countdownValue;
 
@@ -51,6 +51,8 @@ public class _gameLogic : MonoBehaviour {
 	private string[] movesPlayer2= new string[numberMoves];
 	private float countdown;
 	private bool chooseActive;
+	private bool roundTerminato;
+	private bool partitaTerminata;
 
 	private int round;
 
@@ -64,11 +66,13 @@ public class _gameLogic : MonoBehaviour {
 			StartCoroutine(StartCountdown());
 		}
 		else {
-			countdownText.SetActive(false);
+			countdownText.GetComponent<GUIText>().text= "";
 		}
 	}
 
-	void inizializeVariables(){		
+	void inizializeVariables(){	
+		partitaTerminata=false;
+		roundTerminato=false;
 		chooseActive=true;
 		turn=1;
 		healthUnit=1f/player1Health;
@@ -139,19 +143,49 @@ public class _gameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(chooseActive==false)
-		{
-			StartCoroutine(mainFlow ());
-			chooseActive=true;
-		}
-		if(player1Health<=0){
-			countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE IL ROUND!";
-			globalObject.GetComponent<GlobalObject>().round++;
+		if(Input.GetMouseButton(0) && roundTerminato){
 			Application.LoadLevel("GameNormal");
 		}
-		if(round==4){
-			countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE LA PARTITA!";
+		if(Input.GetMouseButton(0) && partitaTerminata){
 			Application.LoadLevel("MainMenu");
+		}
+		if(!roundTerminato && !partitaTerminata){
+			if(player1Health<=0 && player2Health<=0){
+				roundTerminato=true;
+				StopAllCoroutines();
+				countdownText.GetComponent<GUIText>().text= "PAREGGIO!";
+				globalObject.GetComponent<GlobalObject>().round++;
+				globalObject.GetComponent<GlobalObject>().roundWinPlayer2++;
+				globalObject.GetComponent<GlobalObject>().roundWinPlayer1++;
+			} else if(player1Health<=0){
+				roundTerminato=true;
+				StopAllCoroutines();
+				countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE IL ROUND!";
+				globalObject.GetComponent<GlobalObject>().round++;
+				globalObject.GetComponent<GlobalObject>().roundWinPlayer2++;
+
+			} else if(player2Health<=0){
+				roundTerminato=true;
+				StopAllCoroutines();
+				countdownText.GetComponent<GUIText>().text= "PLAYER1 VINCE IL ROUND!";
+				globalObject.GetComponent<GlobalObject>().round++;
+				globalObject.GetComponent<GlobalObject>().roundWinPlayer1++;
+				}
+		}
+		if(globalObject.GetComponent<GlobalObject>().roundWinPlayer2==2){
+			roundTerminato=false;
+			partitaTerminata=true;
+			countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE LA PARTITA!";
+		} else if(globalObject.GetComponent<GlobalObject>().roundWinPlayer1==2){
+			roundTerminato=false;
+			partitaTerminata=true;
+			countdownText.GetComponent<GUIText>().text= "PLAYER1 VINCE LA PARTITA!";
+		}
+
+		if(chooseActive==false && roundTerminato==false && partitaTerminata==false)
+		{
+			StartCoroutine(mainFlow());
+			chooseActive=true;
 		}
 	}
 

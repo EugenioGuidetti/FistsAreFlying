@@ -13,6 +13,8 @@ public class MainMenuLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		globalObject.GetComponent<GlobalObject>().round=1;
+		globalObject.GetComponent<GlobalObject>().roundWinPlayer1=0;
+		globalObject.GetComponent<GlobalObject>().roundWinPlayer2=0;
 	}
 }
