@@ -25,6 +25,8 @@ public class _gameLogic : MonoBehaviour {
 	private GameObject globalObject;
 	private GameObject countdownText;
 	private GameObject player1Choose;
+	private Animator animatorPlayer1;
+	private Animator animatorPlayer2;
 	private Move movePlayer1;
 	private Sprite spritePlayer1;
 	private GameObject player1Moves;
@@ -104,6 +106,7 @@ public class _gameLogic : MonoBehaviour {
 		}
 		player1Choose= GameObject.Find("Player1Choose");
 		player1Moves= GameObject.Find ("Player1Moves");
+		animatorPlayer1= GameObject.Find ("Player1").GetComponent<Animator>();
 		player2Choose= GameObject.Find("Player2Choose");
 		player2Moves= GameObject.Find ("Player2Moves");
 		
@@ -262,6 +265,7 @@ public class _gameLogic : MonoBehaviour {
 
 		yield return new WaitForSeconds(2);
 		flipCard ();
+		startAnimation();
 		yield return new WaitForSeconds(2);
 		calculateDamage();
 		UpdateHealthBar(healthBar1, player1Health);
@@ -269,6 +273,10 @@ public class _gameLogic : MonoBehaviour {
 		//yield return new WaitForSeconds(2);
 		prepareNextTurn();
 
+	}
+
+	void startAnimation(){
+		animatorPlayer1.SetTrigger("isLeftPunch");
 	}
 
 	void flipCard () {
