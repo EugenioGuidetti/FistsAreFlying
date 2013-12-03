@@ -276,8 +276,17 @@ public class _gameLogic : MonoBehaviour {
 	}
 
 	void startAnimation(){
-		animatorPlayer1.SetTrigger("isLeftPunch");
+		if(movePlayer1==Move.LeftPunch){
+			animatorPlayer1.SetTrigger("isLeftPunch");
+		}
+		else if(movePlayer1==Move.RightPunch){
+			animatorPlayer1.SetTrigger("isRightPunch");
+		}
+		else if(movePlayer1==Move.EmptyMove){
+			animatorPlayer1.SetTrigger("isEmptyMove");
+		}
 	}
+
 
 	void flipCard () {
 		player1Choose.GetComponent<SpriteRenderer>().sprite=spritePlayer1;
