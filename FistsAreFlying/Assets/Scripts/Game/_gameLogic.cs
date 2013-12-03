@@ -109,6 +109,7 @@ public class _gameLogic : MonoBehaviour {
 		animatorPlayer1= GameObject.Find ("Player1").GetComponent<Animator>();
 		player2Choose= GameObject.Find("Player2Choose");
 		player2Moves= GameObject.Find ("Player2Moves");
+		animatorPlayer2= GameObject.Find ("Player2").GetComponent<Animator>();
 		
 		coverCard=player1Choose.GetComponent<SpriteRenderer>().sprite;
 		emptyMove= GameObject.Find("EmptySprite").GetComponent<SpriteRenderer>().sprite;
@@ -146,6 +147,18 @@ public class _gameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		checkGameState();
+		if(chooseActive==false && roundTerminato==false && partitaTerminata==false)
+		{
+			StartCoroutine(mainFlow());
+			chooseActive=true;
+		}
+	}
+
+
+
+	private void checkGameState(){
+	
 		if(Input.GetMouseButton(0) && roundTerminato){
 			Application.LoadLevel("GameNormal");
 		}
@@ -154,6 +167,8 @@ public class _gameLogic : MonoBehaviour {
 		}
 		if(!roundTerminato && !partitaTerminata){
 			if(player1Health<=0 && player2Health<=0){
+				animatorPlayer1.SetBool("isDeath",true);
+				animatorPlayer2.SetBool("isDeath",true);
 				roundTerminato=true;
 				StopAllCoroutines();
 				countdownText.GetComponent<GUIText>().text= "PAREGGIO!";
@@ -161,19 +176,20 @@ public class _gameLogic : MonoBehaviour {
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer2++;
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer1++;
 			} else if(player1Health<=0){
-				roundTerminato=true;
+				animatorPlayer1.SetBool("isDeath",true);
 				StopAllCoroutines();
 				countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE IL ROUND!";
 				globalObject.GetComponent<GlobalObject>().round++;
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer2++;
-
+				
 			} else if(player2Health<=0){
+				animatorPlayer2.SetBool("isDeath",true);
 				roundTerminato=true;
 				StopAllCoroutines();
 				countdownText.GetComponent<GUIText>().text= "PLAYER1 VINCE IL ROUND!";
 				globalObject.GetComponent<GlobalObject>().round++;
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer1++;
-				}
+			}
 		}
 		if(globalObject.GetComponent<GlobalObject>().roundWinPlayer2==2){
 			roundTerminato=false;
@@ -183,12 +199,6 @@ public class _gameLogic : MonoBehaviour {
 			roundTerminato=false;
 			partitaTerminata=true;
 			countdownText.GetComponent<GUIText>().text= "PLAYER1 VINCE LA PARTITA!";
-		}
-
-		if(chooseActive==false && roundTerminato==false && partitaTerminata==false)
-		{
-			StartCoroutine(mainFlow());
-			chooseActive=true;
 		}
 	}
 
@@ -284,6 +294,33 @@ public class _gameLogic : MonoBehaviour {
 		}
 		else if(movePlayer1==Move.EmptyMove){
 			animatorPlayer1.SetTrigger("isEmptyMove");
+		}
+		else if (movePlayer1==Move.LeftKick){
+			animatorPlayer1.SetTrigger("isLeftKick");
+		}
+		else if (movePlayer1==Move.RightKick){
+			animatorPlayer1.SetTrigger("isRightKick");
+		}
+		else if (movePlayer1==Move.Defense){
+			animatorPlayer1.SetTrigger("isDefense");
+		}
+		if(movePlayer2==Move.LeftPunch){
+			animatorPlayer2.SetTrigger("isLeftPunch");
+		}
+		else if(movePlayer2==Move.RightPunch){
+			animatorPlayer2.SetTrigger("isRightPunch");
+		}
+		else if(movePlayer2==Move.EmptyMove){
+			animatorPlayer2.SetTrigger("isEmptyMove");
+		}
+		else if (movePlayer2==Move.LeftKick){
+			animatorPlayer2.SetTrigger("isLeftKick");
+		}
+		else if (movePlayer2==Move.RightKick){
+			animatorPlayer2.SetTrigger("isRightKick");
+		}
+		else if (movePlayer2==Move.Defense){
+			animatorPlayer2.SetTrigger("isDefense");
 		}
 	}
 
