@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Action2 : MonoBehaviour {
-	
+public class Action1 : MonoBehaviour {
+
 	private Vector3 screenPoint;
 	bool isMoving; 
 	float speed;
@@ -28,10 +28,10 @@ public class Action2 : MonoBehaviour {
 	// Use this for initialization
 	
 	void Start () {
-		currentCamera= GameObject.Find("DefenseGameCamPlayer2").GetComponent<Camera>();
+		currentCamera= GameObject.Find("DefenseGameCamPlayer1").GetComponent<Camera>();
 		mainCamera= GameObject.Find("Main Camera").GetComponent<Camera>();
 		gameLogic= GameObject.Find("GameLogic").GetComponent<_gameLogic>();
-		shield= GameObject.Find ("Shield2");
+		shield= GameObject.Find ("Shield1");
 		shieldBeginPosition= shield.GetComponent<Transform>().position;
 		actionBeginPosition=transform.position;
 		isMoving = false; 
@@ -56,7 +56,7 @@ public class Action2 : MonoBehaviour {
 			totalTime = finalTime - initialTime; 
 			speed_vector = new Vector3 (mouseMovement.x*1000/totalTime, mouseMovement.y*1000/totalTime, 0f);
 			speed_vector.Normalize ();
-
+			
 			
 			speed =  5/totalTime;
 			
@@ -70,35 +70,35 @@ public class Action2 : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.name == "Wall_up2" || other.gameObject.name == "Wall_down2") {
+		if (other.gameObject.name == "Wall_up1" || other.gameObject.name == "Wall_down1") {
 			float noise_x = Random.value * 2 * noise - noise / 2f;
 			float noise_y = Random.value * 2 * noise - noise / 2f;
 			speed_vector = new Vector3 (speed_vector.x + noise_x, -speed_vector.y + noise_y, speed_vector.z);
 			speed_vector.Normalize ();
 		}
-		if (other.gameObject.name == "Shield2") {
+		if (other.gameObject.name == "Shield1") {
 			speed_vector = new Vector3 (0,0,0);
-			gameLogic.isSavePlayer2=true;
+			gameLogic.isSavePlayer1=true;
 			gameLogic.miniGame=false;
 			refresh();
 		}
-		else if (other.gameObject.name == "collision2"){
+		else if (other.gameObject.name == "collision1"){
 			speed_vector = new Vector3 (0,0,0);
-			gameLogic.isSavePlayer2=false;
+			gameLogic.isSavePlayer1=false;
 			gameLogic.miniGame=false;
 			refresh();
 		}
-				
+		
 	}
-
+	
 	void refresh(){
 		transform.position=actionBeginPosition;
 		shield.GetComponent<Transform>().position=shieldBeginPosition;
 		currentCamera.enabled=false;
 		mainCamera.enabled=true;
 		gameLogic.miniGame=false;
-
+		
 	}
 	
-	
+
 }

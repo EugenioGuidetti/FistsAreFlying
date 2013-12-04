@@ -19,7 +19,11 @@ public class _gameLogic : MonoBehaviour {
 	public float player2Health=8;
 	public int normalDamage=2;
 	public float countdownValue;
+	public bool miniGame;
+	public bool isSavePlayer2;
+	public bool isSavePlayer1;
 
+	private bool endTurn;
 	private int numberChoose;
 
 	private GameObject globalObject;
@@ -31,6 +35,9 @@ public class _gameLogic : MonoBehaviour {
 	private Sprite spritePlayer1;
 	private GameObject player1Moves;
 	private bool isTurnTimeGame;
+	private Camera defenseGameCamPlayer2;
+	private Camera defenseGameCamPlayer1;
+	private Camera mainCamera;
 
 	private GameObject player2Choose;
 	private Move movePlayer2;
@@ -47,6 +54,7 @@ public class _gameLogic : MonoBehaviour {
 	private Sprite coverCard;
 	private Sprite emptyMove;
 
+
 	private Hashtable moves= new Hashtable();
 	private Hashtable rules= new Hashtable();
 	private string[] movesPlayer1= new string[numberMoves];
@@ -60,7 +68,7 @@ public class _gameLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 		inizializeVariables();
 		inizializeGameObject();
 		inizializeHashTables();
@@ -73,6 +81,9 @@ public class _gameLogic : MonoBehaviour {
 	}
 
 	void inizializeVariables(){	
+		miniGame=false;
+		isSavePlayer1=false;
+		isSavePlayer2=false;
 		partitaTerminata=false;
 		roundTerminato=false;
 		chooseActive=true;
@@ -91,7 +102,8 @@ public class _gameLogic : MonoBehaviour {
 	}
 
 	void inizializeGameObject(){
-		
+
+
 		countdownText= GameObject.Find("Countdown");
 
 		globalObject=GameObject.Find("GlobalObject");
@@ -117,7 +129,9 @@ public class _gameLogic : MonoBehaviour {
 		healthBar1 = GameObject.Find("Player1HealthBar").GetComponent<SpriteRenderer>();
 		healthBar2 = GameObject.Find("Player2HealthBar").GetComponent<SpriteRenderer>();
 		healthScale = healthBar1.transform.localScale;
-		
+		defenseGameCamPlayer2=GameObject.Find("DefenseGameCamPlayer2").GetComponent<Camera>();
+		defenseGameCamPlayer1=GameObject.Find("DefenseGameCamPlayer1").GetComponent<Camera>();
+		mainCamera=GameObject.Find("Main Camera").GetComponent<Camera>();
 		
 	}
 
@@ -152,6 +166,21 @@ public class _gameLogic : MonoBehaviour {
 		{
 			StartCoroutine(mainFlow());
 			chooseActive=true;
+		}
+		if(!miniGame && endTurn){
+			UpdateHealthBar(healthBar1, player1Health);
+			UpdateHealthBar(healthBar2, player2Health);
+			prepareNextTurn();
+			endTurn=false;
+		}
+		if(isSavePlayer1){
+			setPlayerMove("Empty Move",2,emptyMove);
+			isSavePlayer1=false;
+			player2Choose.GetComponent<SpriteRenderer>().enabled=true;
+		} else if(isSavePlayer2){
+			setPlayerMove ("Empty Move",1,emptyMove);
+			isSavePlayer2=false;
+			player1Choose.GetComponent<SpriteRenderer>().enabled=true;
 		}
 	}
 
@@ -278,10 +307,7 @@ public class _gameLogic : MonoBehaviour {
 		startAnimation();
 		yield return new WaitForSeconds(2);
 		calculateDamage();
-		UpdateHealthBar(healthBar1, player1Health);
-		UpdateHealthBar(healthBar2, player2Health);
-		//yield return new WaitForSeconds(2);
-		prepareNextTurn();
+		endTurn=true;
 
 	}
 
@@ -341,7 +367,15 @@ public class _gameLogic : MonoBehaviour {
 			}
 		}
 		else if((movePlayer1.Equals(Move.Defense) && !movePlayer2.Equals(Move.EmptyMove)) || (movePlayer2.Equals (Move.Defense) && !movePlayer1.Equals(Move.EmptyMove))){
-			//chiamo minigioco difesa e vedo se far saltare turno
+			if(movePlayer2.Equals(Move.Defense)){
+				mainCamera.enabled=false;
+				defenseGameCamPlayer2.enabled=true;
+				miniGame=true;
+			} else if(movePlayer1.Equals(Move.Defense)){
+				mainCamera.enabled=false;
+				defenseGameCamPlayer1.enabled=true;
+				miniGame=true;
+			}
 		}
 		else if(movePlayer1.Equals(Move.EmptyMove) && !(movePlayer2.Equals (Move.EmptyMove)|| movePlayer2.Equals(Move.Defense))){
 			player1Health= player1Health - normalDamage;
@@ -371,13 +405,17 @@ public class _gameLogic : MonoBehaviour {
 
 
 	void prepareNextTurn(){
-		player1Moves.SetActive(true);
+		if(!isSavePlayer2){
+			player1Moves.SetActive(true);
+		}
 		if(moveCount1==5){
 			enableSprite(player1Moves.GetComponentsInChildren<SpriteRenderer>());
 			enableCollider(player1Moves.GetComponentsInChildren<BoxCollider2D>());
 			moveCount1=0;
 		}
-		player2Moves.SetActive(true);
+		if(!isSavePlayer1){
+			player2Moves.SetActive(true);
+		}
 		if(moveCount2==5){
 			enableSprite(player2Moves.GetComponentsInChildren<SpriteRenderer>());
 			enableCollider (player2Moves.GetComponentsInChildren<BoxCollider2D>());
@@ -411,6 +449,9 @@ public class _gameLogic : MonoBehaviour {
 			collider.enabled = true;
 		}
 	}
+
+
+
 
 	void UpdateHealthBar (SpriteRenderer healthBar, float playerHealth)
 	{
