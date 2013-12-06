@@ -61,7 +61,7 @@ public class MiniGameLogic : MonoBehaviour {
 		screenMouse = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		Debug.Log (screenMouse.x);
 		//controllo che sia in posizione del Giocatore 1 (sx)
-		if (screenMouse.x < -1) {
+		if (screenMouse.x < transform.position.x) {
 			//se clicca prima del tempo
 			if (!clickG1){
 				clickG1 =true;
@@ -77,7 +77,7 @@ public class MiniGameLogic : MonoBehaviour {
 			}
 
 		}
-		if (screenMouse.x >1){
+		if (screenMouse.x > transform.position.x){
 			if (!clickG2){
 				clickG2 = true; 
 				//se clicca troppo presto
