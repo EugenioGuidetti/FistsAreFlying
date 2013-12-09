@@ -324,6 +324,9 @@ public class _gameLogic : MonoBehaviour {
 
 		yield return new WaitForSeconds(2);
 		flipCard ();
+		animatorPlayer1.SetTrigger("isWalkingForward1");
+		animatorPlayer2.SetTrigger("isWalkingForward2");
+		yield return new WaitForSeconds(1);
 		startAnimation();
 		yield return new WaitForSeconds(2);
 		calculateDamage();
@@ -331,7 +334,10 @@ public class _gameLogic : MonoBehaviour {
 
 	}
 
+
+
 	void startAnimation(){
+
 		if(movePlayer1==Move.LeftPunch){
 			animatorPlayer1.SetTrigger("isLeftPunch");
 		}
