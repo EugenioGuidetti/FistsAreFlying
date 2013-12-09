@@ -22,6 +22,10 @@ public class _gameLogic : MonoBehaviour {
 	public bool miniGame;
 	public bool isSavePlayer2;
 	public bool isSavePlayer1;
+	public bool conflictPlayer1;
+	public bool conflictPlayer2;
+	public bool conflictDrow;
+	public bool startCountdownMiniGame;
 
 	private bool endTurn;
 	private int numberChoose;
@@ -38,6 +42,7 @@ public class _gameLogic : MonoBehaviour {
 	private Camera defenseGameCamPlayer2;
 	private Camera defenseGameCamPlayer1;
 	private Camera mainCamera;
+	private Camera conflictGameCam;
 
 	private GameObject player2Choose;
 	private Move movePlayer2;
@@ -81,6 +86,9 @@ public class _gameLogic : MonoBehaviour {
 	}
 
 	void inizializeVariables(){	
+		conflictPlayer1=false;
+		conflictPlayer2=false;
+		conflictDrow=false;
 		miniGame=false;
 		isSavePlayer1=false;
 		isSavePlayer2=false;
@@ -132,6 +140,7 @@ public class _gameLogic : MonoBehaviour {
 		defenseGameCamPlayer2=GameObject.Find("DefenseGameCamPlayer2").GetComponent<Camera>();
 		defenseGameCamPlayer1=GameObject.Find("DefenseGameCamPlayer1").GetComponent<Camera>();
 		mainCamera=GameObject.Find("Main Camera").GetComponent<Camera>();
+		conflictGameCam= GameObject.Find("ConflictGameCam").GetComponent<Camera>();
 		
 	}
 
@@ -168,6 +177,17 @@ public class _gameLogic : MonoBehaviour {
 			chooseActive=true;
 		}
 		if(!miniGame && endTurn){
+			if (conflictPlayer1){
+				player2Health=player2Health-normalDamage;
+				conflictPlayer1=false;
+			}  else if (conflictPlayer2){
+				player1Health=player1Health-normalDamage;
+				conflictPlayer2=false;
+			} else if (conflictDrow){
+				player1Health= player1Health - normalDamage/2;
+				player2Health= player2Health - normalDamage/2;
+				conflictDrow=false;
+			}
 			UpdateHealthBar(healthBar1, player1Health);
 			UpdateHealthBar(healthBar2, player2Health);
 			prepareNextTurn();
@@ -397,7 +417,10 @@ public class _gameLogic : MonoBehaviour {
 				player2Health= player2Health- (normalDamage/2);
 			}
 			else if (result.Equals("scontro")){
-				//chiamo minigioco scontro e aggiorno la vita
+				startCountdownMiniGame=true;
+				miniGame=true;
+				mainCamera.enabled=false;
+				conflictGameCam.enabled=true;
 			}
 		}
 
