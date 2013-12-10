@@ -45,54 +45,54 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 852
-        width: 426
-        height: 426
+        y: 854
+        width: 424
+        height: 424
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: MovesSprites_1
       rect:
         serializedVersion: 2
-        x: 426
-        y: 852
-        width: 426
-        height: 426
+        x: 424
+        y: 854
+        width: 424
+        height: 424
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: MovesSprites_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 426
-        width: 426
-        height: 426
+        y: 430
+        width: 424
+        height: 424
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: MovesSprites_3
       rect:
         serializedVersion: 2
-        x: 426
-        y: 426
-        width: 426
-        height: 426
+        x: 424
+        y: 430
+        width: 424
+        height: 424
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: MovesSprites_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 426
-        height: 426
+        y: 6
+        width: 424
+        height: 424
       alignment: 0
       pivot: {x: 0, y: 0}
     - name: MovesSprites_5
       rect:
         serializedVersion: 2
-        x: 426
-        y: 0
-        width: 426
-        height: 426
+        x: 424
+        y: 6
+        width: 424
+        height: 424
       alignment: 0
       pivot: {x: 0, y: 0}
   spritePackingTag: 

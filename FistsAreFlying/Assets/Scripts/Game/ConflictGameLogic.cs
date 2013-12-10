@@ -18,10 +18,8 @@ public class ConflictGameLogic : MonoBehaviour {
 	private Camera thisCamera;
 	private _gameLogic gameLogic;
 	private GameObject countdownText;
-	private GameObject lose;
-	private GameObject win;
-	private GameObject parity;
-	// IMPORTA STA
+
+	private GameObject mainCountdown;
 	
 	// Use this for initialization
 	void Start () {
@@ -32,12 +30,7 @@ public class ConflictGameLogic : MonoBehaviour {
 		clickG2 = false;
 		countdownText= GameObject.Find("Via");
 		countdownText.SetActive(false);
-		//lose= GameObject.Find("G2 Win");
-		//lose.SetActive(false);
-		//win = GameObject.Find("G1 Win");
-		//win.SetActive(false);
-		//parity = GameObject.Find("Pareggio");
-		//parity.SetActive(false);
+		mainCountdown= GameObject.Find("Countdown");
 
 
 
@@ -47,6 +40,7 @@ public class ConflictGameLogic : MonoBehaviour {
 
 	IEnumerator StartConflictCountdown()
 	{
+		mainCountdown.GetComponent<GUIText>().enabled=false;
 		isLegal = false;
 		while (startTime >0)
 		{
@@ -59,7 +53,6 @@ public class ConflictGameLogic : MonoBehaviour {
 		isLegal = true; 
 		countdownText.SetActive (true); 
 		yield return new WaitForSeconds (1.0f);
-		countdownText.SetActive (false);
 	}
 	
 
@@ -112,26 +105,36 @@ public class ConflictGameLogic : MonoBehaviour {
 		}
 
 		if (clickG1 && clickG2) {
-			if (timeClickG1 > timeClickG2 + offset){
-				gameLogic.conflictPlayer2=true;
-				Debug.Log ("ha vinto G2");
-				//lose.SetActive (true); 
-			} else if (timeClickG2 > timeClickG1 + offset){
-				gameLogic.conflictPlayer1=true;
-				Debug.Log ("ha vinto G1");
-				//win.SetActive (true); 
-			} else {
-				gameLogic.conflictDrow=true;
-				Debug.Log ("parità");
-				//parity.SetActive (true);
-			}
-			gameLogic.miniGame=false;
-			thisCamera.enabled=false;
-			mainCamera.enabled=true;
-			clickG1=false;
-			clickG2=false;
-			StopCoroutine("StartConflictCountdown");
+			StartCoroutine("EndFlow");
+
 		}
+	}
+
+	IEnumerator EndFlow(){
+		if (timeClickG1 > timeClickG2 + offset){
+			gameLogic.conflictPlayer2=true;
+			Debug.Log ("ha vinto G2");
+			countdownText.GetComponent<GUIText>().text="VINCE PLAYER2"; 
+		} else if (timeClickG2 > timeClickG1 + offset){
+			gameLogic.conflictPlayer1=true;
+			Debug.Log ("ha vinto G1");
+			countdownText.GetComponent<GUIText>().text="VINCE PLAYER1"; 
+		} else {
+			gameLogic.conflictDrow=true;
+			Debug.Log ("parità");
+			countdownText.GetComponent<GUIText>().text="PARITA'"; 
+		}
+		yield return new WaitForSeconds(2);
+		countdownText.GetComponent<GUIText>().text="VIA";
+		countdownText.SetActive (false);
+		mainCountdown.GetComponent<GUIText>().enabled=true;
+		gameLogic.miniGame=false;
+		thisCamera.enabled=false;
+		mainCamera.enabled=true;
+		clickG1=false;
+		clickG2=false;
+		StopCoroutine("StartConflictCountdown");
+	
 	}
 
 	 

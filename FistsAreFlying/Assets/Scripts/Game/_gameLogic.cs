@@ -226,6 +226,7 @@ public class _gameLogic : MonoBehaviour {
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer1++;
 			} else if(player1Health<=0){
 				animatorPlayer1.SetBool("isDeath",true);
+				roundTerminato=true;
 				StopAllCoroutines();
 				countdownText.GetComponent<GUIText>().text= "PLAYER2 VINCE IL ROUND!";
 				globalObject.GetComponent<GlobalObject>().round++;
