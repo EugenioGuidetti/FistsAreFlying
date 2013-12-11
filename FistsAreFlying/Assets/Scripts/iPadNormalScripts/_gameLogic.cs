@@ -257,7 +257,7 @@ public class _gameLogic : MonoBehaviour {
 			Application.LoadLevel("MainMenu");
 		}
 		if(!roundTerminato && !partitaTerminata){
-			if((player1Health<=0 && player2Health<=0)||(countdownValue1<=0 || countdownValue2<=0) ){
+			if((player1Health<=0 && player2Health<=0)||(countdownValue1<=0 && countdownValue2<=0) ){
 				animatorPlayer1.SetBool("isDeath",true);
 				animatorPlayer2.SetBool("isDeath",true);
 				roundTerminato=true;
