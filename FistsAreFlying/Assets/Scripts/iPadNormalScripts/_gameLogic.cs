@@ -19,6 +19,8 @@ public class _gameLogic : MonoBehaviour {
 	public float player2Health=8;
 	public int normalDamage=2;
 	public float countdownValue;
+	public float countdownValue1;
+	public float countdownValue2;
 	public bool miniGame;
 	public bool isSavePlayer2;
 	public bool isSavePlayer1;
@@ -30,6 +32,8 @@ public class _gameLogic : MonoBehaviour {
 	private bool endTurn;
 	private int numberChoose;
 
+	private GameObject countPlayer1;
+	private GameObject countPlayer2;
 	private GameObject globalObject;
 	private GameObject countdownText;
 	private GameObject player1Choose;
@@ -65,10 +69,11 @@ public class _gameLogic : MonoBehaviour {
 	private string[] movesPlayer1= new string[numberMoves];
 	private string[] movesPlayer2= new string[numberMoves];
 	private float countdown;
+	private bool isRoundTimeGame;
 	private bool chooseActive;
 	private bool roundTerminato;
 	private bool partitaTerminata;
-
+	private string stringa="TEMPO RIMANENTE ";
 	private int round;
 
 	// Use this for initialization
@@ -77,13 +82,45 @@ public class _gameLogic : MonoBehaviour {
 		inizializeVariables();
 		inizializeGameObject();
 		inizializeHashTables();
-		if(isTurnTimeGame){
-			StartCoroutine(StartCountdown());
-		}
-		else {
-			countdownText.GetComponent<GUIText>().text= "";
+		if(isRoundTimeGame){
+			countdownText.GetComponent<GUIText>().text="";
+			StartCoroutine ("StartCountdownPlayer1");
+			StartCoroutine ("StartCountdownPlayer2");
+		} else {
+			countPlayer1.GetComponent<GUIText>().enabled=false;
+			countPlayer2.GetComponent<GUIText>().enabled=false;
+			if(isTurnTimeGame){
+				StartCoroutine(StartCountdown());
+			}
+			else {
+				countdownText.GetComponent<GUIText>().text= "";
+			}
 		}
 	}
+
+	IEnumerator StartCountdownPlayer1()
+	{
+		while (countdownValue1 >0)
+		{
+			yield return new WaitForSeconds(1.0f);
+			countdownValue1 --;
+			countPlayer1.GetComponent<GUIText>().text= stringa +countdownValue1.ToString();
+		}
+	}
+
+
+
+	IEnumerator StartCountdownPlayer2()
+	{
+		while (countdownValue2 >0)
+		{
+			yield return new WaitForSeconds(1.0f);
+			countdownValue2 --;
+			countPlayer2.GetComponent<GUIText>().text= stringa + countdownValue2.ToString();
+		}
+	}
+
+
 
 	void inizializeVariables(){	
 		conflictPlayer1=false;
@@ -113,10 +150,15 @@ public class _gameLogic : MonoBehaviour {
 
 
 		countdownText= GameObject.Find("Countdown");
+		countPlayer1= GameObject.Find ("CountdownPlayer1");
+		countPlayer2= GameObject.Find("CountdownPlayer2");
 
 		globalObject=GameObject.Find("GlobalObject");
 		isTurnTimeGame= globalObject.GetComponent<GlobalObject>().turnTimeGame;
+		isRoundTimeGame= globalObject.GetComponent<GlobalObject>().roundTimeGame;
 		round=globalObject.GetComponent<GlobalObject>().round;
+		countdownValue1=globalObject.GetComponent<GlobalObject>().roundTime;
+		countdownValue2= globalObject.GetComponent<GlobalObject>().roundTime;
 		if(round==1){
 			countdownValue= globalObject.GetComponent<GlobalObject>().turnTimeRound1;
 		} else if(round==2){
@@ -215,7 +257,7 @@ public class _gameLogic : MonoBehaviour {
 			Application.LoadLevel("MainMenu");
 		}
 		if(!roundTerminato && !partitaTerminata){
-			if(player1Health<=0 && player2Health<=0){
+			if((player1Health<=0 && player2Health<=0)||(countdownValue1<=0 || countdownValue2<=0) ){
 				animatorPlayer1.SetBool("isDeath",true);
 				animatorPlayer2.SetBool("isDeath",true);
 				roundTerminato=true;
@@ -224,7 +266,7 @@ public class _gameLogic : MonoBehaviour {
 				globalObject.GetComponent<GlobalObject>().round++;
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer2++;
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer1++;
-			} else if(player1Health<=0){
+			} else if(player1Health<=0 || countdownValue1<=0){
 				animatorPlayer1.SetBool("isDeath",true);
 				roundTerminato=true;
 				StopAllCoroutines();
@@ -232,7 +274,7 @@ public class _gameLogic : MonoBehaviour {
 				globalObject.GetComponent<GlobalObject>().round++;
 				globalObject.GetComponent<GlobalObject>().roundWinPlayer2++;
 				
-			} else if(player2Health<=0){
+			} else if(player2Health<=0 || countdownValue2<=0){
 				animatorPlayer2.SetBool("isDeath",true);
 				roundTerminato=true;
 				StopAllCoroutines();
@@ -256,6 +298,7 @@ public class _gameLogic : MonoBehaviour {
 
 	public void setPlayerMove (string move, int player, Sprite sprite){
 			if (player==1 && chooseActive){
+				StopCoroutine("StartCountdownPlayer1");
 				movePlayer1= (Move) moves[move];
 				if(!(movePlayer1==Move.EmptyMove))
 				{
@@ -268,6 +311,7 @@ public class _gameLogic : MonoBehaviour {
 
 			}
 			if(player==2 && chooseActive) {
+			StopCoroutine("StartCountdownPlayer2");
 				movePlayer2= (Move) moves[move];
 				if(!(movePlayer2==Move.EmptyMove))
 				{
@@ -461,6 +505,9 @@ public class _gameLogic : MonoBehaviour {
 		if(isTurnTimeGame){
 			StartCoroutine(StartCountdown());
 			countdownText.GetComponent<GUIText>().text="TIME";
+		} else if(isRoundTimeGame){
+			StartCoroutine("StartCountdownPlayer1");
+			StartCoroutine("StartCountdownPlayer2");
 		}
 		selectionPhase=true;
 	}
