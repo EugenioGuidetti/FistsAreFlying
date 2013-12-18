@@ -7,13 +7,13 @@ public class Move : MonoBehaviour {
 
 	private bool amISelected = false;
 	private Vector2 position;
-	private Vector2 offset;
+	private Vector2 offset ;
 	private Vector3 touchCoordinates;
 
 	// Use this for initialization
 	void Start () {
 		position = new Vector2(transform.position.x, transform.position.y);
-		offset = new Vector2(GetComponent<BoxCollider2D>().size.x / 2, GetComponent<BoxCollider2D>().size.y / 2);
+		offset = new Vector2(0.5f, 0.5f);
 		mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
 	}
 	
@@ -22,9 +22,11 @@ public class Move : MonoBehaviour {
 		if (GetComponent<BoxCollider2D>().enabled) {
 			foreach (Touch touch in Input.touches) {
 				touchCoordinates = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
-				if (touchCoordinates.x <= position.x + offset.x && touchCoordinates.x >= position.x - offset.x) {
-					if (touchCoordinates.y <= position.y + offset.y && touchCoordinates.y >= position.y - offset.y) {
-						amISelected = true;
+				if (touch.phase == TouchPhase.Began) {
+					if (touchCoordinates.x <= position.x + offset.x && touchCoordinates.x >= position.x - offset.x) {
+						if (touchCoordinates.y <= position.y + offset.y && touchCoordinates.y >= position.y - offset.y) {
+							amISelected = true;
+						}
 					}
 				}
 			}

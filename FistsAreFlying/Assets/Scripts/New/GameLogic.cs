@@ -7,13 +7,12 @@ public class GameLogic : MonoBehaviour {
 
 	private bool turnTimeMatch = false;
 	private float turnTime;
-	private bool roundTimeMatch = false;
-	private float player1Time;
-	private float player2Time;
 	private int turn;
 
-	public GameObject MiniGameDefense;
-	public GameObject MiniGameConflict;
+	public GameObject DefenseGame;
+	public GameObject DefenseResult;
+	public GameObject ConflictGame;
+	public GameObject ConflictResult;
 
 	public GameObject Player1;
 	public GameObject Player2;
@@ -35,11 +34,6 @@ public class GameLogic : MonoBehaviour {
 		if (global.GetComponent<Global>().GetTurnTimeGame()) {
 			turnTimeMatch = true;
 			turnTime = global.GetComponent<Global>().GetTurnTimeRound1();
-		}
-		if (global.GetComponent<Global>().GetRoundTimeGame()) {
-			roundTimeMatch = true;
-			player1Time = global.GetComponent<Global>().GetRoundTime();
-			player2Time = global.GetComponent<Global>().GetRoundTime();
 		}
 	}
 
