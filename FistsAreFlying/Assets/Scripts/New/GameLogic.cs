@@ -89,7 +89,10 @@ public class GameLogic : MonoBehaviour {
 				player2Health = player2Health - (normalDamage / 2);
 			}
 			if (outcome.Equals("conflict")) {
-				//MiniGameConflict
+				ConflictGame.SetActive(true);
+				ConflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);				
+				Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
+				ConflictGame.GetComponent<ConflictLogic>().StartCountdown();
 			}
 		}
 	}

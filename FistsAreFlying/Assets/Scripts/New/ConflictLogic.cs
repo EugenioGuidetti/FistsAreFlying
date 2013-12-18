@@ -80,7 +80,7 @@ public class ConflictLogic : MonoBehaviour {
 		isLegal = false;
 		player1Tapped = false;
 		player2Tapped = false;
-		Camera.main.transform.position = Vector3.zero;
+		Camera.main.transform.position = new Vector3 (0, 0, Camera.main.transform.position.z);
 		player1.GetComponent<PlayerConflict>().ResetMoves();
 		player2.GetComponent<PlayerConflict>().ResetMoves();
 		text.GetComponent<GUIText>().text = "";
