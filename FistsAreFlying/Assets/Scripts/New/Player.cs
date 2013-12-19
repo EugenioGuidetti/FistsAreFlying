@@ -102,7 +102,6 @@ public class Player : MonoBehaviour {
 		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
 			alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = false;
 		}
-		debugText.GetComponent<GUIText>().text="prima di choosed move";
 		choosedMove.GetComponent<SpriteRenderer>().enabled = true;
 	}
 

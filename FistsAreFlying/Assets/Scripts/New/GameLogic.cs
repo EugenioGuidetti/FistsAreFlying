@@ -124,6 +124,7 @@ public class GameLogic : MonoBehaviour {
 		if (turnTimeMatch) {
 			StartCoroutine("TurnCountdown");
 		}
+		choosePhase=true;
 	}
 
 	private IEnumerator MainFlow () {
