@@ -24,12 +24,13 @@ public class GameLogic : MonoBehaviour {
 	private string player2Move = "";
 	private bool player1Selected = false;
 	private bool player2Selected = false;
-	private int player1Health;
-	private int player2Health;
+	private int player1Health = 20;
+	private int player2Health = 20;
 
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
 
+	public GameObject debugText;
 	// Use this for initialization
 	void Start () {
 		initializeRules();
@@ -118,6 +119,8 @@ public class GameLogic : MonoBehaviour {
 		//controllo fine round e fine match
 		Player1.GetComponent<Player>().NewTurn();
 		Player2.GetComponent<Player>().NewTurn();
+		player1Selected = false;
+		player2Selected = false;
 		if (turnTimeMatch) {
 			StartCoroutine("TurnCountdown");
 		}

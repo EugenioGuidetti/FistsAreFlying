@@ -67,7 +67,7 @@ public class ConflictLogic : MonoBehaviour {
 			text.GetComponent<GUIText>().text = "Player 2 wins!";
 		} else if (player1Time + drawOffset < player2Time) {
 			result.GetComponent<ConflictResult>().SetResult("player1");
-			text.GetComponent<GUIText>().text = "PLayer 1 wins!";
+			text.GetComponent<GUIText>().text = "Player 1 wins!";
 		} else {
 			result.GetComponent<ConflictResult>().SetResult("draw");
 			text.GetComponent<GUIText>().text = "Draw";

@@ -14,7 +14,7 @@ public class LoacalGame : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		Application.LoadLevel("GameNormal");
+		Application.LoadLevel("Game");
 	}
 	                   
 }

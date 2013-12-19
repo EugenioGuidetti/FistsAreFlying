@@ -22,8 +22,5 @@ public class RoundTimeGame : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		globalObject.GetComponent("GlobalObject").SendMessage("setRoundTimeGame", true);
-		playChoice.GetComponent<Transform>().Translate(translateCoordinate);
-		modeChoice.GetComponent<Transform>().Translate(translateCoordinate);
 	}
 }

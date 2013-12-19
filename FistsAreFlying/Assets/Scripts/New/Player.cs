@@ -20,11 +20,13 @@ public class Player : MonoBehaviour {
 	private IList<GameObject> notYetUsedMoves =  new List<GameObject>();
 	private IList<GameObject> touchedMoves = new List<GameObject>();
 
+	public GameObject debugText;
 	// Use this for initialization
 	void Start () {
 		ResetMoves();
 		notYetUsedMoves.Add(emptyMove);
 		coveredMoveSprite = choosedMove.GetComponent<SpriteRenderer>().sprite;
+		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	private void  ResetMoves () {
@@ -74,6 +76,7 @@ public class Player : MonoBehaviour {
 				}
 			} else {
 				selectedMove = "EM";
+				touchedMoves.Add(emptyMove);
 				SelectMove(emptyMove);
 				forcedMove = false;
 			}
@@ -99,6 +102,7 @@ public class Player : MonoBehaviour {
 		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
 			alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = false;
 		}
+		debugText.GetComponent<GUIText>().text="prima di choosed move";
 		choosedMove.GetComponent<SpriteRenderer>().enabled = true;
 	}
 
@@ -113,7 +117,8 @@ public class Player : MonoBehaviour {
 				notYetUsedMoves.Add(alreadyUsedMove);
 			}
 		}
-		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;	
+		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
+		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
 		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
 			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = true;

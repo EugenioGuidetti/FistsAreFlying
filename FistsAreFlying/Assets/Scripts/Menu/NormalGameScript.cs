@@ -21,7 +21,6 @@ public class NormalGameScript : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		globalObject.GetComponent("GlobalObject").SendMessage("setTurnTimeGame", false);
 		playChoice.GetComponent<Transform>().Translate(translateCoordinate);
 		modeChoice.GetComponent<Transform>().Translate(translateCoordinate);
 	}

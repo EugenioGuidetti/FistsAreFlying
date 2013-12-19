@@ -21,7 +21,7 @@ public class TimeTurnGameScript : MonoBehaviour {
 	}
 	
 	void OnMouseDown(){
-		globalObject.GetComponent("GlobalObject").SendMessage("setTurnTimeGame", true);
+		globalObject.GetComponent<Global>().SetTurnTimeGame(true);
 		playChoice.GetComponent<Transform>().Translate(translateCoordinate);
 		modeChoice.GetComponent<Transform>().Translate(translateCoordinate);
 	}

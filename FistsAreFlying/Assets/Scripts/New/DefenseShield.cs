@@ -6,7 +6,7 @@ public class DefenseShield : MonoBehaviour {
 	public GameObject wallUpper;
 	public GameObject wallLower;
 
-	private float speed = 0.03f;
+	private float speed = 10f;
 	private Vector3 touchPosition = Vector3.zero;
 	private float wallUpperY;
 	private float wallLowerY;
