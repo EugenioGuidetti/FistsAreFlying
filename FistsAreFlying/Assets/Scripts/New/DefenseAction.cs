@@ -2,7 +2,13 @@
 using System.Collections;
 
 public class DefenseAction : MonoBehaviour {
-
+	
+	private int relevantTouch = -9999;
+	private float noise = 0.1f;
+	private float noiseY;
+	private float startTime = 0f;
+	private float endTime = 0f;
+	private float totalTime = 0f;
 	private float speed = 0f;
 	private float maxSpeed = 25f;
 	private Vector3 direction = Vector3.zero;
@@ -10,11 +16,9 @@ public class DefenseAction : MonoBehaviour {
 	private Vector3 endPosition = Vector3.zero;
 	private Vector3 touchMovement = Vector3.zero;
 	private Vector3 touchPosition = Vector3.zero;
-	private int relevantTouch = -9999;
-	private float startTime = 0f;
-	private float endTime = 0f;
-	private float totalTime = 0f;
 	private bool isMoving = false;
+	private bool haveIHitSomething = false;
+	private string hittenTarget = "";
 
 	// Use this for initialization
 	void Start () {}
@@ -49,6 +53,31 @@ public class DefenseAction : MonoBehaviour {
 		} else {
 			transform.Translate(direction * speed * Time.deltaTime);
 		}
+	}
 
+	void OnTriggerEnter (Collider other) {
+		if (other.gameObject.name.Equals("WallUpper") || other.gameObject.name.Equals("WallLower")) {
+			//ho tolto un diviso 2f perché l'intervallo mi sembrava asimmetrico
+			noiseY = Random.value * 2 * noise - noise;
+			direction = new Vector3(direction.x, noiseY - direction.y, direction.z);
+			direction.Normalize();
+		}
+		if (other.gameObject.name.Equals("Defense") || other.gameObject.name.Equals("Player1") || other.gameObject.name.Equals("Player2")) {
+			direction = Vector3.zero;
+			speed = 0;
+			hittenTarget = other.gameObject.name.ToString();
+			haveIHitSomething = true;
+		}
+	}
+
+	public bool GetHitStatus () {
+		return haveIHitSomething;
+	}
+
+	public string GetHittenTarget () {
+		haveIHitSomething = false;
+		relevantTouch = -9999;
+		isMoving = false;
+		return hittenTarget;
 	}
 }

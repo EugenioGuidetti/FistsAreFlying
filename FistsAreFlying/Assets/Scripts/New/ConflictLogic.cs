@@ -75,7 +75,7 @@ public class ConflictLogic : MonoBehaviour {
 		StartCoroutine("ConflictEnd");
 	}
 
-	private IEnumerator ConflicEnd () {
+	private IEnumerator ConflictEnd () {
 		yield return new WaitForSeconds(2f);
 		isLegal = false;
 		player1Tapped = false;
@@ -99,8 +99,8 @@ public class ConflictLogic : MonoBehaviour {
 		text.GetComponent<GUIText>().text = "Go!";
 	}
 
-	public void SetPlayerMoves (string player1Move, string player2Move) {
-		this.player1Move = player1Move;
-		this.player2Move = player2Move;
+	public void SetPlayerMoves (string move1, string move2) {
+		player1Move = move1;
+		player2Move = move2;
 	}
 }
