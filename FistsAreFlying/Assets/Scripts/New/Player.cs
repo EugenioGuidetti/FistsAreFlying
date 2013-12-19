@@ -14,6 +14,7 @@ public class Player : MonoBehaviour {
 	private Sprite coveredMoveSprite;
 
 	private bool haveIChoosed = false;
+	private bool forcedMove = false;
 	private string selectedMove = "";
 	private IList<GameObject> alreadyUsedMoves = new List<GameObject>();
 	private IList<GameObject> notYetUsedMoves =  new List<GameObject>();
@@ -40,35 +41,41 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!haveIChoosed) {
-			touchedMoves.Clear();
-			if (notYetUsedMoves.Contains(punchRight) && punchRight.GetComponent<Move>().getAmISelected()) {
-				selectedMove = "PR";
-				touchedMoves.Add(punchRight);
-			}
-			if (notYetUsedMoves.Contains(punchLeft) && punchLeft.GetComponent<Move>().getAmISelected()) {
-				selectedMove = "PL";
-				touchedMoves.Add(punchLeft);
-			}
-			if (notYetUsedMoves.Contains(kickRight) && kickRight.GetComponent<Move>().getAmISelected()) {
-				selectedMove = "KR";
-				touchedMoves.Add(kickRight);
-			}
-			if (notYetUsedMoves.Contains(kickLeft) && kickLeft.GetComponent<Move>().getAmISelected()) {
-				selectedMove = "KL";
-				touchedMoves.Add(kickLeft);
-			}
-			if (notYetUsedMoves.Contains(defense) && defense.GetComponent<Move>().getAmISelected()) {
-				selectedMove = "D";
-				touchedMoves.Add(defense);
-			}
-			if (emptyMove.GetComponent<Move>().getAmISelected()) {
+			if (!forcedMove) {
+				touchedMoves.Clear();
+				if (notYetUsedMoves.Contains(punchRight) && punchRight.GetComponent<Move>().getAmISelected()) {
+					selectedMove = "PR";
+					touchedMoves.Add(punchRight);
+				}
+				if (notYetUsedMoves.Contains(punchLeft) && punchLeft.GetComponent<Move>().getAmISelected()) {
+					selectedMove = "PL";
+					touchedMoves.Add(punchLeft);
+				}
+				if (notYetUsedMoves.Contains(kickRight) && kickRight.GetComponent<Move>().getAmISelected()) {
+					selectedMove = "KR";
+					touchedMoves.Add(kickRight);
+				}
+				if (notYetUsedMoves.Contains(kickLeft) && kickLeft.GetComponent<Move>().getAmISelected()) {
+					selectedMove = "KL";
+					touchedMoves.Add(kickLeft);
+				}
+				if (notYetUsedMoves.Contains(defense) && defense.GetComponent<Move>().getAmISelected()) {
+					selectedMove = "D";
+					touchedMoves.Add(defense);
+				}
+				if (emptyMove.GetComponent<Move>().getAmISelected()) {
+					selectedMove = "EM";
+					touchedMoves.Add(emptyMove);
+				}
+				if (touchedMoves.Count > 1) {
+					selectedMove = "";
+				} else if (touchedMoves.Count > 0) {
+					SelectMove(touchedMoves[0]);
+				}
+			} else {
 				selectedMove = "EM";
-				touchedMoves.Add(emptyMove);
-			}
-			if (touchedMoves.Count > 1) {
-				selectedMove = "";
-			} else if (touchedMoves.Count > 0) {
-				SelectMove(touchedMoves[0]);
+				SelectMove(emptyMove);
+				forcedMove = false;
 			}
 		}
 	}
@@ -106,7 +113,8 @@ public class Player : MonoBehaviour {
 				notYetUsedMoves.Add(alreadyUsedMove);
 			}
 		}
-		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;	foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;	
+		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
 			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = true;
 		}
@@ -115,6 +123,10 @@ public class Player : MonoBehaviour {
 
 	public bool GetHaveIChoosed () {
 		return haveIChoosed;
+	}
+
+	public void SetForcedMove () {
+		forcedMove = true;
 	}
 
 	public string GetSelectedMove () {

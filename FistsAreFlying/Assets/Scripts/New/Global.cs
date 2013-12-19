@@ -5,9 +5,7 @@ public class Global : MonoBehaviour {
 
 	private bool onlineGame = false;
 	private bool turnTimeGame = false;
-	private int turnTimeRound1 = 15;
-	private int turnTimeRound2 = 10;
-	private int turnTimeRound3 = 5;
+	private int turnTime = 10;
 
 	// Use this for initialization
 	void Start () {
@@ -34,22 +32,12 @@ public class Global : MonoBehaviour {
 		turnTimeGame = flag;
 	}
 
-	public int GetTurnTimeRound1 () {
-		return turnTimeRound1;
+	public int GetTurnTime () {
+		return turnTime;
 	}
 
-	public int GetTurnTimeRound2 () {
-		return turnTimeRound2;
-	}
-
-	public int GetTurnTimeRound3 () {
-		return turnTimeRound3;
-	}
-
-	public void SetTurnTime (int round1, int round2, int round3) {
-		turnTimeRound1 = round1;
-		turnTimeRound2 = round2;
-		turnTimeRound3 = round3;
+	public void SetTurnTime (int time) {
+		turnTime = time;
 	}
 
 }
