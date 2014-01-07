@@ -43,8 +43,8 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!haveIChoosed) {
+			touchedMoves.Clear();
 			if (!forcedMove) {
-				touchedMoves.Clear();
 				if (notYetUsedMoves.Contains(punchRight) && punchRight.GetComponent<Move>().getAmISelected()) {
 					selectedMove = "PR";
 					touchedMoves.Add(punchRight);
@@ -111,10 +111,7 @@ public class Player : MonoBehaviour {
 
 	public void NewTurn () {
 		if (notYetUsedMoves.Count == 1 && notYetUsedMoves[0].Equals(emptyMove)) {
-			foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
-				alreadyUsedMoves.Remove(alreadyUsedMove);
-				notYetUsedMoves.Add(alreadyUsedMove);
-			}
+			ResetMoves();
 		}
 		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
 		choosedMove.GetComponent<SpriteRenderer>().enabled = false;

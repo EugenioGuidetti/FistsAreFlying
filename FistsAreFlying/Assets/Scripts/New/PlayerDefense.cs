@@ -64,7 +64,7 @@ public class PlayerDefense : MonoBehaviour {
 			amIAttacking = false;
 		} else {
 			defense.GetComponent<Transform>().position = this.transform.position;
-			attackingMove.SetActive(false);
+			defense.SetActive(false);
 		}
 		this.gameObject.SetActive(false);
 	}

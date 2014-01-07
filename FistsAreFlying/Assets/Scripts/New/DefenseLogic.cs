@@ -26,7 +26,7 @@ public class DefenseLogic : MonoBehaviour {
 					result.GetComponent<DefenseResult>().SetResult("Fail");					
 					text.GetComponent<GUIText>().text = attackingPLayer.gameObject.name.ToString() + " could act in the next turn!";
 				}
-
+				StartCoroutine("DefenseEnd");
 			}
 		}
 	}
