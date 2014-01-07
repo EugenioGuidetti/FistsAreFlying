@@ -113,6 +113,19 @@ public class Player : MonoBehaviour {
 		haveIChoosed = false;
 	}
 
+	public void NewRound () {
+		ResetMoves();		
+		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
+		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
+		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
+			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = true;
+		}
+		//per la partita a super mosse
+		//forcedMove = false;
+		haveIChoosed = false;
+	}
+
 	public bool GetHaveIChoosed () {
 		return haveIChoosed;
 	}

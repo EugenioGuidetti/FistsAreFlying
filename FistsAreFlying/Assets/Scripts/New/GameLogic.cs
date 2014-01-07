@@ -18,6 +18,12 @@ public class GameLogic : MonoBehaviour {
 	public GameObject conflictResult;
 	private string minigameResult;
 
+	public GameObject roundText;
+	public GameObject turnTimeText;
+	public GameObject messageText;
+	public GameObject p1WinnedRoundsText;
+	public GameObject p2WinnedRoundsText;
+
 	public GameObject Player1;
 	public GameObject Player2;
 	private string player1Move = "";
@@ -26,20 +32,29 @@ public class GameLogic : MonoBehaviour {
 	private bool player2Selected = false;
 	private int player1Health = 20;
 	private int player2Health = 20;
+	private int player1WinnedRounds;
+	private int player2WinnedRounds;
 
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
 
-	public GameObject debugText;
 	// Use this for initialization
 	void Start () {
 		initializeRules();
 		round = 1;
+		roundText.GetComponent<GUIText>().text = round.ToString();
+		player1WinnedRounds = 0;
+		player2WinnedRounds = 0;
+		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
+		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
 		if (global.GetComponent<Global>().GetTurnTimeGame()) {
 			turnTimeMatch = true;
 			turnTime = global.GetComponent<Global>().GetTurnTime();
+			turnTimeText.GetComponent<GUIText>().text = turnTime;
 			StartCoroutine("TurnCountdown");
+		} else {
+			turnTimeText.GetComponent<GUIText>().text = "∞";
 		}
 		choosePhase = true;
 	}
@@ -115,14 +130,7 @@ public class GameLogic : MonoBehaviour {
 			}
 		}
 		//controllo fine round e fine match
-		Player1.GetComponent<Player>().NewTurn();
-		Player2.GetComponent<Player>().NewTurn();
-		player1Selected = false;
-		player2Selected = false;
-		if (turnTimeMatch) {
-			StartCoroutine("TurnCountdown");
-		}
-		choosePhase=true;
+		StartCoroutine("EndTurnChecks");
 	}
 
 	private IEnumerator MainFlow () {
@@ -140,7 +148,7 @@ public class GameLogic : MonoBehaviour {
 		while (countdown > 0) {
 			yield return new WaitForSeconds(1f);
 			countdown --;
-			//cambiare la guitext
+			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
 		if (!player1Selected) {
 			Player1.GetComponent<Player>().SetForcedMove();
@@ -187,5 +195,76 @@ public class GameLogic : MonoBehaviour {
 				conflictGame.GetComponent<ConflictLogic>().StartCountdown();
 			}
 		}
+	}
+
+	private IEnumerator EndTurnChecks () {
+		if (player1Health <= 0 || player2Health <= 0) {
+			if (player1Health <= 0) {
+				player2WinnedRounds = player2WinnedRounds + 1;
+			}
+			if (player2Health <= 0) {
+				player1WinnedRounds = player1WinnedRounds + 1;
+			}
+			//stampare risultato round
+			if (player1Health > 0) {
+				messageText.GetComponent<GUIText>().text = "Player 1 wins the round!";
+			} else if (player2Health > 0) {
+				messageText.GetComponent<GUIText>().text = "Player 2 wins the round!";
+			} else {
+				messageText.GetComponent<GUIText>().text = "Round draw!";
+			}
+			yield return new WaitForSeconds(2f);
+			messageText.GetComponent<GUIText>().text = "";
+			p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
+			p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
+			if (round == 1) {
+				NewRound();
+			}
+			if (round == 2) {
+				if ((player1WinnedRounds == 2 && player2WinnedRounds == 0) || (player1WinnedRounds == 0 && player2WinnedRounds == 2)) {
+					EndMatch();
+					StopCoroutine("EndTurnChecks");
+				} else {
+					NewRound();
+				}
+			}
+			if (round == 3) {
+				EndMatch();
+				StopCoroutine("EndTurnChecks");
+			}
+		} else {
+			Player1.GetComponent<Player>().NewTurn();
+			Player2.GetComponent<Player>().NewTurn();		
+		}
+		player1Selected = false;
+		player2Selected = false;
+		if (turnTimeMatch) {
+			turnTimeText.GetComponent<GUIText>().text = turnTime;
+			StartCoroutine("TurnCountdown");
+		}
+		choosePhase=true;
+	}
+
+	private void NewRound () {
+		round = round + 1;		
+		roundText.GetComponent<GUIText>().text = round.ToString();
+		player1Health = 20;
+		player2Health = 20;
+		//aggiornare barra della vita
+		Player1.GetComponent<Player>().NewRound();
+		Player2.GetComponent<Player>().NewRound();
+	}
+
+	private IEnumerator EndMatch () {
+		if (player1WinnedRounds > player2WinnedRounds) {
+			messageText.GetComponent<GUIText>().text = "Player 1 wins the match!";
+		} else if (player2WinnedRounds > player1WinnedRounds) {
+			messageText.GetComponent<GUIText>().text = "Player 2 wins the match!";
+		} else {
+			messageText.GetComponent<GUIText>().text = "Match draw!";
+		}
+		yield return new WaitForSeconds(2f);		
+		messageText.GetComponent<GUIText>().text = "";
+		Application.LoadLevel("MainMenu");
 	}
 }
