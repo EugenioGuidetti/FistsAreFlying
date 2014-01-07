@@ -51,7 +51,7 @@ public class GameLogic : MonoBehaviour {
 		if (global.GetComponent<Global>().GetTurnTimeGame()) {
 			turnTimeMatch = true;
 			turnTime = global.GetComponent<Global>().GetTurnTime();
-			turnTimeText.GetComponent<GUIText>().text = turnTime;
+			turnTimeText.GetComponent<GUIText>().text = turnTime.ToString();
 			StartCoroutine("TurnCountdown");
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "∞";
@@ -239,7 +239,7 @@ public class GameLogic : MonoBehaviour {
 		player1Selected = false;
 		player2Selected = false;
 		if (turnTimeMatch) {
-			turnTimeText.GetComponent<GUIText>().text = turnTime;
+			turnTimeText.GetComponent<GUIText>().text = turnTime.ToString();
 			StartCoroutine("TurnCountdown");
 		}
 		choosePhase=true;
