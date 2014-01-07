@@ -73,14 +73,12 @@ public class GameLogic : MonoBehaviour {
 		if (!player1Selected) {
 			if (Player1.GetComponent<Player>().GetHaveIChoosed()) {
 				player1Move = Player1.GetComponent<Player>().GetSelectedMove();
-				Player1.GetComponent<Player>().PrepareSelectedMove();
 				player1Selected = true;
 			}
 		}
 		if (!player2Selected) {
 			if (Player2.GetComponent<Player>().GetHaveIChoosed()) {
 				player2Move = Player2.GetComponent<Player>().GetSelectedMove();
-				Player2.GetComponent<Player>().PrepareSelectedMove();
 				player2Selected = true;
 			}
 		}

@@ -93,15 +93,6 @@ public class Player : MonoBehaviour {
 			notYetUsedMoves.Remove(move);
 			alreadyUsedMoves.Add(move);
 		}
-	}
-
-	public void PrepareSelectedMove () {
-		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
-			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = false;
-		}
-		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
-			alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = false;
-		}
 		choosedMove.GetComponent<SpriteRenderer>().enabled = true;
 	}
 
