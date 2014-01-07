@@ -55,7 +55,8 @@ public class DefenseAction : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter (Collider other) {
+	void OnTriggerEnter2D (Collider2D other) {
+		Debug.Log("collisione avvertita");
 		if (other.gameObject.name.Equals("WallUpper") || other.gameObject.name.Equals("WallLower")) {
 			//ho tolto un diviso 2f perché l'intervallo mi sembrava asimmetrico
 			noiseY = Random.value * 2 * noise - noise;
