@@ -23,6 +23,8 @@ public class GameLogic : MonoBehaviour {
 	public GameObject messageText;
 	public GameObject p1WinnedRoundsText;
 	public GameObject p2WinnedRoundsText;
+	public GameObject player1HealthBar;
+	public GameObject player2HealthBar;
 
 	public GameObject Player1;
 	public GameObject Player2;
@@ -32,6 +34,8 @@ public class GameLogic : MonoBehaviour {
 	private bool player2Selected = false;
 	private int player1Health = 20;
 	private int player2Health = 20;
+	private float healthUnit;
+	private float scaleUnit;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 
@@ -41,8 +45,10 @@ public class GameLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		initializeRules();
+		healthUnit = 1 / player1Health;
+		scaleUnit = player1HealthBar.transform.localScale.x * healthUnit;
 		round = 1;
-		roundText.GetComponent<GUIText>().text = round.ToString();
+		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
 		player1WinnedRounds = 0;
 		player2WinnedRounds = 0;
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
@@ -120,6 +126,8 @@ public class GameLogic : MonoBehaviour {
 			}
 		}
 		//aggiornamento barre della vita
+		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
+		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
@@ -247,10 +255,11 @@ public class GameLogic : MonoBehaviour {
 
 	private void NewRound () {
 		round = round + 1;		
-		roundText.GetComponent<GUIText>().text = round.ToString();
+		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
 		player1Health = 20;
 		player2Health = 20;
-		//aggiornare barra della vita
+		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
+		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		Player1.GetComponent<Player>().NewRound();
 		Player2.GetComponent<Player>().NewRound();
 	}
@@ -266,5 +275,10 @@ public class GameLogic : MonoBehaviour {
 		yield return new WaitForSeconds(2f);		
 		messageText.GetComponent<GUIText>().text = "";
 		Application.LoadLevel("MainMenu");
+	}
+
+	private void UpdateHealthBar (SpriteRenderer healthBar, int actualHealth) {
+		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - actualHealth * healthUnit);
+		healthBar.transform.localScale = new Vector3(scaleUnit * actualHealth, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 	}
 }
