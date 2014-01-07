@@ -89,6 +89,7 @@ public class GameLogic : MonoBehaviour {
 			LocalChoosePhase();
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
+			EnableText();
 			EndTurnPhase();
 		}
 	}
@@ -180,6 +181,7 @@ public class GameLogic : MonoBehaviour {
 			if (!player1Move.Equals("EM") && !player2Move.Equals("EM")) {
 				defenseGame.SetActive(true);
 				defenseGame.GetComponent<DefenseLogic>().SetPlayers(player1Move, player2Move);
+				DisableText();
 				Camera.main.transform.position = new Vector3 (0, -15, Camera.main.transform.position.z);
 			}
 		} else if (player1Move.Equals("EM") || player2Move.Equals("EM")) {
@@ -201,11 +203,26 @@ public class GameLogic : MonoBehaviour {
 			}
 			if (outcome.Equals("conflict")) {
 				conflictGame.SetActive(true);
-				conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);				
+				conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);
+				DisableText();
 				Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
 				conflictGame.GetComponent<ConflictLogic>().StartCountdown();
 			}
 		}
+	}
+
+	private void DisableText () {
+		turnTimeText.SetActive(false);
+		roundText.SetActive(false);
+		p1WinnedRoundsText.SetActive(false);
+		p2WinnedRoundsText.SetActive(false);
+	}
+
+	private void EnableText () {
+		turnTimeText.SetActive(true);
+		roundText.SetActive(true);
+		p1WinnedRoundsText.SetActive(true);
+		p2WinnedRoundsText.SetActive(true);
 	}
 
 	private IEnumerator EndTurnChecks () {
