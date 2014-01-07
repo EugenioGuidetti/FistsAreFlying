@@ -33,6 +33,7 @@ public class Player : MonoBehaviour {
 		if (alreadyUsedMoves.Count > 0) {
 			alreadyUsedMoves.Clear();
 		}
+		notYetUsedMoves.Clear();
 		notYetUsedMoves.Add(punchRight);
 		notYetUsedMoves.Add(punchLeft);
 		notYetUsedMoves.Add(kickRight);
@@ -103,6 +104,7 @@ public class Player : MonoBehaviour {
 	public void NewTurn () {
 		if (notYetUsedMoves.Count == 1 && notYetUsedMoves[0].Equals(emptyMove)) {
 			ResetMoves();
+			notYetUsedMoves.Add(emptyMove);
 		}
 		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
 		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
@@ -114,7 +116,8 @@ public class Player : MonoBehaviour {
 	}
 
 	public void NewRound () {
-		ResetMoves();		
+		ResetMoves();
+		notYetUsedMoves.Add(emptyMove);
 		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
 		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
 		foreach (GameObject notYetUsedMove in notYetUsedMoves) {

@@ -36,6 +36,7 @@ public class GameLogic : MonoBehaviour {
 	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
+	private const int healthTotal = 5;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 
@@ -45,8 +46,8 @@ public class GameLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		initializeRules();
-		player1Health = 20;
-		player2Health = 20;
+		player1Health = healthTotal;
+		player2Health = healthTotal;
 		healthUnit = 1f / player1Health;
 		scaleUnit = player1HealthBar.transform.localScale.x * healthUnit;
 		round = 1;
@@ -227,20 +228,19 @@ public class GameLogic : MonoBehaviour {
 			messageText.GetComponent<GUIText>().text = "";
 			p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 			p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
-			if (round == 1) {
-				NewRound();
-			}
+			if (round == 3) {
+				StartCoroutine("EndMatch");
+			} 
 			if (round == 2) {
 				if ((player1WinnedRounds == 2 && player2WinnedRounds == 0) || (player1WinnedRounds == 0 && player2WinnedRounds == 2)) {
-					EndMatch();
-					StopCoroutine("EndTurnChecks");
+					StartCoroutine("EndMatch");
 				} else {
 					NewRound();
 				}
 			}
-			if (round == 3) {
-				EndMatch();
-				StopCoroutine("EndTurnChecks");
+			
+			if (round == 1) {
+				NewRound();
 			}
 		} else {
 			Player1.GetComponent<Player>().NewTurn();
@@ -258,8 +258,8 @@ public class GameLogic : MonoBehaviour {
 	private void NewRound () {
 		round = round + 1;		
 		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
-		player1Health = 20;
-		player2Health = 20;
+		player1Health = healthTotal;
+		player2Health = healthTotal;
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
 		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		Player1.GetComponent<Player>().NewRound();
@@ -267,6 +267,8 @@ public class GameLogic : MonoBehaviour {
 	}
 
 	private IEnumerator EndMatch () {
+		Debug.Log("entrato in EndMatch");
+		StopCoroutine("EndTurnChecks");
 		if (player1WinnedRounds > player2WinnedRounds) {
 			messageText.GetComponent<GUIText>().text = "Player 1 wins the match!";
 		} else if (player2WinnedRounds > player1WinnedRounds) {
