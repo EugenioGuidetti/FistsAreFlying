@@ -32,8 +32,8 @@ public class GameLogic : MonoBehaviour {
 	private string player2Move = "";
 	private bool player1Selected = false;
 	private bool player2Selected = false;
-	private int player1Health = 20;
-	private int player2Health = 20;
+	private int player1Health;
+	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
 	private int player1WinnedRounds;
@@ -45,7 +45,9 @@ public class GameLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		initializeRules();
-		healthUnit = 1 / player1Health;
+		player1Health = 20;
+		player2Health = 20;
+		healthUnit = 1f / player1Health;
 		scaleUnit = player1HealthBar.transform.localScale.x * healthUnit;
 		round = 1;
 		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
