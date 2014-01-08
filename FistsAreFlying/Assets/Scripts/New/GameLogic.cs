@@ -36,7 +36,7 @@ public class GameLogic : MonoBehaviour {
 	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
-	private const int healthTotal = 5;
+	private const int healthTotal = 20;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 
@@ -299,6 +299,9 @@ public class GameLogic : MonoBehaviour {
 	}
 
 	private void UpdateHealthBar (SpriteRenderer healthBar, int actualHealth) {
+		if (actualHealth < 0) {
+			actualHealth = 0;
+		}
 		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - actualHealth * healthUnit);
 		healthBar.transform.localScale = new Vector3(scaleUnit * actualHealth, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
 	}
