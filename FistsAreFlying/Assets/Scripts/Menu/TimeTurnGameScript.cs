@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class TimeTurnGameScript : MonoBehaviour {
@@ -21,7 +21,7 @@ public class TimeTurnGameScript : MonoBehaviour {
 	}
 	
 	void OnMouseDown(){
-		globalObject.GetComponent<Global>().SetTurnTimeGame(true);
+		globalObject.GetComponent<Global>().SetTimeGame(true);
 		playChoice.GetComponent<Transform>().Translate(translateCoordinate);
 		modeChoice.GetComponent<Transform>().Translate(translateCoordinate);
 	}

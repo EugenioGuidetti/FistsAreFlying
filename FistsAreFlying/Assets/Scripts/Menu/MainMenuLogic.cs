@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class MainMenuLogic : MonoBehaviour {
@@ -8,7 +8,7 @@ public class MainMenuLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		globalObject=GameObject.Find("GlobalObject");
-		globalObject.GetComponent<Global>().SetTurnTimeGame(false);
+		globalObject.GetComponent<Global>().SetTimeGame(false);
 		globalObject.GetComponent<Global>().SetOnlineGame(false);
 	}
 	

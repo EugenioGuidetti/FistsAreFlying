@@ -5,8 +5,8 @@ public class GameLogic : MonoBehaviour {
 
 	private GameObject global;
 
-	private bool turnTimeMatch = false;
-	private int turnTime;
+	private bool timeMatch = false;
+	private int time;
 	private int countdown;
 	private int round;
 	private bool choosePhase = false;
@@ -57,10 +57,10 @@ public class GameLogic : MonoBehaviour {
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
-		if (global.GetComponent<Global>().GetTurnTimeGame()) {
-			turnTimeMatch = true;
-			turnTime = global.GetComponent<Global>().GetTurnTime();
-			turnTimeText.GetComponent<GUIText>().text = turnTime.ToString();
+		if (global.GetComponent<Global>().GetTimeGame()) {
+			timeMatch = true;
+			time = global.GetComponent<Global>().GetTime();
+			turnTimeText.GetComponent<GUIText>().text = time.ToString();
 			StartCoroutine("TurnCountdown");
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "∞";
@@ -156,7 +156,7 @@ public class GameLogic : MonoBehaviour {
 	}
 
 	private IEnumerator TurnCountdown () {
-		countdown = turnTime;
+		countdown = time;
 		while (countdown > 0) {
 			yield return new WaitForSeconds(1f);
 			countdown --;
@@ -265,8 +265,8 @@ public class GameLogic : MonoBehaviour {
 		}
 		player1Selected = false;
 		player2Selected = false;
-		if (turnTimeMatch) {
-			turnTimeText.GetComponent<GUIText>().text = turnTime.ToString();
+		if (timeMatch) {
+			turnTimeText.GetComponent<GUIText>().text = time.ToString();
 			StartCoroutine("TurnCountdown");
 		}
 		choosePhase=true;

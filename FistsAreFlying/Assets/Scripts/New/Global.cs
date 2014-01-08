@@ -4,8 +4,10 @@ using System.Collections;
 public class Global : MonoBehaviour {
 
 	private bool onlineGame = false;
-	private bool turnTimeGame = false;
-	private int turnTime = 10;
+	private bool timeGame = false;
+	private int time = 10;
+	private bool soundEnable = true;
+	private bool effectsEnable = true;
 
 	// Use this for initialization
 	void Start () {
@@ -24,20 +26,36 @@ public class Global : MonoBehaviour {
 		onlineGame = flag;
 	}
 
-	public bool GetTurnTimeGame () {
-		return turnTimeGame;
+	public bool GetTimeGame () {
+		return timeGame;
 	}
 
-	public void SetTurnTimeGame (bool flag){
-		turnTimeGame = flag;
+	public void SetTimeGame (bool flag){
+		timeGame = flag;
 	}
 
-	public int GetTurnTime () {
-		return turnTime;
+	public int GetTime () {
+		return time;
 	}
 
-	public void SetTurnTime (int time) {
-		turnTime = time;
+	public void SetTime (int time) {
+		time = time;
+	}
+
+	public bool GetSound () {
+		return soundEnable;
+	}
+
+	public void SetSound (bool flag) {
+		soundEnable = flag;
+	}
+
+	public bool GetEffects () {
+		return effectsEnable;
+	}
+
+	public void SetEffects (bool flag) {
+		effectsEnable = flag;
 	}
 
 }
