@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9727ca308ee9f2746be9a1f1d31f5aad
+guid: 2e1ae5eefcb3608409c7fdab463dc473
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -45,77 +45,77 @@ TextureImporter:
     compressionQuality: 50
   spriteSheet:
     sprites:
-    - name: NewMenu_0
+    - name: Options_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 473
-        width: 394
-        height: 64
+        x: 0
+        y: 268
+        width: 310
+        height: 42
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_1
+      pivot: {x: .5, y: .5}
+    - name: Options_1
       rect:
         serializedVersion: 2
-        x: 3
-        y: 406
-        width: 394
-        height: 64
+        x: 0
+        y: 232
+        width: 310
+        height: 39
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_2
+      pivot: {x: .5, y: .5}
+    - name: Options_2
       rect:
         serializedVersion: 2
-        x: 3
-        y: 339
-        width: 394
-        height: 64
+        x: 0
+        y: 193
+        width: 310
+        height: 39
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_3
+      pivot: {x: .5, y: .5}
+    - name: Options_3
       rect:
         serializedVersion: 2
-        x: 3
-        y: 272
-        width: 394
-        height: 64
+        x: 0
+        y: 154
+        width: 310
+        height: 39
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_4
+      pivot: {x: .5, y: .5}
+    - name: Options_4
       rect:
         serializedVersion: 2
-        x: 3
-        y: 205
-        width: 394
-        height: 64
+        x: 0
+        y: 115
+        width: 310
+        height: 39
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_5
+      pivot: {x: .5, y: .5}
+    - name: Options_5
       rect:
         serializedVersion: 2
-        x: 3
-        y: 138
-        width: 394
-        height: 64
+        x: 0
+        y: 76
+        width: 310
+        height: 39
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_6
+      pivot: {x: .5, y: .5}
+    - name: Options_6
       rect:
         serializedVersion: 2
-        x: 3
-        y: 71
-        width: 394
-        height: 64
+        x: 0
+        y: 40
+        width: 310
+        height: 36
       alignment: 0
-      pivot: {x: 0, y: 0}
-    - name: NewMenu_7
+      pivot: {x: .5, y: .5}
+    - name: Options_7
       rect:
         serializedVersion: 2
-        x: 3
-        y: 4
-        width: 394
-        height: 64
+        x: 0
+        y: 1
+        width: 309
+        height: 39
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: .5, y: .5}
   spritePackingTag: 
   userData: 
