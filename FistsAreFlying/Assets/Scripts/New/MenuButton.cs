@@ -18,7 +18,10 @@ public class MenuButton : MonoBehaviour {
 	}
 
 	public bool GetAmISelected () {
-		amISelected = false;
-		return true;
+		if (amISelected) {
+			amISelected = false;
+			return true;		
+		}
+		return amISelected;
 	}
 }

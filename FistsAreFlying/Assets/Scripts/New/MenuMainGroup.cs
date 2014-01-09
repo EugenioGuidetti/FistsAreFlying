@@ -43,8 +43,11 @@ public class MenuMainGroup : MonoBehaviour {
 	}
 
 	public bool GetHaveISelected () {
-		haveISelected = false;
-		return true;
+		if (haveISelected) {
+			haveISelected = false;
+			return true;
+		}
+		return haveISelected;
 	}
 
 	public string GetSelectedButton () {
