@@ -49,9 +49,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 268
-        width: 310
-        height: 42
+        y: 270
+        width: 130
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_1
@@ -59,8 +59,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 232
-        width: 310
-        height: 39
+        width: 285
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_2
@@ -69,52 +69,52 @@ TextureImporter:
         x: 0
         y: 193
         width: 310
-        height: 39
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 154
-        width: 310
-        height: 39
+        y: 157
+        width: 65
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 115
-        width: 310
-        height: 39
+        y: 119
+        width: 100
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_5
       rect:
         serializedVersion: 2
         x: 0
-        y: 76
-        width: 310
-        height: 39
+        y: 81
+        width: 180
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 40
-        width: 310
-        height: 36
+        y: 43
+        width: 180
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: Options_7
       rect:
         serializedVersion: 2
         x: 0
-        y: 1
-        width: 309
-        height: 39
+        y: 5
+        width: 170
+        height: 35
       alignment: 0
       pivot: {x: .5, y: .5}
   spritePackingTag: 
