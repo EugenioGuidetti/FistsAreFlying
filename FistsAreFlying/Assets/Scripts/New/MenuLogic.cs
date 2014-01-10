@@ -125,5 +125,9 @@ public class MenuLogic : MonoBehaviour {
 		}
 	}
 
+	private void ManageOption () {
+		
+	}
+
 
 }

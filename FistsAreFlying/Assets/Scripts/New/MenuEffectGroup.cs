@@ -6,6 +6,8 @@ public class MenuEffectGroup : MonoBehaviour {
 	private GameObject global;
 	public GameObject effectOn;
 	public GameObject effectOff;
+	public GameObject checkOn;
+	public GameObject checkOff;
 
 	// Use this for initialization
 	void Start () {
@@ -16,9 +18,13 @@ public class MenuEffectGroup : MonoBehaviour {
 	void Update () {
 		if (effectOn.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetEffects(true);
+			checkOn.SetActive(true);
+			checkOff.SetActive(false);
 		}
 		if (effectOff.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetEffects(false);
+			checkOn.SetActive(false);
+			checkOff.SetActive(true);
 		}
 	}
 }

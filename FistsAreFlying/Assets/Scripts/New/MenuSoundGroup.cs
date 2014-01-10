@@ -6,6 +6,8 @@ public class MenuSoundGroup : MonoBehaviour {
 	private GameObject global;
 	public GameObject soundOn;
 	public GameObject soundOff;
+	public GameObject checkOn;
+	public GameObject checkOff;
 
 	// Use this for initialization
 	void Start () {
@@ -16,9 +18,13 @@ public class MenuSoundGroup : MonoBehaviour {
 	void Update () {
 		if (soundOn.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetSound(true);
+			checkOn.SetActive(true);
+			checkOff.SetActive(false);
 		}
 		if (soundOff.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetSound(false);
+			checkOff.SetActive(true);
+			checkOn.SetActive(false);
 		}
 	}
 }

@@ -7,6 +7,9 @@ public class MenuTimeGroup : MonoBehaviour {
 	public GameObject time1;
 	public GameObject time2;
 	public GameObject time3; 
+	public GameObject check1;
+	public GameObject check2;
+	public GameObject check3;
 
 	// Use this for initialization
 	void Start () {
@@ -18,12 +21,22 @@ public class MenuTimeGroup : MonoBehaviour {
 	void Update () {
 		if (time1.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetTime(15);
+			check1.SetActive(true);
+			check2.SetActive(false);
+			check3.SetActive(false);
+
 		}
-		if (time1.GetComponent<MenuButton> ().GetAmISelected()) {
+		if (time2.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetTime(10);
+			check1.SetActive(false);
+			check2.SetActive(true);
+			check3.SetActive(false);
 		}
-		if (time1.GetComponent<MenuButton> ().GetAmISelected()) {
+		if (time3.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetTime(5);
+			check1.SetActive(false);
+			check2.SetActive(false);
+			check3.SetActive(true);
 		}
 	}
 }
