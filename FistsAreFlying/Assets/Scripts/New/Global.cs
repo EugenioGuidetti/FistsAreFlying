@@ -39,7 +39,7 @@ public class Global : MonoBehaviour {
 	}
 
 	public void SetTime (int time) {
-		time = time;
+		this.time = time;
 	}
 
 	public bool GetSound () {

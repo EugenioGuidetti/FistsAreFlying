@@ -39,7 +39,7 @@ public class MenuLogic : MonoBehaviour {
 			return;
 		}
 		if (actualGroup.Equals(optionsGroup)) {
-			//gestione
+			ManageOptions();
 			return;
 		}
 		/*
@@ -125,8 +125,13 @@ public class MenuLogic : MonoBehaviour {
 		}
 	}
 
-	private void ManageOption () {
-		
+	private void ManageOptions () {
+		if (back.GetComponent<MenuButton>().GetAmISelected()) {
+			actualGroup.SetActive(false);
+			back.SetActive(false);
+			actualGroup = mainGroup;
+			actualGroup.SetActive(true);
+		}
 	}
 
 

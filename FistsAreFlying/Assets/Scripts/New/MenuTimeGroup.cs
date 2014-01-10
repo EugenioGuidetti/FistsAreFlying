@@ -21,6 +21,7 @@ public class MenuTimeGroup : MonoBehaviour {
 	void Update () {
 		if (time1.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetTime(15);
+			Debug.Log(global.GetComponent<Global>().GetTime().ToString());
 			check1.SetActive(true);
 			check2.SetActive(false);
 			check3.SetActive(false);
@@ -28,12 +29,14 @@ public class MenuTimeGroup : MonoBehaviour {
 		}
 		if (time2.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetTime(10);
+			Debug.Log(global.GetComponent<Global>().GetTime().ToString());
 			check1.SetActive(false);
 			check2.SetActive(true);
 			check3.SetActive(false);
 		}
 		if (time3.GetComponent<MenuButton> ().GetAmISelected()) {
 			global.GetComponent<Global>().SetTime(5);
+			Debug.Log(global.GetComponent<Global>().GetTime().ToString());
 			check1.SetActive(false);
 			check2.SetActive(false);
 			check3.SetActive(true);
