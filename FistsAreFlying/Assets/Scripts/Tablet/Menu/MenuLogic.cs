@@ -19,6 +19,7 @@ public class MenuLogic : MonoBehaviour {
 	void Start () {
 		global = GameObject.Find("GlobalObject");
 		global.GetComponent<Global>().SetOnlineGame(false);
+		global.GetComponent<Global>().SetAmIPlayer1(false);
 		global.GetComponent<Global>().SetTimeGame(false);
 		actualGroup = mainGroup;
 		lastSelection = "";
@@ -90,6 +91,7 @@ public class MenuLogic : MonoBehaviour {
 			}
 		} else if (back.GetComponent<MenuButton>().GetAmISelected()) {
 			if (global.GetComponent<Global>().GetOnlineGame()) {
+				global.GetComponent<Global>().SetAmIPlayer1(false);
 				actualGroup.SetActive(false);
 				actualGroup = onlineGroup;
 				actualGroup.SetActive(true);
@@ -110,6 +112,7 @@ public class MenuLogic : MonoBehaviour {
 			previousGroup = actualGroup;
 			if (lastSelection.Equals("createMatch")) {
 				actualGroup = modeGroup;
+				global.GetComponent<Global>().SetAmIPlayer1(true);
 			}
 			if (lastSelection.Equals("searchMatch")) {
 				//actualGroup = matchGroup;

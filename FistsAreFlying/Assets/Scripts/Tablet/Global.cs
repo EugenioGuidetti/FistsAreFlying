@@ -4,6 +4,7 @@ using System.Collections;
 public class Global : MonoBehaviour {
 
 	private bool onlineGame = false;
+	private bool amIPlayer1 = false;
 	private bool timeGame = false;
 	private int time = 10;
 	private bool soundEnable = true;
@@ -24,6 +25,14 @@ public class Global : MonoBehaviour {
 
 	public void SetOnlineGame (bool flag) {
 		onlineGame = flag;
+	}
+
+	public bool GetAmIPlayer1 () {
+		return amIPlayer1;
+	}
+
+	public void SetAmIPlayer1 (bool flag) {
+		amIPlayer1 = flag;
 	}
 
 	public bool GetTimeGame () {
