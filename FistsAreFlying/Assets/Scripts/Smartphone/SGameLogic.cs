@@ -62,8 +62,6 @@ public class SGameLogic : MonoBehaviour {
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
-			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdownPlayer1");
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "∞";
 		}
@@ -106,6 +104,10 @@ public class SGameLogic : MonoBehaviour {
 					tapPlayer1=true;
 					Player1.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
+					if (timeMatch){
+						turnTimeText.GetComponent<GUIText>().text = time.ToString();
+						StartCoroutine("TurnCountdownPlayer1");
+					}
 				}
 			} else if (Player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
 				player1Move = Player1.GetComponent<SPlayer>().GetSelectedMove();
@@ -119,6 +121,10 @@ public class SGameLogic : MonoBehaviour {
 					tapPlayer2=true;
 					Player2.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
+					if (timeMatch){
+						turnTimeText.GetComponent<GUIText>().text = time.ToString();
+						StartCoroutine("TurnCountdownPlayer2");
+					}
 				}
 			} else if (!player2Selected) {
 				if (Player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
@@ -300,14 +306,23 @@ public class SGameLogic : MonoBehaviour {
 		}
 		player1Selected = false;
 		player2Selected = false;
-		if (timeMatch) {
+
+		//nb 
+		//NB
+		//NB
+		//if (onlineMatch){
+	/*	if (timeMatch) {
 			turnTimeText.GetComponent<GUIText>().text = time.ToString();
 			StartCoroutine("TurnCountdownPlayer1");
-		}
+		}*/
+		//else{
+			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+			tapPlayer1 = false;
+			tapPlayer2 = false;
+		//}
 		choosePhase = true;
-		tapPlayer1 = false;
-		tapPlayer2 = false;
-		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+
+
 	}
 	
 	private void NewRound () {
