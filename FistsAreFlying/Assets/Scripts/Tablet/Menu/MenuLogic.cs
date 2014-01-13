@@ -15,6 +15,11 @@ public class MenuLogic : MonoBehaviour {
 	private GameObject previousGroup;
 	private string lastSelection;
 
+	//temporanee
+	private float width = 0;
+	private float heigth = 0;
+	private float inches = 0;
+
 	// Use this for initialization
 	void Start () {
 		global = GameObject.Find("GlobalObject");
@@ -83,7 +88,14 @@ public class MenuLogic : MonoBehaviour {
 				if (lastSelection.Equals("timePlay")) {
 					global.GetComponent<Global>().SetTimeGame(true);
 				}
-				Application.LoadLevel("Game");
+				width= Screen.width/ Screen.dpi;
+				heigth= Screen.height/Screen.dpi;
+				inches= Mathf.Sqrt(Mathf.Pow(width,2f)+Mathf.Pow(heigth,2f));
+				if (inches>=6.5){
+					Application.LoadLevel("Game");
+				} else {
+					Application.LoadLevel("GameS");
+				}
 			} else {
 				//actualGroup settato ad attesa sfidante
 				previousGroup.SetActive(false);
