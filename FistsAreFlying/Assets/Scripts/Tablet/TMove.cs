@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Move : MonoBehaviour {
+public class TMove : MonoBehaviour {
 
 	private Camera mainCamera;
 

@@ -1,24 +1,23 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class GameLogic : MonoBehaviour {
-
+public class SGameLogic : MonoBehaviour {
+	
 	private GameObject global;
-	private bool onlineMatch;
-	private bool amIPlayer1;
+	
 	private bool timeMatch = false;
 	private int time;
 	private int countdown;
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
-
+	
 	public GameObject defenseGame;
 	public GameObject defenseResult;
 	public GameObject conflictGame;
 	public GameObject conflictResult;
 	private string minigameResult;
-
+	
 	public GameObject roundText;
 	public GameObject turnTimeText;
 	public GameObject messageText;
@@ -26,13 +25,15 @@ public class GameLogic : MonoBehaviour {
 	public GameObject p2WinnedRoundsText;
 	public GameObject player1HealthBar;
 	public GameObject player2HealthBar;
-
+	
 	public GameObject Player1;
 	public GameObject Player2;
 	private string player1Move = "";
 	private string player2Move = "";
 	private bool player1Selected = false;
 	private bool player2Selected = false;
+	private bool tapPlayer1 = false;
+	private bool tapPlayer2 = false;
 	private int player1Health;
 	private int player2Health;
 	private float healthUnit;
@@ -43,7 +44,7 @@ public class GameLogic : MonoBehaviour {
 
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
-
+	
 	// Use this for initialization
 	void Start () {
 		initializeRules();
@@ -58,21 +59,18 @@ public class GameLogic : MonoBehaviour {
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
-		if (global.GetComponent<Global>().GetOnlineGame()) {
-			onlineMatch = true;
-			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
-		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
 			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdown");
+			StartCoroutine("TurnCountdownPlayer1");
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "∞";
 		}
 		choosePhase = true;
+		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
 	}
-
+	
 	private void initializeRules () {
 		rules.Add ("PR.PL", "conflict");
 		rules.Add ("PR.KR", "player2");
@@ -90,84 +88,58 @@ public class GameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+			
 		if (choosePhase) {
-			if (!onlineMatch) {
-				LocalChoosePhase();
-			} else if (amIPlayer1) {
-				OnlineP1ChoosePhase();
-			} else {
-				OnlineP2ChoosePhase();
-			}
+			LocalChoosePhase();
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
 			EnableText();
 			EndTurnPhase();
 		}
 	}
-
+	
 	private void LocalChoosePhase () {
 		if (!player1Selected) {
-			if (Player1.GetComponent<Player>().GetHaveIChoosed()) {
-				player1Move = Player1.GetComponent<Player>().GetSelectedMove();
+			if(!tapPlayer1){
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
+					Debug.Log("tap rilevato");
+					tapPlayer1=true;
+					Player1.GetComponent<SPlayer>().PutInShowPosition();
+					messageText.GetComponent<GUIText>().text= "";
+				}
+			} else if (Player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
+				player1Move = Player1.GetComponent<SPlayer>().GetSelectedMove();
 				player1Selected = true;
+				Player1.GetComponent<SPlayer>().PutInHidePosition();
+				messageText.GetComponent<GUIText>().text= "Player 2 turn, tap for begin";
+			}
+		} else {
+			if (!tapPlayer2) {
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
+					tapPlayer2=true;
+					Player2.GetComponent<SPlayer>().PutInShowPosition();
+					messageText.GetComponent<GUIText>().text= "";
+				}
+			} else if (!player2Selected) {
+				if (Player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
+					player2Move = Player2.GetComponent<SPlayer>().GetSelectedMove();
+					player2Selected = true;
+					Player2.GetComponent<SPlayer>().PutInHidePosition();
+				}
 			}
 		}
-		if (!player2Selected) {
-			if (Player2.GetComponent<Player>().GetHaveIChoosed()) {
-				player2Move = Player2.GetComponent<Player>().GetSelectedMove();
-				player2Selected = true;
-			}
+		if (player1Selected) {
+			StopCoroutine("TurnCountdownPlayer1");
+		}
+		if (player2Selected) {
+			StopCoroutine("TurnCountdownPlayer2");
 		}
 		if (player1Selected && player2Selected) {
 			choosePhase = false;
-			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
 		}
 	}
-
-	private void OnlineP1ChoosePhase () {
-		if (!player1Selected) {
-			if (Player1.GetComponent<Player>().GetHaveIChoosed()) {
-				Player1Decision(Player1.GetComponent<Player>().GetSelectedMove());
-			}
-		}
-		if (player1Selected && player2Selected) {
-			choosePhase = false;
-			StopCoroutine("TurnCountdown");
-			StartCoroutine("MainFlow");
-		}
-	}
-
-	private void OnlineP2ChoosePhase () {
-		if (!player2Selected) {
-			if (Player2.GetComponent<Player>().GetHaveIChoosed()) {
-				Player2Decision(Player2.GetComponent<Player>().GetSelectedMove());
-			}
-		}
-		if (player1Selected && player2Selected) {
-			choosePhase = false;
-			StopCoroutine("TurnCountdown");
-			StartCoroutine("MainFlow");
-		}
-	}
-
-	[RPC] void Player1Decision (string selectedMove) {
-		player1Selected = true;
-		player1Move = selectedMove;
-		if (Network.isServer) {
-			networkView.RPC("Player1Decision", RPCMode.Others, selectedMove);
-		}
-	}
-
-	[RPC] void Player2Decision (string selectedMove) {
-		player2Selected = true;
-		player1Move = selectedMove;
-		if (Network.isClient) {
-			networkView.RPC("Player2Decision", RPCMode.Server, selectedMove);
-		}
-	}
-
-
+	
 	private void EndTurnPhase () {
 		endPhase = false;
 		if (conflictResult.GetComponent<ConflictResult>().GetFreshness()) {
@@ -189,41 +161,50 @@ public class GameLogic : MonoBehaviour {
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
-				Player1.GetComponent<Player>().SetForcedMove();
+				Player1.GetComponent<SPlayer>().SetForcedMove();
 			}
 			if (minigameResult.Equals("Player2")) {
-				Player2.GetComponent<Player>().SetForcedMove();
+				Player2.GetComponent<SPlayer>().SetForcedMove();
 			}
 		}
 		//controllo fine round e fine match
 		StartCoroutine("EndTurnChecks");
 	}
-
+	
 	private IEnumerator MainFlow () {
 		yield return new WaitForSeconds(2f);
-		Player1.GetComponent<Player>().ShowSelectedMove();
-		Player2.GetComponent<Player>().ShowSelectedMove();
+		Player1.GetComponent<SPlayer>().ShowSelectedMove();
+		Player2.GetComponent<SPlayer>().ShowSelectedMove();
 		//lanciare le animazioni di avvicinamento		
 		yield return new WaitForSeconds(1f);
 		ApplyRules();
 		endPhase = true;
 	}
-
-	private IEnumerator TurnCountdown () {
+	
+	private IEnumerator TurnCountdownPlayer1 () {
 		countdown = time;
 		while (countdown > 0) {
 			yield return new WaitForSeconds(1f);
 			countdown --;
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
-		if (!player1Selected) {
-			Player1.GetComponent<Player>().SetForcedMove();
-		}
 		if (!player2Selected) {
-			Player2.GetComponent<Player>().SetForcedMove();
+			Player2.GetComponent<SPlayer>().SetForcedMove();
 		}
 	}
 
+	private IEnumerator TurnCountdownPlayer2 () {
+		countdown = time;
+		while (countdown > 0) {
+			yield return new WaitForSeconds(1f);
+			countdown --;
+			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
+		}
+		if (!player2Selected) {
+			Player2.GetComponent<SPlayer>().SetForcedMove();
+		}
+	}
+	
 	private void ApplyRules () {
 		string outcome;
 		if (player1Move.Equals(player2Move)) {
@@ -264,21 +245,21 @@ public class GameLogic : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	private void DisableText () {
 		turnTimeText.SetActive(false);
 		roundText.SetActive(false);
 		p1WinnedRoundsText.SetActive(false);
 		p2WinnedRoundsText.SetActive(false);
 	}
-
+	
 	private void EnableText () {
 		turnTimeText.SetActive(true);
 		roundText.SetActive(true);
 		p1WinnedRoundsText.SetActive(true);
 		p2WinnedRoundsText.SetActive(true);
 	}
-
+	
 	private IEnumerator EndTurnChecks () {
 		if (player1Health <= 0 || player2Health <= 0) {
 			if (player1Health <= 0) {
@@ -314,18 +295,21 @@ public class GameLogic : MonoBehaviour {
 				NewRound();
 			}
 		} else {
-			Player1.GetComponent<Player>().NewTurn();
-			Player2.GetComponent<Player>().NewTurn();		
+			Player1.GetComponent<SPlayer>().NewTurn();
+			Player2.GetComponent<SPlayer>().NewTurn();		
 		}
 		player1Selected = false;
 		player2Selected = false;
 		if (timeMatch) {
 			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdown");
+			StartCoroutine("TurnCountdownPlayer1");
 		}
-		choosePhase=true;
+		choosePhase = true;
+		tapPlayer1 = false;
+		tapPlayer2 = false;
+		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
 	}
-
+	
 	private void NewRound () {
 		round = round + 1;		
 		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
@@ -333,10 +317,10 @@ public class GameLogic : MonoBehaviour {
 		player2Health = healthTotal;
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
 		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
-		Player1.GetComponent<Player>().NewRound();
-		Player2.GetComponent<Player>().NewRound();
+		Player1.GetComponent<SPlayer>().NewRound();
+		Player2.GetComponent<SPlayer>().NewRound();
 	}
-
+	
 	private IEnumerator EndMatch () {
 		Debug.Log("entrato in EndMatch");
 		StopCoroutine("EndTurnChecks");
@@ -351,7 +335,7 @@ public class GameLogic : MonoBehaviour {
 		messageText.GetComponent<GUIText>().text = "";
 		Application.LoadLevel("MainMenu");
 	}
-
+	
 	private void UpdateHealthBar (SpriteRenderer healthBar, int actualHealth) {
 		if (actualHealth < 0) {
 			actualHealth = 0;
