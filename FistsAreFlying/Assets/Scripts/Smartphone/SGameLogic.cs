@@ -11,6 +11,7 @@ public class SGameLogic : MonoBehaviour {
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
+	private bool inPause = false;
 	
 	public GameObject defenseGame;
 	public GameObject defenseResult;
@@ -86,7 +87,23 @@ public class SGameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-			
+		if (Input.GetKeyDown(KeyCode.Escape)){
+			if(!inPause){
+				inPause = true;
+				Time.timeScale = 0;
+				messageText.GetComponent<GUIText>().text = "GAME PAUSED";
+				Player1.SetActive(false);
+				Player2.SetActive(false);
+				//audio.Pause();
+			} else {
+				inPause = false;
+				messageText.GetComponent<GUIText>().text = "";
+				Time.timeScale = 1;
+				Player1.SetActive(true);
+				Player2.SetActive(true);
+				/*if (!audio.isPlaying) audio.Play(); */
+			}
+		}
 		if (choosePhase) {
 			LocalChoosePhase();
 		}
