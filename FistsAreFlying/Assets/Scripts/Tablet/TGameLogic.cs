@@ -110,8 +110,8 @@ public class TGameLogic : MonoBehaviour {
 			if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
 				Debug.Log("tap rilevato");
 				tapPlayers = true;
-				Player1.GetComponent<SPlayer>().PutInShowPosition();
-				Player2.GetComponent<SPlayer>().PutInShowPosition();
+				Player1.GetComponent<TPlayer>().PutInShowPosition();
+				Player2.GetComponent<TPlayer>().PutInShowPosition();
 				messageText.GetComponent<GUIText>().text= "";
 				if (timeMatch) {
 					turnTimeText.GetComponent<GUIText>().text = time.ToString();
@@ -124,12 +124,14 @@ public class TGameLogic : MonoBehaviour {
 				if (Player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
 					player1Move = Player1.GetComponent<TPlayer>().GetSelectedMove();
 					player1Selected = true;
+					Player1.GetComponent<TPlayer>().PutInHidePosition(true);
 				}
 			}
 			if (!player2Selected) {
 				if (Player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
 					player2Move = Player2.GetComponent<TPlayer>().GetSelectedMove();
 					player2Selected = true;
+					Player2.GetComponent<TPlayer>().PutInHidePosition(false);
 				}
 			}
 			if (player1Selected && player2Selected) {
@@ -343,6 +345,7 @@ public class TGameLogic : MonoBehaviour {
 			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";		
 		}
 		choosePhase=true;
+		tapPlayers = false;
 	}
 
 	private void NewRound () {

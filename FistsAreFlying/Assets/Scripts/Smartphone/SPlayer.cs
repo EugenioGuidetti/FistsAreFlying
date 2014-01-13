@@ -23,8 +23,7 @@ public class SPlayer : MonoBehaviour {
 
 	private Vector3 showPosition = new Vector3 (0,0,0);
 	private Vector3 hidePosition = new Vector3 (7,0,0);
-	
-	public GameObject debugText;
+
 	// Use this for initialization
 	void Start () {
 		ResetMoves();
