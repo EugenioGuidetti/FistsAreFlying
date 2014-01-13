@@ -33,6 +33,7 @@ public class TGameLogic : MonoBehaviour {
 	private string player2Move = "";
 	private bool player1Selected = false;
 	private bool player2Selected = false;
+	private bool tapPlayers = false;
 	private int player1Health;
 	private int player2Health;
 	private float healthUnit;
@@ -65,12 +66,11 @@ public class TGameLogic : MonoBehaviour {
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
-			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdown");
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "∞";
 		}
 		choosePhase = true;
+		messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";
 	}
 
 	private void initializeRules () {
@@ -106,22 +106,37 @@ public class TGameLogic : MonoBehaviour {
 	}
 
 	private void LocalChoosePhase () {
-		if (!player1Selected) {
-			if (Player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
-				player1Move = Player1.GetComponent<TPlayer>().GetSelectedMove();
-				player1Selected = true;
+		if (!tapPlayers) {
+			if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
+				Debug.Log("tap rilevato");
+				tapPlayers = true;
+				Player1.GetComponent<SPlayer>().PutInShowPosition();
+				Player2.GetComponent<SPlayer>().PutInShowPosition();
+				messageText.GetComponent<GUIText>().text= "";
+				if (timeMatch) {
+					turnTimeText.GetComponent<GUIText>().text = time.ToString();
+					StartCoroutine("TurnCountdown");
+				}
 			}
-		}
-		if (!player2Selected) {
-			if (Player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
-				player2Move = Player2.GetComponent<TPlayer>().GetSelectedMove();
-				player2Selected = true;
+
+		} else {
+			if (!player1Selected) {
+				if (Player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+					player1Move = Player1.GetComponent<TPlayer>().GetSelectedMove();
+					player1Selected = true;
+				}
 			}
-		}
-		if (player1Selected && player2Selected) {
-			choosePhase = false;
-			StopCoroutine("TurnCountdown");
-			StartCoroutine("MainFlow");
+			if (!player2Selected) {
+				if (Player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+					player2Move = Player2.GetComponent<TPlayer>().GetSelectedMove();
+					player2Selected = true;
+				}
+			}
+			if (player1Selected && player2Selected) {
+				choosePhase = false;
+				StopCoroutine("TurnCountdown");
+				StartCoroutine("MainFlow");
+			}
 		}
 	}
 
@@ -319,9 +334,13 @@ public class TGameLogic : MonoBehaviour {
 		}
 		player1Selected = false;
 		player2Selected = false;
-		if (timeMatch) {
-			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdown");
+		if (onlineMatch) {
+			if (timeMatch) {
+				turnTimeText.GetComponent<GUIText>().text = time.ToString();
+				StartCoroutine("TurnCountdown");
+			}
+		} else {
+			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";		
 		}
 		choosePhase=true;
 	}

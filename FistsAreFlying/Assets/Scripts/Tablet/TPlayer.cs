@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class TPlayer : MonoBehaviour {
 
+	public GameObject moves;
 	public GameObject punchRight;
 	public GameObject punchLeft;
 	public GameObject kickRight;
@@ -19,8 +20,11 @@ public class TPlayer : MonoBehaviour {
 	private IList<GameObject> alreadyUsedMoves = new List<GameObject>();
 	private IList<GameObject> notYetUsedMoves =  new List<GameObject>();
 	private IList<GameObject> touchedMoves = new List<GameObject>();
+	
+	private Vector3 showPosition = new Vector3(0, 0, 0);
+	private Vector3 hidePosition1 = new Vector3(-10, 0, 0);
+	private Vector3 hidePosition2 = new Vector3(10, 0, 0);
 
-	public GameObject debugText;
 	// Use this for initialization
 	void Start () {
 		ResetMoves();
@@ -139,5 +143,29 @@ public class TPlayer : MonoBehaviour {
 
 	public string GetSelectedMove () {
 		return selectedMove;
+	}
+	
+	public void PutInShowPosition () {
+		moves.transform.position = showPosition;
+		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+			notYetUsedMove.GetComponent<TMove>().SetPosition();
+		}
+		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+			alreadyUsedMove.GetComponent<TMove>().SetPosition();
+		}
+	}
+	
+	public void PutInHidePosition (bool isPlayer1) {
+		if (isPlayer1) {
+			moves.transform.position = hidePosition1;
+		} else {
+			moves.transform.position = hidePosition2;
+		}
+		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+			notYetUsedMove.GetComponent<TMove>().SetPosition();
+		}
+		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+			alreadyUsedMove.GetComponent<TMove>().SetPosition();
+		}
 	}
 }

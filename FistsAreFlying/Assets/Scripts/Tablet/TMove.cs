@@ -40,4 +40,8 @@ public class TMove : MonoBehaviour {
 		}
 		return amISelected;
 	}
+	
+	public void SetPosition () {
+		position = new Vector2(transform.position.x, transform.position.y);
+	}
 }
