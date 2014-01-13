@@ -4,7 +4,8 @@ using System.Collections;
 public class GameLogic : MonoBehaviour {
 
 	private GameObject global;
-
+	private bool onlineMatch;
+	private bool amIPlayer1;
 	private bool timeMatch = false;
 	private int time;
 	private int countdown;
@@ -57,6 +58,10 @@ public class GameLogic : MonoBehaviour {
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
+		if (global.GetComponent<Global>().GetOnlineGame()) {
+			onlineMatch = true;
+			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
+		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
@@ -86,7 +91,13 @@ public class GameLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (choosePhase) {
-			LocalChoosePhase();
+			if (!onlineMatch) {
+				LocalChoosePhase();
+			} else if (amIPlayer1) {
+				OnlineP1ChoosePhase();
+			} else {
+				OnlineP2ChoosePhase();
+			}
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
 			EnableText();
@@ -113,6 +124,49 @@ public class GameLogic : MonoBehaviour {
 			StartCoroutine("MainFlow");
 		}
 	}
+
+	private void OnlineP1ChoosePhase () {
+		if (!player1Selected) {
+			if (Player1.GetComponent<Player>().GetHaveIChoosed()) {
+				Player1Decision(Player1.GetComponent<Player>().GetSelectedMove());
+			}
+		}
+		if (player1Selected && player2Selected) {
+			choosePhase = false;
+			StopCoroutine("TurnCountdown");
+			StartCoroutine("MainFlow");
+		}
+	}
+
+	private void OnlineP2ChoosePhase () {
+		if (!player2Selected) {
+			if (Player2.GetComponent<Player>().GetHaveIChoosed()) {
+				Player2Decision(Player2.GetComponent<Player>().GetSelectedMove());
+			}
+		}
+		if (player1Selected && player2Selected) {
+			choosePhase = false;
+			StopCoroutine("TurnCountdown");
+			StartCoroutine("MainFlow");
+		}
+	}
+
+	[RPC] void Player1Decision (string selectedMove) {
+		player1Selected = true;
+		player1Move = selectedMove;
+		if (Network.isServer) {
+			networkView.RPC("Player1Decision", RPCMode.Others, selectedMove);
+		}
+	}
+
+	[RPC] void Player2Decision (string selectedMove) {
+		player2Selected = true;
+		player1Move = selectedMove;
+		if (Network.isClient) {
+			networkView.RPC("Player2Decision", RPCMode.Server, selectedMove);
+		}
+	}
+
 
 	private void EndTurnPhase () {
 		endPhase = false;
