@@ -342,10 +342,10 @@ public class TGameLogic : MonoBehaviour {
 				StartCoroutine("TurnCountdown");
 			}
 		} else {
-			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";		
+			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";	
+			tapPlayers = false;
 		}
 		choosePhase=true;
-		tapPlayers = false;
 	}
 
 	private void NewRound () {
