@@ -32,6 +32,8 @@ public class GameLogicS : MonoBehaviour {
 	private string player2Move = "";
 	private bool player1Selected = false;
 	private bool player2Selected = false;
+	private bool tapPlayer1 = false;
+	private bool tapPlayer2 = false;
 	private int player1Health;
 	private int player2Health;
 	private float healthUnit;
@@ -39,7 +41,7 @@ public class GameLogicS : MonoBehaviour {
 	private const int healthTotal = 20;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
-	
+
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
 	
@@ -66,6 +68,7 @@ public class GameLogicS : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = "∞";
 		}
 		choosePhase = true;
+		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
 	}
 	
 	private void initializeRules () {
@@ -85,14 +88,7 @@ public class GameLogicS : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButton(0) && player1Selected) {
-			Player1.GetComponent<PlayerS>().PutInHidePosition();
-			Player2.GetComponent<PlayerS>().PutInShowPosition();
-			if(global.GetComponent<Global>().GetTimeGame()){
-				StartCoroutine("TurnCountdownPlayer2");
-			}
-		}
-
+			
 		if (choosePhase) {
 			LocalChoosePhase();
 		}
@@ -104,16 +100,32 @@ public class GameLogicS : MonoBehaviour {
 	
 	private void LocalChoosePhase () {
 		if (!player1Selected) {
-			if (Player1.GetComponent<Player>().GetHaveIChoosed()) {
-				player1Move = Player1.GetComponent<Player>().GetSelectedMove();
+			if(!tapPlayer1){
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
+					Debug.Log("tap rilevato");
+					tapPlayer1=true;
+					Player1.GetComponent<PlayerS>().PutInShowPosition();
+					messageText.GetComponent<GUIText>().text= "";
+				}
+			} else if (Player1.GetComponent<PlayerS>().GetHaveIChoosed()) {
+				player1Move = Player1.GetComponent<PlayerS>().GetSelectedMove();
 				player1Selected = true;
+				Player1.GetComponent<PlayerS>().PutInHidePosition();
 				messageText.GetComponent<GUIText>().text= "Player 2 turn, tap for begin";
 			}
-		}
-		if (!player2Selected) {
-			if (Player2.GetComponent<Player>().GetHaveIChoosed()) {
-				player2Move = Player2.GetComponent<Player>().GetSelectedMove();
-				player2Selected = true;
+		} else {
+			if (!tapPlayer2) {
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
+					tapPlayer2=true;
+					Player2.GetComponent<PlayerS>().PutInShowPosition();
+					messageText.GetComponent<GUIText>().text= "";
+				}
+			} else if (!player2Selected) {
+				if (Player2.GetComponent<PlayerS>().GetHaveIChoosed()) {
+					player2Move = Player2.GetComponent<PlayerS>().GetSelectedMove();
+					player2Selected = true;
+					Player2.GetComponent<PlayerS>().PutInHidePosition();
+				}
 			}
 		}
 		if (player1Selected) {
@@ -149,10 +161,10 @@ public class GameLogicS : MonoBehaviour {
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
-				Player1.GetComponent<Player>().SetForcedMove();
+				Player1.GetComponent<PlayerS>().SetForcedMove();
 			}
 			if (minigameResult.Equals("Player2")) {
-				Player2.GetComponent<Player>().SetForcedMove();
+				Player2.GetComponent<PlayerS>().SetForcedMove();
 			}
 		}
 		//controllo fine round e fine match
@@ -161,8 +173,8 @@ public class GameLogicS : MonoBehaviour {
 	
 	private IEnumerator MainFlow () {
 		yield return new WaitForSeconds(2f);
-		Player1.GetComponent<Player>().ShowSelectedMove();
-		Player2.GetComponent<Player>().ShowSelectedMove();
+		Player1.GetComponent<PlayerS>().ShowSelectedMove();
+		Player2.GetComponent<PlayerS>().ShowSelectedMove();
 		//lanciare le animazioni di avvicinamento		
 		yield return new WaitForSeconds(1f);
 		ApplyRules();
@@ -177,7 +189,7 @@ public class GameLogicS : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
 		if (!player2Selected) {
-			Player2.GetComponent<Player>().SetForcedMove();
+			Player2.GetComponent<PlayerS>().SetForcedMove();
 		}
 	}
 
@@ -189,7 +201,7 @@ public class GameLogicS : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
 		if (!player2Selected) {
-			Player2.GetComponent<Player>().SetForcedMove();
+			Player2.GetComponent<PlayerS>().SetForcedMove();
 		}
 	}
 	
@@ -283,8 +295,8 @@ public class GameLogicS : MonoBehaviour {
 				NewRound();
 			}
 		} else {
-			Player1.GetComponent<Player>().NewTurn();
-			Player2.GetComponent<Player>().NewTurn();		
+			Player1.GetComponent<PlayerS>().NewTurn();
+			Player2.GetComponent<PlayerS>().NewTurn();		
 		}
 		player1Selected = false;
 		player2Selected = false;
@@ -292,7 +304,10 @@ public class GameLogicS : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = time.ToString();
 			StartCoroutine("TurnCountdownPlayer1");
 		}
-		choosePhase=true;
+		choosePhase = true;
+		tapPlayer1 = false;
+		tapPlayer2 = false;
+		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
 	}
 	
 	private void NewRound () {
@@ -302,8 +317,8 @@ public class GameLogicS : MonoBehaviour {
 		player2Health = healthTotal;
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
 		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
-		Player1.GetComponent<Player>().NewRound();
-		Player2.GetComponent<Player>().NewRound();
+		Player1.GetComponent<PlayerS>().NewRound();
+		Player2.GetComponent<PlayerS>().NewRound();
 	}
 	
 	private IEnumerator EndMatch () {

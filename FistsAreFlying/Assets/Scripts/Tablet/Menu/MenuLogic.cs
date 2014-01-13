@@ -88,9 +88,15 @@ public class MenuLogic : MonoBehaviour {
 				if (lastSelection.Equals("timePlay")) {
 					global.GetComponent<Global>().SetTimeGame(true);
 				}
+				if (Screen.dpi <= 0) {
+					Debug.Log(Screen.dpi.ToString());
+					Application.LoadLevel("GameS");
+					return;
+				}
 				width= Screen.width/ Screen.dpi;
 				heigth= Screen.height/Screen.dpi;
 				inches= Mathf.Sqrt(Mathf.Pow(width,2f)+Mathf.Pow(heigth,2f));
+				Debug.Log(inches.ToString());
 				if (inches>=6.5){
 					Application.LoadLevel("Game");
 				} else {

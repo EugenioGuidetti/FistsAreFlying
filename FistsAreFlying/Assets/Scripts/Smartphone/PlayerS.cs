@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlayerS : MonoBehaviour {
-	
+
+	public GameObject moves;
 	public GameObject punchRight;
 	public GameObject punchLeft;
 	public GameObject kickRight;
@@ -49,27 +50,27 @@ public class PlayerS : MonoBehaviour {
 		if (!haveIChoosed) {
 			touchedMoves.Clear();
 			if (!forcedMove) {
-				if (notYetUsedMoves.Contains(punchRight) && punchRight.GetComponent<Move>().getAmISelected()) {
+				if (notYetUsedMoves.Contains(punchRight) && punchRight.GetComponent<MoveS>().getAmISelected()) {
 					selectedMove = "PR";
 					touchedMoves.Add(punchRight);
 				}
-				if (notYetUsedMoves.Contains(punchLeft) && punchLeft.GetComponent<Move>().getAmISelected()) {
+				if (notYetUsedMoves.Contains(punchLeft) && punchLeft.GetComponent<MoveS>().getAmISelected()) {
 					selectedMove = "PL";
 					touchedMoves.Add(punchLeft);
 				}
-				if (notYetUsedMoves.Contains(kickRight) && kickRight.GetComponent<Move>().getAmISelected()) {
+				if (notYetUsedMoves.Contains(kickRight) && kickRight.GetComponent<MoveS>().getAmISelected()) {
 					selectedMove = "KR";
 					touchedMoves.Add(kickRight);
 				}
-				if (notYetUsedMoves.Contains(kickLeft) && kickLeft.GetComponent<Move>().getAmISelected()) {
+				if (notYetUsedMoves.Contains(kickLeft) && kickLeft.GetComponent<MoveS>().getAmISelected()) {
 					selectedMove = "KL";
 					touchedMoves.Add(kickLeft);
 				}
-				if (notYetUsedMoves.Contains(defense) && defense.GetComponent<Move>().getAmISelected()) {
+				if (notYetUsedMoves.Contains(defense) && defense.GetComponent<MoveS>().getAmISelected()) {
 					selectedMove = "D";
 					touchedMoves.Add(defense);
 				}
-				if (emptyMove.GetComponent<Move>().getAmISelected()) {
+				if (emptyMove.GetComponent<MoveS>().getAmISelected()) {
 					selectedMove = "EM";
 					touchedMoves.Add(emptyMove);
 				}
@@ -145,10 +146,22 @@ public class PlayerS : MonoBehaviour {
 	}
 
 	public void PutInShowPosition () {
-		this.transform.position = showPosition;
+		moves.transform.position = showPosition;
+		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+			notYetUsedMove.GetComponent<MoveS>().SetPosition();
+		}
+		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+			alreadyUsedMove.GetComponent<MoveS>().SetPosition();
+		}
 	}
 
 	public void PutInHidePosition () {
-		this.transform.position = hidePosition;
+		moves.transform.position = hidePosition;
+		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+			notYetUsedMove.GetComponent<MoveS>().SetPosition();
+		}
+		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+			alreadyUsedMove.GetComponent<MoveS>().SetPosition();
+		}
 	}
 }
