@@ -12,7 +12,8 @@ public class SGameLogic : MonoBehaviour {
 	private bool choosePhase = false;
 	private bool endPhase = false;
 	private bool inPause = false;
-	
+
+	public GameObject pauseGUI;
 	public GameObject defenseGame;
 	public GameObject defenseResult;
 	public GameObject conflictGame;
@@ -42,6 +43,7 @@ public class SGameLogic : MonoBehaviour {
 	private const int healthTotal = 20;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
+	private string oldMessageString = "";
 
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
@@ -87,7 +89,9 @@ public class SGameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		pauseCheck();
+		//if (!onlineMatch) {
+			pauseCheck();
+		//}
 		if (choosePhase) {
 			LocalChoosePhase();
 		}
@@ -102,16 +106,22 @@ public class SGameLogic : MonoBehaviour {
 			if(!inPause){
 				inPause = true;
 				Time.timeScale = 0;
-				messageText.GetComponent<GUIText>().text = "GAME PAUSED";
+				DisableText();
+				oldMessageString = messageText.GetComponent<GUIText>().text;
+				messageText.GetComponent<GUIText>().text = "";
 				Player1.SetActive(false);
 				Player2.SetActive(false);
+				pauseGUI.SetActive(true);
 				//audio.Pause();
 			} else {
+				pauseGUI.SetActive(false);
 				inPause = false;
-				messageText.GetComponent<GUIText>().text = "";
-				Time.timeScale = 1;
+				EnableText();
+				messageText.GetComponent<GUIText>().text = oldMessageString;
+				oldMessageString = "";
 				Player1.SetActive(true);
 				Player2.SetActive(true);
+				Time.timeScale = 1;
 				/*if (!audio.isPlaying) audio.Play(); */
 			}
 		}
@@ -120,7 +130,7 @@ public class SGameLogic : MonoBehaviour {
 	private void LocalChoosePhase () {
 		if (!player1Selected) {
 			if(!tapPlayer1){
-				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !inPause){
 					Debug.Log("tap rilevato");
 					tapPlayer1=true;
 					Player1.GetComponent<SPlayer>().PutInShowPosition();
@@ -138,7 +148,7 @@ public class SGameLogic : MonoBehaviour {
 			}
 		} else {
 			if (!tapPlayer2) {
-				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !inPause) {
 					tapPlayer2=true;
 					Player2.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
