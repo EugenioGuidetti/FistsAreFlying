@@ -12,7 +12,6 @@ public class TPlayer : MonoBehaviour {
 	public GameObject defense;
 	public GameObject emptyMove;
 	public GameObject choosedMove;
-	private Sprite coveredMoveSprite;
 
 	private bool haveIChoosed = false;
 	private bool forcedMove = false;
@@ -29,8 +28,6 @@ public class TPlayer : MonoBehaviour {
 	void Start () {
 		ResetMoves();
 		notYetUsedMoves.Add(emptyMove);
-		coveredMoveSprite = choosedMove.GetComponent<SpriteRenderer>().sprite;
-		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
 	}
 
 	private void  ResetMoves () {
@@ -120,7 +117,7 @@ public class TPlayer : MonoBehaviour {
 			}
 			notYetUsedMoves.Add(emptyMove);
 		}
-		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
+		choosedMove.GetComponent<TChoosedMove>().ResetSprite();
 		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
 		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
@@ -140,7 +137,7 @@ public class TPlayer : MonoBehaviour {
 			notYetUsedMove.GetComponent<TMove>().ResetMove();
 		}
 		notYetUsedMoves.Add(emptyMove);
-		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
+		choosedMove.GetComponent<TChoosedMove>().ResetSprite();
 		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
 		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
