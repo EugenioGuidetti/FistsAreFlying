@@ -69,7 +69,7 @@ public class TGameLogic : MonoBehaviour {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
 		} else {
-			turnTimeText.GetComponent<GUIText>().text = "∞";
+			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
 		choosePhase = true;
 		messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";
