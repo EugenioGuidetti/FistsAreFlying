@@ -72,6 +72,8 @@ public class MenuLogic : MonoBehaviour {
 			previousGroup.SetActive(false);
 			actualGroup.SetActive(true);
 			back.SetActive(true);
+		} else if (Input.GetKeyDown(KeyCode.Escape)) {
+			Application.Quit();
 		}
 	}
 
@@ -93,7 +95,7 @@ public class MenuLogic : MonoBehaviour {
 				previousGroup.SetActive(false);
 				actualGroup.SetActive(true);
 			}
-		} else if (back.GetComponent<MenuButton>().GetAmISelected()) {
+		} else if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			if (global.GetComponent<Global>().GetOnlineGame()) {
 				global.GetComponent<Global>().SetAmIPlayer1(false);
 				actualGroup.SetActive(false);
@@ -123,7 +125,7 @@ public class MenuLogic : MonoBehaviour {
 			}
 			previousGroup.SetActive(false);
 			actualGroup.SetActive(true);
-		} else if (back.GetComponent<MenuButton>().GetAmISelected()) {
+		} else if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			global.GetComponent<Global>().SetOnlineGame(false);
 			actualGroup.SetActive(false);
 			back.SetActive(false);
@@ -133,7 +135,7 @@ public class MenuLogic : MonoBehaviour {
 	}
 
 	private void ManageOptions () {
-		if (back.GetComponent<MenuButton>().GetAmISelected()) {
+		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			actualGroup.SetActive(false);
 			back.SetActive(false);
 			actualGroup = mainGroup;
