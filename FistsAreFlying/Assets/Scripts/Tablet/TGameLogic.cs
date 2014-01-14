@@ -12,7 +12,9 @@ public class TGameLogic : MonoBehaviour {
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
+	private string oldMessageString = "";
 
+	public GameObject pauseGUI;
 	public GameObject defenseGame;
 	public GameObject defenseResult;
 	public GameObject conflictGame;
@@ -90,6 +92,9 @@ public class TGameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (!onlineMatch) {
+			pauseCheck();
+		}
 		if (choosePhase) {
 			if (!onlineMatch) {
 				LocalChoosePhase();
@@ -105,9 +110,37 @@ public class TGameLogic : MonoBehaviour {
 		}
 	}
 
+	private void pauseCheck() {
+		if (Input.GetKeyDown(KeyCode.Escape)){
+			if(!pauseGUI.activeSelf){
+				Time.timeScale = 0;
+				DisableText();
+				oldMessageString = messageText.GetComponent<GUIText>().text;
+				messageText.GetComponent<GUIText>().text = "";
+				Player1.SetActive(false);
+				Player2.SetActive(false);
+				pauseGUI.SetActive(true);
+				//audio.Pause();
+			} else {
+				ResumeGame();
+			}
+		}
+	}
+	
+	private void ResumeGame () {
+		pauseGUI.SetActive(false);
+		EnableText();
+		messageText.GetComponent<GUIText>().text = oldMessageString;
+		oldMessageString = "";
+		Player1.SetActive(true);
+		Player2.SetActive(true);
+		Time.timeScale = 1;
+		/*if (!audio.isPlaying) audio.Play(); */		
+	}
+
 	private void LocalChoosePhase () {
 		if (!tapPlayers) {
-			if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began){
+			if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
 				Debug.Log("tap rilevato");
 				tapPlayers = true;
 				Player1.GetComponent<TPlayer>().PutInShowPosition();

@@ -15,7 +15,13 @@ public class MenuPauseGroup : MonoBehaviour {
 			SendMessageUpwards("ResumeGame");
 		}
 		if (quit.GetComponent<MenuButton>().GetAmISelected()) {
-			Application.LoadLevel("MainMenu");
+			StartCoroutine("LoadDelay");
 		}
+	}
+
+	private IEnumerator LoadDelay (){
+		Time.timeScale = 1;
+		yield return new WaitForSeconds (0.1f);
+		Application.LoadLevel("MainMenu");
 	}
 }

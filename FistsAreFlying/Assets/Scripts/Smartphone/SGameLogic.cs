@@ -11,7 +11,6 @@ public class SGameLogic : MonoBehaviour {
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
-	private bool inPause = false;
 
 	public GameObject pauseGUI;
 	public GameObject defenseGame;
@@ -103,8 +102,7 @@ public class SGameLogic : MonoBehaviour {
 
 	private void pauseCheck() {
 		if (Input.GetKeyDown(KeyCode.Escape)){
-			if(!inPause){
-				inPause = true;
+			if(!pauseGUI.activeSelf){
 				Time.timeScale = 0;
 				DisableText();
 				oldMessageString = messageText.GetComponent<GUIText>().text;
@@ -121,7 +119,6 @@ public class SGameLogic : MonoBehaviour {
 
 	private void ResumeGame () {
 		pauseGUI.SetActive(false);
-		inPause = false;
 		EnableText();
 		messageText.GetComponent<GUIText>().text = oldMessageString;
 		oldMessageString = "";
@@ -134,7 +131,7 @@ public class SGameLogic : MonoBehaviour {
 	private void LocalChoosePhase () {
 		if (!player1Selected) {
 			if(!tapPlayer1){
-				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !inPause){
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
 					Debug.Log("tap rilevato");
 					tapPlayer1=true;
 					Player1.GetComponent<SPlayer>().PutInShowPosition();
@@ -152,7 +149,7 @@ public class SGameLogic : MonoBehaviour {
 			}
 		} else {
 			if (!tapPlayer2) {
-				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !inPause) {
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf) {
 					tapPlayer2=true;
 					Player2.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
