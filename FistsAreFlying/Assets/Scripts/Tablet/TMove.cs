@@ -4,6 +4,8 @@ using System.Collections;
 public class TMove : MonoBehaviour {
 
 	private Camera mainCamera;
+	public Sprite usedMove;
+	private Sprite availableMove;
 
 	private bool amISelected = false;
 	private Vector2 position;
@@ -15,6 +17,7 @@ public class TMove : MonoBehaviour {
 		position = new Vector2(transform.position.x, transform.position.y);
 		offset = new Vector2(0.5f, 0.5f);
 		mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+		availableMove = this.gameObject.GetComponent<SpriteRenderer>().sprite;
 	}
 	
 	// Update is called once per frame
@@ -43,5 +46,13 @@ public class TMove : MonoBehaviour {
 	
 	public void SetPosition () {
 		position = new Vector2(transform.position.x, transform.position.y);
+	}
+
+	public void UseMove () {
+		this.gameObject.GetComponent<SpriteRenderer>().sprite = usedMove;
+	}
+	
+	public void ResetMove () {
+		this.gameObject.GetComponent<SpriteRenderer>().sprite = availableMove;
 	}
 }

@@ -90,24 +90,34 @@ public class TPlayer : MonoBehaviour {
 
 	private void SelectMove (GameObject move) {
 		haveIChoosed = true;
+		if (!selectedMove.Equals("EM")) {
+			notYetUsedMoves.Remove(move);
+			alreadyUsedMoves.Add(move);
+		}
 		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
 			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = false;
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = false;
 		}
-		if (!selectedMove.Equals("EM")) {
-			notYetUsedMoves.Remove(move);
-			alreadyUsedMoves.Add(move);
+		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+			alreadyUsedMove.GetComponent<BoxCollider2D>().enabled = false;
+			alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = false;
 		}
 		choosedMove.GetComponent<SpriteRenderer>().enabled = true;
 	}
 
 	public void ShowSelectedMove () {
 		choosedMove.GetComponent<SpriteRenderer>().sprite = touchedMoves[0].GetComponent<SpriteRenderer>().sprite;
+		if (touchedMoves[0] != emptyMove){
+			touchedMoves[0].GetComponent<TMove>().UseMove();
+		}
 	}
 
 	public void NewTurn () {
 		if (notYetUsedMoves.Count == 1 && notYetUsedMoves[0].Equals(emptyMove)) {
 			ResetMoves();
+			foreach (GameObject notYetUsedMove in notYetUsedMoves){
+				notYetUsedMove.GetComponent<TMove>().ResetMove();
+			}
 			notYetUsedMoves.Add(emptyMove);
 		}
 		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
@@ -116,11 +126,19 @@ public class TPlayer : MonoBehaviour {
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
 			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = true;
 		}
+		if (alreadyUsedMoves.Count > 0){
+			foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+				alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = true;
+			}
+		}
 		haveIChoosed = false;
 	}
 
 	public void NewRound () {
 		ResetMoves();
+		foreach (GameObject notYetUsedMove in notYetUsedMoves){
+			notYetUsedMove.GetComponent<TMove>().ResetMove();
+		}
 		notYetUsedMoves.Add(emptyMove);
 		choosedMove.GetComponent<SpriteRenderer>().sprite = coveredMoveSprite;
 		choosedMove.GetComponent<SpriteRenderer>().enabled = false;
