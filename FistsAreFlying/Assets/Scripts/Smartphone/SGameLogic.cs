@@ -64,7 +64,7 @@ public class SGameLogic : MonoBehaviour {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
 		} else {
-			turnTimeText.GetComponent<GUIText>().text = "∞";
+			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
 		choosePhase = true;
 		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
@@ -87,6 +87,17 @@ public class SGameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		pauseCheck();
+		if (choosePhase) {
+			LocalChoosePhase();
+		}
+		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
+			EnableText();
+			EndTurnPhase();
+		}
+	}
+
+	private void pauseCheck() {
 		if (Input.GetKeyDown(KeyCode.Escape)){
 			if(!inPause){
 				inPause = true;
@@ -103,13 +114,6 @@ public class SGameLogic : MonoBehaviour {
 				Player2.SetActive(true);
 				/*if (!audio.isPlaying) audio.Play(); */
 			}
-		}
-		if (choosePhase) {
-			LocalChoosePhase();
-		}
-		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
-			EnableText();
-			EndTurnPhase();
 		}
 	}
 	
