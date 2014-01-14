@@ -114,17 +114,21 @@ public class SGameLogic : MonoBehaviour {
 				pauseGUI.SetActive(true);
 				//audio.Pause();
 			} else {
-				pauseGUI.SetActive(false);
-				inPause = false;
-				EnableText();
-				messageText.GetComponent<GUIText>().text = oldMessageString;
-				oldMessageString = "";
-				Player1.SetActive(true);
-				Player2.SetActive(true);
-				Time.timeScale = 1;
-				/*if (!audio.isPlaying) audio.Play(); */
+				ResumeGame();
 			}
 		}
+	}
+
+	private void ResumeGame () {
+		pauseGUI.SetActive(false);
+		inPause = false;
+		EnableText();
+		messageText.GetComponent<GUIText>().text = oldMessageString;
+		oldMessageString = "";
+		Player1.SetActive(true);
+		Player2.SetActive(true);
+		Time.timeScale = 1;
+		/*if (!audio.isPlaying) audio.Play(); */		
 	}
 	
 	private void LocalChoosePhase () {
