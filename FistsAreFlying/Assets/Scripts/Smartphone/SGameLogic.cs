@@ -12,6 +12,7 @@ public class SGameLogic : MonoBehaviour {
 	private bool choosePhase = false;
 	private bool endPhase = false;
 
+	public GameObject animationLogic;
 	public GameObject pauseGUI;
 	public GameObject defenseGame;
 	public GameObject defenseResult;
@@ -94,7 +95,7 @@ public class SGameLogic : MonoBehaviour {
 		if (choosePhase) {
 			LocalChoosePhase();
 		}
-		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
+		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf && animationLogic.GetComponent<AnimatorLogic>().isAnmiationEnd()) {
 			EnableText();
 			EndTurnPhase();
 		}
@@ -194,8 +195,6 @@ public class SGameLogic : MonoBehaviour {
 			}
 		}
 		//aggiornamento barre della vita
-		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
-		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
@@ -205,6 +204,10 @@ public class SGameLogic : MonoBehaviour {
 				Player2.GetComponent<SPlayer>().SetForcedMove();
 			}
 		}
+		
+		animationLogic.GetComponent<AnimatorLogic>().EndMinigame();
+		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
+		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		//controllo fine round e fine match
 		StartCoroutine("EndTurnChecks");
 	}
@@ -226,8 +229,8 @@ public class SGameLogic : MonoBehaviour {
 			countdown --;
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
-		if (!player2Selected) {
-			Player2.GetComponent<SPlayer>().SetForcedMove();
+		if (!player1Selected) {
+			Player1.GetComponent<SPlayer>().SetForcedMove();
 		}
 	}
 
@@ -244,18 +247,20 @@ public class SGameLogic : MonoBehaviour {
 	}
 	
 	private void ApplyRules () {
-		string outcome;
+		string outcome = "";
 		if (player1Move.Equals(player2Move)) {
 			if (!player1Move.Equals("EM") && !player1Move.Equals("D")) {
+				outcome = "sameMoves";
 				player1Health = player1Health - normalDamage;
 				player2Health = player2Health - normalDamage;
 			}
 		} else if (player1Move.Equals("D") || player2Move.Equals("D")) {
 			if (!player1Move.Equals("EM") && !player2Move.Equals("EM")) {
-				defenseGame.SetActive(true);
-				defenseGame.GetComponent<DefenseLogic>().SetPlayers(player1Move, player2Move);
+				outcome = "defense";
+			//	defenseGame.SetActive(true);
+			//	defenseGame.GetComponent<DefenseLogic>().SetPlayers(player1Move, player2Move);
 				DisableText();
-				Camera.main.transform.position = new Vector3 (0, -15, Camera.main.transform.position.z);
+			//	Camera.main.transform.position = new Vector3 (0, -15, Camera.main.transform.position.z);
 			}
 		} else if (player1Move.Equals("EM") || player2Move.Equals("EM")) {
 			if (player1Move.Equals("EM")) {
@@ -264,6 +269,7 @@ public class SGameLogic : MonoBehaviour {
 			if (player2Move.Equals("EM")) {
 				player2Health = player2Health - normalDamage;
 			}
+			outcome = "emptyVsDamage";
 		} else {
 			outcome = (string) rules[player1Move + "." + player2Move];
 			if (outcome.Equals("player1")) {
@@ -275,13 +281,14 @@ public class SGameLogic : MonoBehaviour {
 				player2Health = player2Health - (normalDamage / 2);
 			}
 			if (outcome.Equals("conflict")) {
-				conflictGame.SetActive(true);
-				conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);
+			//	conflictGame.SetActive(true);
+			//	conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);
 				DisableText();
-				Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
-				conflictGame.GetComponent<ConflictLogic>().StartCountdown();
+			//	Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
+			//	conflictGame.GetComponent<ConflictLogic>().StartCountdown();
 			}
 		}
+		animationLogic.GetComponent<AnimatorLogic>().SetMoves(player1Move, player2Move, outcome);
 	}
 	
 	private void DisableText () {
