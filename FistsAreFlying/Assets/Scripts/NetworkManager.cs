@@ -3,19 +3,24 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
 
+	private GameObject global;
+
 	private const string gameName = "FistsAreFlying";
 	//se un giocatore crea il match deve avere la possibilità di scegliere gameName
-	private const string roomName = "RoomName";
+	//private const string roomName = "";
 
 	private HostData[] hostList;
 
 	// Use this for initialization
-	void Start () {}
+	void Start () {
+		global = GameObject.Find("GlobalObject");
+		GameObject.DontDestroyOnLoad(this);
+	}
 	
 	// Update is called once per frame
 	void Update () {}
 
-	public void StartServer () {
+	public void StartServer (string roomName) {
 		Network.InitializeServer(2, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(gameName, roomName);
 	}
@@ -29,10 +34,7 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	public HostData[] GetHostList () {
-		if (hostList != null) {
-			return hostList;
-		}
-		return null;
+		return hostList;
 	}
 
 	void OnMasterServerEvent (MasterServerEvent msEvent) {
@@ -47,5 +49,33 @@ public class NetworkManager : MonoBehaviour {
 
 	void OnConnectedToServer () {
 		Debug.Log("Server joined.");
+		if (global.GetComponent<Global>().GetTablet()) {
+			Application.LoadLevel("TGame");
+		} else {
+			Application.LoadLevel("SGame");
+		}
+	}
+
+	void OnPlayerConnected () {
+		Debug.Log("Opponent connected.");
+		MasterServer.UnregisterHost();
+		if (global.GetComponent<Global>().GetTimeGame()) {
+			networkView.RPC("ComunicateTimeGame", RPCMode.Others);
+			networkView.RPC("ComunicateTime", RPCMode.Others, global.GetComponent<Global>().GetTime());
+		}
+		if (global.GetComponent<Global>().GetTablet()) {
+			Application.LoadLevel("TGame");
+		} else {
+			Application.LoadLevel("SGame");
+		}
+	}
+	
+	
+	[RPC] void ComunicateTimeGame () {
+		global.GetComponent<Global>().SetTimeGame(true);
+	}
+	
+	[RPC] void ComunicateTime (int time) {
+		global.GetComponent<Global>().SetOnlineTime(time);
 	}
 }

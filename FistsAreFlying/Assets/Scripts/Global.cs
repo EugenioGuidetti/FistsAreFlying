@@ -10,6 +10,7 @@ public class Global : MonoBehaviour {
 
 	private bool onlineGame = false;
 	private bool amIPlayer1 = false;
+	private int onlineTime = 0;
 	private bool timeGame = false;
 	private int time = 10;
 	private bool soundEnable = true;
@@ -59,7 +60,7 @@ public class Global : MonoBehaviour {
 		return timeGame;
 	}
 
-	public void SetTimeGame (bool flag){
+	public void SetTimeGame (bool flag) {
 		timeGame = flag;
 	}
 
@@ -69,6 +70,14 @@ public class Global : MonoBehaviour {
 
 	public void SetTime (int time) {
 		this.time = time;
+	}
+	
+	public int GetOnlineTime () {
+		return onlineTime;
+	}
+	
+	public void SetOnlineTime (int time) {
+		onlineTime = time;
 	}
 
 	public bool GetSound () {

@@ -28,6 +28,10 @@ public class PlayerDefense : MonoBehaviour {
 	}
 
 	public bool GetHitStatus () {
+		if (haveIHitSomething) {
+			haveIHitSomething = false;
+			return true;
+		}
 		return haveIHitSomething;
 	}
 

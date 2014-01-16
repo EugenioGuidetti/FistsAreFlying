@@ -12,7 +12,6 @@ public class TGameLogic : MonoBehaviour {
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
-	private string oldMessageString = "";
 
 	public GameObject pauseGUI;
 	public GameObject defenseGame;
@@ -24,13 +23,14 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject roundText;
 	public GameObject turnTimeText;
 	public GameObject messageText;
+	private string oldMessage = "";
 	public GameObject p1WinnedRoundsText;
 	public GameObject p2WinnedRoundsText;
 	public GameObject player1HealthBar;
 	public GameObject player2HealthBar;
 
-	public GameObject Player1;
-	public GameObject Player2;
+	public GameObject player1;
+	public GameObject player2;
 	private string player1Move = "";
 	private string player2Move = "";
 	private bool player1Selected = false;
@@ -64,10 +64,19 @@ public class TGameLogic : MonoBehaviour {
 		if (global.GetComponent<Global>().GetOnlineGame()) {
 			onlineMatch = true;
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
+			if (amIPlayer1) {
+				player1.GetComponent<TPlayer>().PutInShowPosition();
+			} else {
+				player2.GetComponent<TPlayer>().PutInShowPosition();
+			}
 		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
-			time = global.GetComponent<Global>().GetTime();
+			if (onlineMatch) {
+				time = global.GetComponent<Global>().GetOnlineTime();
+			} else {
+				time = global.GetComponent<Global>().GetTime();
+			}
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
@@ -115,10 +124,10 @@ public class TGameLogic : MonoBehaviour {
 			if(!pauseGUI.activeSelf){
 				Time.timeScale = 0;
 				DisableText();
-				oldMessageString = messageText.GetComponent<GUIText>().text;
+				oldMessage = messageText.GetComponent<GUIText>().text;
 				messageText.GetComponent<GUIText>().text = "";
-				Player1.SetActive(false);
-				Player2.SetActive(false);
+				player1.SetActive(false);
+				player2.SetActive(false);
 				pauseGUI.SetActive(true);
 				//audio.Pause();
 			} else {
@@ -130,10 +139,10 @@ public class TGameLogic : MonoBehaviour {
 	private void ResumeGame () {
 		pauseGUI.SetActive(false);
 		EnableText();
-		messageText.GetComponent<GUIText>().text = oldMessageString;
-		oldMessageString = "";
-		Player1.SetActive(true);
-		Player2.SetActive(true);
+		messageText.GetComponent<GUIText>().text = oldMessage;
+		oldMessage = "";
+		player1.SetActive(true);
+		player2.SetActive(true);
 		Time.timeScale = 1;
 		/*if (!audio.isPlaying) audio.Play(); */		
 	}
@@ -143,28 +152,27 @@ public class TGameLogic : MonoBehaviour {
 			if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
 				Debug.Log("tap rilevato");
 				tapPlayers = true;
-				Player1.GetComponent<TPlayer>().PutInShowPosition();
-				Player2.GetComponent<TPlayer>().PutInShowPosition();
-				messageText.GetComponent<GUIText>().text= "";
+				player1.GetComponent<TPlayer>().PutInShowPosition();
+				player2.GetComponent<TPlayer>().PutInShowPosition();
+				messageText.GetComponent<GUIText>().text = "";
 				if (timeMatch) {
 					turnTimeText.GetComponent<GUIText>().text = time.ToString();
 					StartCoroutine("TurnCountdown");
 				}
 			}
-
 		} else {
 			if (!player1Selected) {
-				if (Player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
-					player1Move = Player1.GetComponent<TPlayer>().GetSelectedMove();
+				if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+					player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
 					player1Selected = true;
-					Player1.GetComponent<TPlayer>().PutInHidePosition(true);
+					player1.GetComponent<TPlayer>().PutInHidePosition(true);
 				}
 			}
 			if (!player2Selected) {
-				if (Player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
-					player2Move = Player2.GetComponent<TPlayer>().GetSelectedMove();
+				if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+					player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
 					player2Selected = true;
-					Player2.GetComponent<TPlayer>().PutInHidePosition(false);
+					player2.GetComponent<TPlayer>().PutInHidePosition(false);
 				}
 			}
 			if (player1Selected && player2Selected) {
@@ -177,8 +185,16 @@ public class TGameLogic : MonoBehaviour {
 
 	private void OnlineP1ChoosePhase () {
 		if (!player1Selected) {
-			if (Player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
-				Player1Decision(Player1.GetComponent<TPlayer>().GetSelectedMove());
+			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player1Selected = true;
+				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				networkView.RPC("Player1Decision", RPCMode.Others, player1Move);
+			}
+		}
+		if (!player2Selected) {
+			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+				player2Selected = true;
 			}
 		}
 		if (player1Selected && player2Selected) {
@@ -189,9 +205,17 @@ public class TGameLogic : MonoBehaviour {
 	}
 
 	private void OnlineP2ChoosePhase () {
+		if (!player1Selected) {
+			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				player1Selected = true;
+			}
+		}
 		if (!player2Selected) {
-			if (Player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
-				Player2Decision(Player2.GetComponent<TPlayer>().GetSelectedMove());
+			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player2Selected = true;
+				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
 			}
 		}
 		if (player1Selected && player2Selected) {
@@ -201,20 +225,12 @@ public class TGameLogic : MonoBehaviour {
 		}
 	}
 
-	[RPC] void Player1Decision (string selectedMove) {
-		player1Selected = true;
-		player1Move = selectedMove;
-		if (Network.isServer) {
-			networkView.RPC("Player1Decision", RPCMode.Others, selectedMove);
-		}
+	[RPC] void Player1Decision (string move) {
+		player1.GetComponent<TPlayer>().OnlineSelectMove(move);
 	}
 
-	[RPC] void Player2Decision (string selectedMove) {
-		player2Selected = true;
-		player1Move = selectedMove;
-		if (Network.isClient) {
-			networkView.RPC("Player2Decision", RPCMode.Server, selectedMove);
-		}
+	[RPC] void Player2Decision (string move) {
+		player2.GetComponent<TPlayer>().OnlineSelectMove(move);
 	}
 
 
@@ -239,10 +255,10 @@ public class TGameLogic : MonoBehaviour {
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
-				Player1.GetComponent<TPlayer>().SetForcedMove();
+				player1.GetComponent<TPlayer>().SetForcedMove();
 			}
 			if (minigameResult.Equals("Player2")) {
-				Player2.GetComponent<TPlayer>().SetForcedMove();
+				player2.GetComponent<TPlayer>().SetForcedMove();
 			}
 		}
 		//controllo fine round e fine match
@@ -251,8 +267,8 @@ public class TGameLogic : MonoBehaviour {
 
 	private IEnumerator MainFlow () {
 		yield return new WaitForSeconds(2f);
-		Player1.GetComponent<TPlayer>().ShowSelectedMove();
-		Player2.GetComponent<TPlayer>().ShowSelectedMove();
+		player1.GetComponent<TPlayer>().ShowSelectedMove();
+		player2.GetComponent<TPlayer>().ShowSelectedMove();
 		//lanciare le animazioni di avvicinamento		
 		yield return new WaitForSeconds(1f);
 		ApplyRules();
@@ -267,10 +283,10 @@ public class TGameLogic : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
 		if (!player1Selected) {
-			Player1.GetComponent<TPlayer>().SetForcedMove();
+			player1.GetComponent<TPlayer>().SetForcedMove();
 		}
 		if (!player2Selected) {
-			Player2.GetComponent<TPlayer>().SetForcedMove();
+			player2.GetComponent<TPlayer>().SetForcedMove();
 		}
 	}
 
@@ -364,8 +380,8 @@ public class TGameLogic : MonoBehaviour {
 				NewRound();
 			}
 		} else {
-			Player1.GetComponent<TPlayer>().NewTurn();
-			Player2.GetComponent<TPlayer>().NewTurn();		
+			player1.GetComponent<TPlayer>().NewTurn();
+			player2.GetComponent<TPlayer>().NewTurn();		
 		}
 		player1Selected = false;
 		player2Selected = false;
@@ -388,8 +404,8 @@ public class TGameLogic : MonoBehaviour {
 		player2Health = healthTotal;
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
 		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
-		Player1.GetComponent<TPlayer>().NewRound();
-		Player2.GetComponent<TPlayer>().NewRound();
+		player1.GetComponent<TPlayer>().NewRound();
+		player2.GetComponent<TPlayer>().NewRound();
 	}
 
 	private IEnumerator EndMatch () {
