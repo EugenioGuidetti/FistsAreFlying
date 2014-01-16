@@ -9,7 +9,7 @@ public class ConflictLogic : MonoBehaviour {
 	public GameObject result;
 	public GameObject text;
 
-	private int drawOffset = 3;
+	private float drawOffset = 0.025f;
 	private bool isLegal = false;
 	private int randomRange = 0;
 	private string player1Move = "";
@@ -100,7 +100,7 @@ public class ConflictLogic : MonoBehaviour {
 			foreach (Touch touch in Input.touches) {
 				touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
 				if (touchPosition.x > this.transform.position.x) {
-					player2.GetComponent<PlayerConflict>().ShowMove(player1Move);
+					player2.GetComponent<PlayerConflict>().ShowMove(player2Move);
 					player2Time = Time.time - startTime;
 					networkView.RPC("Player2Timing", RPCMode.Server, player2Time);
 					player2Tapped = true;
