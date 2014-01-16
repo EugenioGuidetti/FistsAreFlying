@@ -87,7 +87,9 @@ public class SGameLogic : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
 		choosePhase = true;
-		messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+		if(!onlineMatch){
+			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+		}
 	}
 	
 	private void initializeRules () {
@@ -418,19 +420,17 @@ public class SGameLogic : MonoBehaviour {
 		}
 		player1Selected = false;
 		player2Selected = false;
-		//nb 
-		//NB
-		//NB
-		//if (onlineMatch){
-	/*	if (timeMatch) {
-			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdownPlayer1");
-		}*/
-		//else{
+		if (onlineMatch) {
+			if (timeMatch) {
+				turnTimeText.GetComponent<GUIText>().text = time.ToString();
+				StartCoroutine("TurnCountdownPlayer1");
+			}
+		}
+		else{
 			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
 			tapPlayer1 = false;
 			tapPlayer2 = false;
-		//}
+		}
 		choosePhase = true;
 
 
