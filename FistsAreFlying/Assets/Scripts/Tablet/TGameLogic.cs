@@ -67,10 +67,13 @@ public class TGameLogic : MonoBehaviour {
 			onlineMatch = true;
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
 			if (amIPlayer1) {
-				player1.GetComponent<TPlayer>().PutInShowPosition();
+				player2.GetComponent<TPlayer>().PutInHidePosition(false);
 			} else {
-				player2.GetComponent<TPlayer>().PutInShowPosition();
+				player1.GetComponent<TPlayer>().PutInHidePosition(true);
 			}
+		} else {
+			player2.GetComponent<TPlayer>().PutInHidePosition(false);
+			player1.GetComponent<TPlayer>().PutInHidePosition(true);
 		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
