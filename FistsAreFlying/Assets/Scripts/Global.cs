@@ -20,7 +20,6 @@ public class Global : MonoBehaviour {
 	void Start () {
 		GameObject.DontDestroyOnLoad(this);
 		if (Screen.dpi <= 0) {
-			tablet = true;
 			Debug.Log(Screen.dpi.ToString());
 		} else {
 			width = Screen.width / Screen.dpi;
@@ -31,6 +30,8 @@ public class Global : MonoBehaviour {
 				tablet = true;
 			}
 		}
+		//da togliere
+		tablet = true;
 		Application.LoadLevel("MainMenu");
 	}
 	

@@ -104,7 +104,11 @@ public class MenuLogic : MonoBehaviour {
 			} else {
 				string roomName = "room ";
 				networkManager.GetComponent<NetworkManager>().RefreshHostList();
-				roomName = roomName + (networkManager.GetComponent<NetworkManager>().GetHostList().Length + 1).ToString() + ": ";
+				if (networkManager.GetComponent<NetworkManager>().GetHostList() != null) {
+					roomName = roomName + (networkManager.GetComponent<NetworkManager>().GetHostList().Length + 1).ToString() + ": ";
+				} else {
+					roomName = roomName + "1: ";
+				}
 				if (lastSelection.Equals("timePlay")) {
 					global.GetComponent<Global>().SetTimeGame(true);
 					roomName = roomName + "Time Play " + global.GetComponent<Global>().GetTime().ToString() + "s";
