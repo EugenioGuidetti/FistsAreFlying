@@ -9,6 +9,7 @@ public class PlayerDefense : MonoBehaviour {
 	public GameObject kickRight;
 	public GameObject kickLeft;
 
+	private bool amIOnline = false;
 	private bool amIAttacking = false;
 	private GameObject attackingMove;
 	private bool haveIHitSomething = false;
@@ -41,6 +42,9 @@ public class PlayerDefense : MonoBehaviour {
 	}
 
 	public void SetDefense () {
+		if (amIOnline) {
+			defense.GetComponent<DefenseShield>().SetPassive(true);
+		}
 		defense.SetActive(true);
 	}
 
@@ -58,6 +62,9 @@ public class PlayerDefense : MonoBehaviour {
 			attackingMove = kickLeft;
 		}
 		amIAttacking = true;
+		if (amIOnline) {
+			attackingMove.GetComponent<DefenseAction>().SetPassive();
+		}
 		attackingMove.SetActive(true);
 	}
 
@@ -68,8 +75,16 @@ public class PlayerDefense : MonoBehaviour {
 			amIAttacking = false;
 		} else {
 			defense.GetComponent<Transform>().position = this.transform.position;
+			if (amIOnline) {
+				defense.GetComponent<DefenseShield>().SetPassive(false);
+			}
 			defense.SetActive(false);
 		}
+		amIOnline = false;
 		this.gameObject.SetActive(false);
+	}
+
+	public void SetOnline () {
+		amIOnline = true;
 	}
 }

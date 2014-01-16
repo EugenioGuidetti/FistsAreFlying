@@ -28,6 +28,7 @@ public class TMove : MonoBehaviour {
 				if (touch.phase == TouchPhase.Began) {
 					if (touchCoordinates.x <= position.x + offset.x && touchCoordinates.x >= position.x - offset.x) {
 						if (touchCoordinates.y <= position.y + offset.y && touchCoordinates.y >= position.y - offset.y) {
+							Debug.Log("Tap sulla mossa.");
 							amISelected = true;
 						}
 					}

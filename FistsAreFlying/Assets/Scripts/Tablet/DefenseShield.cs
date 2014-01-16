@@ -3,6 +3,8 @@ using System.Collections;
 
 public class DefenseShield : MonoBehaviour {
 
+	private bool passive = false;
+
 	public GameObject wallUpper;
 	public GameObject wallLower;
 
@@ -21,16 +23,22 @@ public class DefenseShield : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		foreach (Touch touch in Input.touches) {
-			touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
-			if (touchPosition.x >= this.transform.position.x - 2 && touchPosition.x <= this.transform.position.x + 2) {
-				if (touchPosition.y > this.transform.position.y && this.transform.position.y < wallUpperY - wallHeight) {
-					this.transform.Translate(Vector3.up * Time.deltaTime * speed);
-				}
-				if (touchPosition.y < this.transform.position.y && this.transform.position.y > wallLowerY + wallHeight) {
-					this.transform.Translate(Vector3.down * Time.deltaTime * speed);
+		if (!passive) {
+			foreach (Touch touch in Input.touches) {
+				touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+				if (touchPosition.x >= this.transform.position.x - 2 && touchPosition.x <= this.transform.position.x + 2) {
+					if (touchPosition.y > this.transform.position.y && this.transform.position.y < wallUpperY - wallHeight) {
+						this.transform.Translate(Vector3.up * Time.deltaTime * speed);
+					}
+					if (touchPosition.y < this.transform.position.y && this.transform.position.y > wallLowerY + wallHeight) {
+						this.transform.Translate(Vector3.down * Time.deltaTime * speed);
+					}
 				}
 			}
 		}
+	}
+
+	public void SetPassive (bool flag) {
+		passive = flag;
 	}
 }
