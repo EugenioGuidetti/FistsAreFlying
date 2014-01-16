@@ -83,7 +83,9 @@ public class TGameLogic : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
 		choosePhase = true;
-		messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";
+		if (!onlineMatch) {
+			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";
+		}
 	}
 
 	private void initializeRules () {

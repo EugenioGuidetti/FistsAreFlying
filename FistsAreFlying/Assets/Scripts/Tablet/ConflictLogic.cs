@@ -109,12 +109,12 @@ public class ConflictLogic : MonoBehaviour {
 		}	
 	}
 
-	[RPC] void Player1Timing (int tapTime) {
+	[RPC] void Player1Timing (float tapTime) {
 		player1Time = tapTime;
 		player1Tapped = true;
 	}
 
-	[RPC] void Player2Timing (int tapTime) {
+	[RPC] void Player2Timing (float tapTime) {
 		player2Time = tapTime;
 		player2Tapped = true;
 	}
