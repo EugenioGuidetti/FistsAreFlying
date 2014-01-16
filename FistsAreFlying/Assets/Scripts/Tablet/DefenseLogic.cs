@@ -89,38 +89,23 @@ public class DefenseLogic : MonoBehaviour {
 	}
 	
 	public void SetPlayers (string player1Move, string player2Move) {
-		player1.SetActive(true);
-		player2.SetActive(true);
-		if (!global.GetComponent<Global>().GetOnlineGame()) {
-			if (player1Move.Equals("D")) {
-				player1.GetComponent<PlayerDefense>().SetDefense();
-				player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
-				attackingPlayer = player2;
-			} else {			
-				player1.GetComponent<PlayerDefense>().SetAttack(player1Move);
-				player2.GetComponent<PlayerDefense>().SetDefense();
-				attackingPlayer = player1;
-			}
-		} else {
-			player1.GetComponent<PlayerDefense>().SetOnline();
-			player2.GetComponent<PlayerDefense>().SetOnline();
+		if (global.GetComponent<Global>().GetOnlineGame()) {
 			if (global.GetComponent<Global>().GetAmIPlayer1()) {
-				if (player1Move.Equals("D")) {
-					player1.GetComponent<PlayerDefense>().SetDefense();
-					attackingPlayer = player2;
-				} else {
-					player1.GetComponent<PlayerDefense>().SetAttack(player1Move);
-					attackingPlayer = player1;
-				}
+				player2.GetComponent<PlayerDefense>().SetOnline();
 			} else {
-				if (player2Move.Equals("D")) {
-					player2.GetComponent<PlayerDefense>().SetDefense();
-					attackingPlayer = player1;
-				} else {
-					player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
-					attackingPlayer = player2;
-				}
+				player1.GetComponent<PlayerDefense>().SetOnline();
 			}
 		}
+		if (player1Move.Equals("D")) {
+			player1.GetComponent<PlayerDefense>().SetDefense();
+			player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
+			attackingPlayer = player2;
+		} else {			
+			player1.GetComponent<PlayerDefense>().SetAttack(player1Move);
+			player2.GetComponent<PlayerDefense>().SetDefense();
+			attackingPlayer = player1;
+		}
+		player1.SetActive(true);
+		player2.SetActive(true);
 	}
 }
