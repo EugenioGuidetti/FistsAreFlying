@@ -174,8 +174,8 @@ public class AnimatorLogic : MonoBehaviour {
 		else if (typeAnimation == "conflict") {
 			avatar1Manager.GetComponent<AvatarManager>().setAnimation (player1move);
 			avatar2Manager.GetComponent<AvatarManager>().setAnimation (player2move);
-			yield return new WaitForSeconds(normalDurate);
 			conflictGame.SetActive(true);
+			yield return new WaitForSeconds(normalDurate);
 			conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1move, player2move);
 			Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
 			conflictGame.GetComponent<ConflictLogic>().StartCountdown();
