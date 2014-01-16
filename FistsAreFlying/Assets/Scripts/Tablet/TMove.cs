@@ -25,6 +25,8 @@ public class TMove : MonoBehaviour {
 		if (GetComponent<BoxCollider2D>().enabled) {
 			foreach (Touch touch in Input.touches) {
 				touchCoordinates = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+				Debug.Log("Coordinate tocco di: " + this.gameObject.name + ", " + touchCoordinates.ToString());				
+				Debug.Log("Posizione di: " + this.gameObject.name + ", " + position.ToString());
 				if (touch.phase == TouchPhase.Began) {
 					if (touchCoordinates.x <= position.x + offset.x && touchCoordinates.x >= position.x - offset.x) {
 						if (touchCoordinates.y <= position.y + offset.y && touchCoordinates.y >= position.y - offset.y) {

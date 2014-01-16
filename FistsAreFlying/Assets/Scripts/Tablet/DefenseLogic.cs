@@ -107,6 +107,7 @@ public class DefenseLogic : MonoBehaviour {
 			if (global.GetComponent<Global>().GetAmIPlayer1()) {
 				if (player1Move.Equals("D")) {
 					player1.GetComponent<PlayerDefense>().SetDefense();
+					attackingPlayer = player2;
 				} else {
 					player1.GetComponent<PlayerDefense>().SetAttack(player1Move);
 					attackingPlayer = player1;
@@ -114,6 +115,7 @@ public class DefenseLogic : MonoBehaviour {
 			} else {
 				if (player2Move.Equals("D")) {
 					player2.GetComponent<PlayerDefense>().SetDefense();
+					attackingPlayer = player1;
 				} else {
 					player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
 					attackingPlayer = player2;
