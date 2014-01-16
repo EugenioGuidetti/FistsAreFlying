@@ -31,7 +31,7 @@ public class Global : MonoBehaviour {
 			}
 		}
 		//da togliere
-		tablet = true;
+		//tablet = true;
 		Application.LoadLevel("MainMenu");
 	}
 	

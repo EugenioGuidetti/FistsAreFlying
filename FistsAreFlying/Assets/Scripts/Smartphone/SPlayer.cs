@@ -100,7 +100,31 @@ public class SPlayer : MonoBehaviour {
 		}
 		choosedMove.GetComponent<SpriteRenderer>().enabled = true;
 	}
-	
+
+
+	public void OnlineSelectMove (string move) {
+		selectedMove = move;
+		if (selectedMove.Equals("PR")) {
+			touchedMoves.Add(punchRight);
+		}
+		if (selectedMove.Equals("PL")) {
+			touchedMoves.Add(punchLeft);
+		}
+		if (selectedMove.Equals("KR")) {
+			touchedMoves.Add(kickRight);
+		}
+		if (selectedMove.Equals("KL")) {
+			touchedMoves.Add(kickLeft);
+		}
+		if (selectedMove.Equals("D")) {
+			touchedMoves.Add(defense);
+		}
+		if (selectedMove.Equals("EM")) {
+			touchedMoves.Add(emptyMove);
+		}
+		SelectMove(touchedMoves[0]);
+	}
+
 	public void ShowSelectedMove () {
 		choosedMove.GetComponent<SpriteRenderer>().sprite = touchedMoves[0].GetComponent<SpriteRenderer>().sprite;
 		if (touchedMoves[0] != emptyMove){
@@ -144,8 +168,6 @@ public class SPlayer : MonoBehaviour {
 			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = true;
 			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = true;
 		}
-		//per la partita a super mosse
-		//forcedMove = false;
 		haveIChoosed = false;
 	}
 	

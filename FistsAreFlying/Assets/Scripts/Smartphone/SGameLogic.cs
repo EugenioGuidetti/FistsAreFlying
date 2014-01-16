@@ -4,7 +4,8 @@ using System.Collections;
 public class SGameLogic : MonoBehaviour {
 	
 	private GameObject global;
-	
+	private bool onlineMatch;
+	private bool amIPlayer1;	
 	private bool timeMatch = false;
 	private int time;
 	private int countdown;
@@ -23,13 +24,14 @@ public class SGameLogic : MonoBehaviour {
 	public GameObject roundText;
 	public GameObject turnTimeText;
 	public GameObject messageText;
+	private string oldMessage = "";
 	public GameObject p1WinnedRoundsText;
 	public GameObject p2WinnedRoundsText;
 	public GameObject player1HealthBar;
 	public GameObject player2HealthBar;
 	
-	public GameObject Player1;
-	public GameObject Player2;
+	public GameObject player1;
+	public GameObject player2;
 	private string player1Move = "";
 	private string player2Move = "";
 	private bool player1Selected = false;
@@ -43,7 +45,6 @@ public class SGameLogic : MonoBehaviour {
 	private const int healthTotal = 20;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
-	private string oldMessageString = "";
 
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
@@ -64,9 +65,24 @@ public class SGameLogic : MonoBehaviour {
 		global = GameObject.Find("GlobalObject");
 		defenseGame.GetComponent<DefenseLogic>().SetGlobal(global);
 		conflictGame.GetComponent<ConflictLogic>().SetGlobal(global);
+		if (global.GetComponent<Global>().GetOnlineGame()) {
+			onlineMatch = true;
+			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
+			if (amIPlayer1) {
+				player2.GetComponent<SPlayer>().PutInHidePosition();
+			} else {
+				player1.GetComponent<SPlayer>().PutInHidePosition();
+			}
+		} else {
+			player2.GetComponent<SPlayer>().PutInHidePosition();
+		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
-			time = global.GetComponent<Global>().GetTime();
+			if (onlineMatch) {
+				time = global.GetComponent<Global>().GetOnlineTime();
+			} else {
+				time = global.GetComponent<Global>().GetTime();
+			}
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
@@ -91,11 +107,17 @@ public class SGameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//if (!onlineMatch) {
+		if (!onlineMatch) {
 			pauseCheck();
-		//}
+		}
 		if (choosePhase) {
-			LocalChoosePhase();
+			if (!onlineMatch) {
+				LocalChoosePhase();
+			} else if (amIPlayer1) {
+				OnlineP1ChoosePhase();
+			} else {
+				OnlineP2ChoosePhase();
+			}
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf && animationLogic.GetComponent<AnimatorLogic>().isAnmiationEnd()) {
 			EnableText();
@@ -108,10 +130,10 @@ public class SGameLogic : MonoBehaviour {
 			if(!pauseGUI.activeSelf){
 				Time.timeScale = 0;
 				DisableText();
-				oldMessageString = messageText.GetComponent<GUIText>().text;
+				oldMessage = messageText.GetComponent<GUIText>().text;
 				messageText.GetComponent<GUIText>().text = "";
-				Player1.SetActive(false);
-				Player2.SetActive(false);
+				player1.SetActive(false);
+				player2.SetActive(false);
 				pauseGUI.SetActive(true);
 				//audio.Pause();
 			} else {
@@ -123,10 +145,10 @@ public class SGameLogic : MonoBehaviour {
 	private void ResumeGame () {
 		pauseGUI.SetActive(false);
 		EnableText();
-		messageText.GetComponent<GUIText>().text = oldMessageString;
-		oldMessageString = "";
-		Player1.SetActive(true);
-		Player2.SetActive(true);
+		messageText.GetComponent<GUIText>().text = oldMessage;
+		oldMessage = "";
+		player1.SetActive(true);
+		player2.SetActive(true);
 		Time.timeScale = 1;
 		/*if (!audio.isPlaying) audio.Play(); */		
 	}
@@ -137,24 +159,24 @@ public class SGameLogic : MonoBehaviour {
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
 					Debug.Log("tap rilevato");
 					tapPlayer1=true;
-					Player1.GetComponent<SPlayer>().PutInShowPosition();
+					player1.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
 					if (timeMatch){
 						turnTimeText.GetComponent<GUIText>().text = time.ToString();
 						StartCoroutine("TurnCountdownPlayer1");
 					}
 				}
-			} else if (Player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
-				player1Move = Player1.GetComponent<SPlayer>().GetSelectedMove();
+			} else if (player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
+				player1Move = player1.GetComponent<SPlayer>().GetSelectedMove();
 				player1Selected = true;
-				Player1.GetComponent<SPlayer>().PutInHidePosition();
+				player1.GetComponent<SPlayer>().PutInHidePosition();
 				messageText.GetComponent<GUIText>().text= "Player 2 turn, tap for begin";
 			}
 		} else {
 			if (!tapPlayer2) {
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf) {
 					tapPlayer2=true;
-					Player2.GetComponent<SPlayer>().PutInShowPosition();
+					player2.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
 					if (timeMatch){
 						turnTimeText.GetComponent<GUIText>().text = time.ToString();
@@ -162,10 +184,10 @@ public class SGameLogic : MonoBehaviour {
 					}
 				}
 			} else if (!player2Selected) {
-				if (Player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
-					player2Move = Player2.GetComponent<SPlayer>().GetSelectedMove();
+				if (player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
+					player2Move = player2.GetComponent<SPlayer>().GetSelectedMove();
 					player2Selected = true;
-					Player2.GetComponent<SPlayer>().PutInHidePosition();
+					player2.GetComponent<SPlayer>().PutInHidePosition();
 				}
 			}
 		}
@@ -179,6 +201,56 @@ public class SGameLogic : MonoBehaviour {
 			choosePhase = false;
 			StartCoroutine("MainFlow");
 		}
+	}
+
+	private void OnlineP1ChoosePhase () {
+		if (!player1Selected) {
+			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player1Selected = true;
+				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				networkView.RPC("Player1Decision", RPCMode.Others, player1Move);
+			}
+		}
+		if (!player2Selected) {
+			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+				player2Selected = true;
+			}
+		}
+		if (player1Selected && player2Selected) {
+			choosePhase = false;
+			StopCoroutine("TurnCountdown");
+			StartCoroutine("MainFlow");
+		}
+	}
+	
+	private void OnlineP2ChoosePhase () {
+		if (!player1Selected) {
+			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				player1Selected = true;
+			}
+		}
+		if (!player2Selected) {
+			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player2Selected = true;
+				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
+			}
+		}
+		if (player1Selected && player2Selected) {
+			choosePhase = false;
+			StopCoroutine("TurnCountdown");
+			StartCoroutine("MainFlow");
+		}
+	}
+	
+	[RPC] void Player1Decision (string move) {
+		player1.GetComponent<TPlayer>().OnlineSelectMove(move);
+	}
+	
+	[RPC] void Player2Decision (string move) {
+		player2.GetComponent<TPlayer>().OnlineSelectMove(move);
 	}
 	
 	private void EndTurnPhase () {
@@ -199,10 +271,10 @@ public class SGameLogic : MonoBehaviour {
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
-				Player1.GetComponent<SPlayer>().SetForcedMove();
+				player1.GetComponent<SPlayer>().SetForcedMove();
 			}
 			if (minigameResult.Equals("Player2")) {
-				Player2.GetComponent<SPlayer>().SetForcedMove();
+				player2.GetComponent<SPlayer>().SetForcedMove();
 			}
 		}
 		animationLogic.GetComponent<AnimatorLogic>().EndMinigame(minigameResult);
@@ -215,8 +287,8 @@ public class SGameLogic : MonoBehaviour {
 	
 	private IEnumerator MainFlow () {
 		yield return new WaitForSeconds(2f);
-		Player1.GetComponent<SPlayer>().ShowSelectedMove();
-		Player2.GetComponent<SPlayer>().ShowSelectedMove();
+		player1.GetComponent<SPlayer>().ShowSelectedMove();
+		player2.GetComponent<SPlayer>().ShowSelectedMove();
 		//lanciare le animazioni di avvicinamento		
 		yield return new WaitForSeconds(1f);
 		ApplyRules();
@@ -231,7 +303,7 @@ public class SGameLogic : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
 		if (!player1Selected) {
-			Player1.GetComponent<SPlayer>().SetForcedMove();
+			player1.GetComponent<SPlayer>().SetForcedMove();
 		}
 	}
 
@@ -243,7 +315,7 @@ public class SGameLogic : MonoBehaviour {
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
 		if (!player2Selected) {
-			Player2.GetComponent<SPlayer>().SetForcedMove();
+			player2.GetComponent<SPlayer>().SetForcedMove();
 		}
 	}
 	
@@ -341,8 +413,8 @@ public class SGameLogic : MonoBehaviour {
 				yield return new WaitForSeconds (4f);
 			}
 		} else {
-			Player1.GetComponent<SPlayer>().NewTurn();
-			Player2.GetComponent<SPlayer>().NewTurn();		
+			player1.GetComponent<SPlayer>().NewTurn();
+			player2.GetComponent<SPlayer>().NewTurn();		
 		}
 		player1Selected = false;
 		player2Selected = false;
@@ -372,8 +444,8 @@ public class SGameLogic : MonoBehaviour {
 		player2Health = healthTotal;
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
 		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
-		Player1.GetComponent<SPlayer>().NewRound();
-		Player2.GetComponent<SPlayer>().NewRound();
+		player1.GetComponent<SPlayer>().NewRound();
+		player2.GetComponent<SPlayer>().NewRound();
 	}
 	
 	private IEnumerator EndMatch () {
