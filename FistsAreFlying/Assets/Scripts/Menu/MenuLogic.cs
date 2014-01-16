@@ -111,6 +111,7 @@ public class MenuLogic : MonoBehaviour {
 				}
 				if (lastSelection.Equals("timePlay")) {
 					global.GetComponent<Global>().SetTimeGame(true);
+					global.GetComponent<Global>().SetOnlineTime(global.GetComponent<Global>().GetTime());
 					roomName = roomName + "Time Play " + global.GetComponent<Global>().GetTime().ToString() + "s";
 				}
 				if (lastSelection.Equals("standardPlay")) {

@@ -9,6 +9,11 @@ public class PlayerDefense : MonoBehaviour {
 	public GameObject kickRight;
 	public GameObject kickLeft;
 
+	public GameObject actionPrefab;
+	public GameObject shieldPrefab;
+	public GameObject wallUpper;
+	public GameObject wallLower;
+
 	private bool amIOnline = false;
 	private bool amIAttacking = false;
 	private GameObject attackingMove;
