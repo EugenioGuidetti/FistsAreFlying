@@ -423,7 +423,12 @@ public class SGameLogic : MonoBehaviour {
 		if (onlineMatch) {
 			if (timeMatch) {
 				turnTimeText.GetComponent<GUIText>().text = time.ToString();
-				StartCoroutine("TurnCountdownPlayer1");
+				if (amIPlayer1){
+					StartCoroutine("TurnCountdownPlayer1");
+				}
+				else {
+					StartCoroutine("TurnCountdownPlayer2");
+				}
 			}
 		}
 		else{
