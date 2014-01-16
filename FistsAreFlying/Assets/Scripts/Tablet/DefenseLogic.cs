@@ -89,9 +89,9 @@ public class DefenseLogic : MonoBehaviour {
 	}
 	
 	public void SetPlayers (string player1Move, string player2Move) {
+		player1.SetActive(true);
+		player2.SetActive(true);
 		if (!global.GetComponent<Global>().GetOnlineGame()) {
-			player1.SetActive(true);
-			player2.SetActive(true);
 			if (player1Move.Equals("D")) {
 				player1.GetComponent<PlayerDefense>().SetDefense();
 				player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
@@ -103,7 +103,6 @@ public class DefenseLogic : MonoBehaviour {
 			}
 		} else {
 			if (global.GetComponent<Global>().GetAmIPlayer1()) {
-				player1.SetActive(true);
 				if (player1Move.Equals("D")) {
 					player1.GetComponent<PlayerDefense>().SetDefense();
 					//player2.setPassive();
@@ -113,7 +112,6 @@ public class DefenseLogic : MonoBehaviour {
 					attackingPlayer = player1;
 				}
 			} else {
-				player2.SetActive(true);
 				if (player2Move.Equals("D")) {
 					player2.GetComponent<PlayerDefense>().SetDefense();
 					//player1.setPassive();
