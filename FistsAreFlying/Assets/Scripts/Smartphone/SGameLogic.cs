@@ -205,15 +205,15 @@ public class SGameLogic : MonoBehaviour {
 
 	private void OnlineP1ChoosePhase () {
 		if (!player1Selected) {
-			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+			if (player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
 				player1Selected = true;
-				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				player1Move = player1.GetComponent<SPlayer>().GetSelectedMove();
 				networkView.RPC("Player1Decision", RPCMode.Others, player1Move);
 			}
 		}
 		if (!player2Selected) {
-			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
-				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+			if (player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
+				player2Move = player2.GetComponent<SPlayer>().GetSelectedMove();
 				player2Selected = true;
 			}
 		}
@@ -226,15 +226,15 @@ public class SGameLogic : MonoBehaviour {
 	
 	private void OnlineP2ChoosePhase () {
 		if (!player1Selected) {
-			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
-				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+			if (player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
+				player1Move = player1.GetComponent<SPlayer>().GetSelectedMove();
 				player1Selected = true;
 			}
 		}
 		if (!player2Selected) {
-			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
+			if (player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
 				player2Selected = true;
-				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+				player2Move = player2.GetComponent<SPlayer>().GetSelectedMove();
 				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
 			}
 		}
@@ -246,11 +246,11 @@ public class SGameLogic : MonoBehaviour {
 	}
 	
 	[RPC] void Player1Decision (string move) {
-		player1.GetComponent<TPlayer>().OnlineSelectMove(move);
+		player1.GetComponent<SPlayer>().OnlineSelectMove(move);
 	}
 	
 	[RPC] void Player2Decision (string move) {
-		player2.GetComponent<TPlayer>().OnlineSelectMove(move);
+		player2.GetComponent<SPlayer>().OnlineSelectMove(move);
 	}
 	
 	private void EndTurnPhase () {
