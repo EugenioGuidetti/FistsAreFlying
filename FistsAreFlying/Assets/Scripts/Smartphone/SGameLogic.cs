@@ -205,7 +205,8 @@ public class SGameLogic : MonoBehaviour {
 			}
 		}
 		
-		animationLogic.GetComponent<AnimatorLogic>().EndMinigame();
+		animationLogic.GetComponent<AnimatorLogic>().EndMinigame(minigameResult);
+		minigameResult = "";
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
 		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		//controllo fine round e fine match
@@ -306,6 +307,8 @@ public class SGameLogic : MonoBehaviour {
 	}
 	
 	private IEnumerator EndTurnChecks () {
+		//attendo che tornino indietro (devo farlo da qui perchè nel caso ci siano minigiochi
+		yield return new WaitForSeconds (1f);
 		if (player1Health <= 0 || player2Health <= 0) {
 			if (player1Health <= 0) {
 				player2WinnedRounds = player2WinnedRounds + 1;
@@ -316,10 +319,13 @@ public class SGameLogic : MonoBehaviour {
 			//stampare risultato round
 			if (player1Health > 0) {
 				messageText.GetComponent<GUIText>().text = "Player 1 wins the round!";
+				animationLogic.GetComponent<AnimatorLogic>().EndRound("player2");
 			} else if (player2Health > 0) {
 				messageText.GetComponent<GUIText>().text = "Player 2 wins the round!";
+				animationLogic.GetComponent<AnimatorLogic>().EndRound("player1");
 			} else {
 				messageText.GetComponent<GUIText>().text = "Round draw!";
+				animationLogic.GetComponent<AnimatorLogic>().EndRound("draw");
 			}
 			yield return new WaitForSeconds(2f);
 			messageText.GetComponent<GUIText>().text = "";
@@ -333,11 +339,13 @@ public class SGameLogic : MonoBehaviour {
 					StartCoroutine("EndMatch");
 				} else {
 					NewRound();
+					yield return new WaitForSeconds (4f);
 				}
 			}
 			
 			if (round == 1) {
 				NewRound();
+				yield return new WaitForSeconds (4f);
 			}
 		} else {
 			Player1.GetComponent<SPlayer>().NewTurn();
@@ -345,7 +353,6 @@ public class SGameLogic : MonoBehaviour {
 		}
 		player1Selected = false;
 		player2Selected = false;
-
 		//nb 
 		//NB
 		//NB
@@ -365,6 +372,7 @@ public class SGameLogic : MonoBehaviour {
 	}
 	
 	private void NewRound () {
+		animationLogic.GetComponent<AnimatorLogic>().NewRound();
 		round = round + 1;		
 		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
 		player1Health = healthTotal;

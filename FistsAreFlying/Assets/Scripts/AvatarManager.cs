@@ -58,5 +58,19 @@ public class AvatarManager : MonoBehaviour {
 			avatar.GetComponent<Animator>().SetTrigger("lightDamage");
 			return;
 		}
+		if (move == "STOP") {
+			avatar.GetComponent<Animator>().speed = 0;
+			return;
+		}
+		if (move == "START") {
+			avatar.GetComponent<Animator>().speed = 1;
+			return;
+		}
+		if (move == "DEATH") {
+			avatar.GetComponent<Animator>().SetTrigger("death");
+		}
+		if (move == "GETBACK") {
+			avatar.GetComponent<Animator>().SetTrigger("getBack");
+		}
 	}
 }
