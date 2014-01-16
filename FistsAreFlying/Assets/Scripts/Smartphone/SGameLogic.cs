@@ -86,6 +86,14 @@ public class SGameLogic : MonoBehaviour {
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
+		if (onlineMatch && timeMatch){
+			turnTimeText.GetComponent<GUIText>().text = time.ToString();
+			if (amIPlayer1) {
+				StartCoroutine("TurnCountdownPlayer1");
+			} else {
+				StartCoroutine("TurnCountdownPlayer2");
+			}
+		}
 		choosePhase = true;
 		if(!onlineMatch){
 			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
