@@ -43,9 +43,10 @@ public class PlayerDefense : MonoBehaviour {
 
 	public void SetDefense () {
 		if (amIOnline) {
-			defense.GetComponent<DefenseShield>().SetPassive(true);
+			//instanziare scudo online
+		} else {
+			defense.SetActive(true);
 		}
-		defense.SetActive(true);
 	}
 
 	public void SetAttack (string move) {
@@ -62,9 +63,6 @@ public class PlayerDefense : MonoBehaviour {
 			attackingMove = kickLeft;
 		}
 		amIAttacking = true;
-		if (amIOnline) {
-			attackingMove.GetComponent<DefenseAction>().SetPassive();
-		}
 		attackingMove.SetActive(true);
 	}
 
@@ -75,9 +73,6 @@ public class PlayerDefense : MonoBehaviour {
 			amIAttacking = false;
 		} else {
 			defense.GetComponent<Transform>().position = this.transform.position;
-			if (amIOnline) {
-				defense.GetComponent<DefenseShield>().SetPassive(false);
-			}
 			defense.SetActive(false);
 		}
 		amIOnline = false;

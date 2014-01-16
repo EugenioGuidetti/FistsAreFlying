@@ -3,8 +3,6 @@ using System.Collections;
 
 public class DefenseAction : MonoBehaviour {
 
-	private bool passive = false;
-
 	private int relevantTouch = -9999;
 	private float noise = 0.1f;
 	private float noiseY;
@@ -27,35 +25,33 @@ public class DefenseAction : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!passive) {
-			if (!isMoving) {
-				foreach (Touch touch in Input.touches) {
-					touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
-					if (touch.phase == TouchPhase.Began) {
-						if (touchPosition.x >= this.transform.position.x - 1.25 && touchPosition.x <= this.transform.position.x + 1.25) {
-							if (touchPosition.y >= this.transform.position.y - 1.25 && touchPosition.y <= this.transform.position.y + 1.25) {
-								startTime = Time.time;
-								startPosition = touchPosition;
-								relevantTouch = touch.fingerId;
-							}
+		if (!isMoving) {
+			foreach (Touch touch in Input.touches) {
+				touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
+				if (touch.phase == TouchPhase.Began) {
+					if (touchPosition.x >= this.transform.position.x - 1.25 && touchPosition.x <= this.transform.position.x + 1.25) {
+						if (touchPosition.y >= this.transform.position.y - 1.25 && touchPosition.y <= this.transform.position.y + 1.25) {
+							startTime = Time.time;
+							startPosition = touchPosition;
+							relevantTouch = touch.fingerId;
 						}
-					} else if (touch.phase == TouchPhase.Ended && touch.fingerId == relevantTouch) {
-						endTime = Time.time;
-						endPosition = touchPosition;
-						touchMovement = endPosition - startPosition;
-						totalTime = endTime - startTime;
-						direction = touchMovement;
-						direction.Normalize();
-						speed = Mathf.Sqrt(touchMovement.sqrMagnitude) / totalTime;
-						if (speed > maxSpeed) {
-							speed = maxSpeed;
-						}
-						isMoving = true;
 					}
+				} else if (touch.phase == TouchPhase.Ended && touch.fingerId == relevantTouch) {
+					endTime = Time.time;
+					endPosition = touchPosition;
+					touchMovement = endPosition - startPosition;
+					totalTime = endTime - startTime;
+					direction = touchMovement;
+					direction.Normalize();
+					speed = Mathf.Sqrt(touchMovement.sqrMagnitude) / totalTime;
+					if (speed > maxSpeed) {
+						speed = maxSpeed;
+					}
+					isMoving = true;
 				}
-			} else {
-				transform.Translate(direction * speed * Time.deltaTime);
 			}
+		} else {
+			transform.Translate(direction * speed * Time.deltaTime);
 		}
 	}
 
@@ -82,11 +78,6 @@ public class DefenseAction : MonoBehaviour {
 		haveIHitSomething = false;
 		relevantTouch = -9999;
 		isMoving = false;
-		passive = false;
 		return hittenTarget;
-	}
-
-	public void SetPassive () {
-		passive = true;
 	}
 }
