@@ -61,6 +61,8 @@ public class TGameLogic : MonoBehaviour {
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
+		defenseGame.GetComponent<DefenseLogic>().SetGlobal(global);
+		conflictGame.GetComponent<ConflictLogic>().SetGlobal(global);
 		if (global.GetComponent<Global>().GetOnlineGame()) {
 			onlineMatch = true;
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();

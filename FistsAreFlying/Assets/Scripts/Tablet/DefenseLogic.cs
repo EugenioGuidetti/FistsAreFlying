@@ -13,8 +13,10 @@ public class DefenseLogic : MonoBehaviour {
 	private string hittenTarget = "";
 
 	// Use this for initialization
-	void Start () {
-		global = GameObject.Find("GlobalObject");
+	void Start () {}
+
+	public void SetGlobal (GameObject global) {
+		this.global = global;
 	}
 	
 	// Update is called once per frame

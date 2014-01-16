@@ -62,6 +62,8 @@ public class SGameLogic : MonoBehaviour {
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
+		defenseGame.GetComponent<DefenseLogic>().SetGlobal(global);
+		conflictGame.GetComponent<ConflictLogic>().SetGlobal(global);
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
 			time = global.GetComponent<Global>().GetTime();
