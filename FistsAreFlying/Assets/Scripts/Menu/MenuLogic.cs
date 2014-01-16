@@ -154,12 +154,9 @@ public class MenuLogic : MonoBehaviour {
 				previousGroup.SetActive(false);
 				networkManager.GetComponent<NetworkManager>().RefreshHostList();
 				hostList = networkManager.GetComponent<NetworkManager>().GetHostList();
-				if (hostList != null) {
-					for (int i = 0; i < hostList.Length; i ++) {
-						if (GUI.Button(new Rect(400, 100 + (110 * i), 300, 100), hostList[i].gameName)) {
-							networkManager.GetComponent<NetworkManager>().JoinServer(hostList[i]);
-						}
-					}
+				if (hostList != null) {					
+					networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
+					//qui vanno creati i bottoni per scegliere l'host a cui collegarsi
 				}
 				actualGroup.SetActive(true);
 			}
