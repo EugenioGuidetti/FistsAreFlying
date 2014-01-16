@@ -13,6 +13,7 @@ public class TGameLogic : MonoBehaviour {
 	private bool choosePhase = false;
 	private bool endPhase = false;
 
+	public GameObject animationLogic;
 	public GameObject pauseGUI;
 	public GameObject defenseGame;
 	public GameObject defenseResult;
@@ -120,7 +121,7 @@ public class TGameLogic : MonoBehaviour {
 				OnlineP2ChoosePhase();
 			}
 		}
-		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf) {
+		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf && animationLogic.GetComponent<AnimatorLogic>().isAnmiationEnd()) {
 			EnableText();
 			EndTurnPhase();
 		}
@@ -256,9 +257,6 @@ public class TGameLogic : MonoBehaviour {
 				player2Health = player2Health - normalDamage / 2;
 			}
 		}
-		//aggiornamento barre della vita
-		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
-		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
@@ -268,6 +266,10 @@ public class TGameLogic : MonoBehaviour {
 				player2.GetComponent<TPlayer>().SetForcedMove();
 			}
 		}
+		animationLogic.GetComponent<AnimatorLogic>().EndMinigame(minigameResult);
+		minigameResult = "";
+		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
+		UpdateHealthBar(player2HealthBar.GetComponent<SpriteRenderer>(), player2Health);
 		//controllo fine round e fine match
 		StartCoroutine("EndTurnChecks");
 	}
@@ -298,18 +300,17 @@ public class TGameLogic : MonoBehaviour {
 	}
 
 	private void ApplyRules () {
-		string outcome;
+		string outcome ="";
 		if (player1Move.Equals(player2Move)) {
 			if (!player1Move.Equals("EM") && !player1Move.Equals("D")) {
+				outcome = "sameMoves";
 				player1Health = player1Health - normalDamage;
 				player2Health = player2Health - normalDamage;
 			}
 		} else if (player1Move.Equals("D") || player2Move.Equals("D")) {
 			if (!player1Move.Equals("EM") && !player2Move.Equals("EM")) {
-				defenseGame.SetActive(true);
-				defenseGame.GetComponent<DefenseLogic>().SetPlayers(player1Move, player2Move);
+				outcome = "defense";
 				DisableText();
-				Camera.main.transform.position = new Vector3 (0, -15, Camera.main.transform.position.z);
 			}
 		} else if (player1Move.Equals("EM") || player2Move.Equals("EM")) {
 			if (player1Move.Equals("EM")) {
@@ -318,6 +319,7 @@ public class TGameLogic : MonoBehaviour {
 			if (player2Move.Equals("EM")) {
 				player2Health = player2Health - normalDamage;
 			}
+			outcome = "emptyVsDamage";
 		} else {
 			outcome = (string) rules[player1Move + "." + player2Move];
 			if (outcome.Equals("player1")) {
@@ -329,13 +331,10 @@ public class TGameLogic : MonoBehaviour {
 				player2Health = player2Health - (normalDamage / 2);
 			}
 			if (outcome.Equals("conflict")) {
-				conflictGame.SetActive(true);
-				conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);
 				DisableText();
-				Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
-				conflictGame.GetComponent<ConflictLogic>().StartCountdown();
 			}
-		}
+		}	
+		animationLogic.GetComponent<AnimatorLogic>().SetMoves(player1Move, player2Move, outcome);
 	}
 
 	private void DisableText () {
@@ -353,6 +352,7 @@ public class TGameLogic : MonoBehaviour {
 	}
 
 	private IEnumerator EndTurnChecks () {
+		yield return new WaitForSeconds (1f);
 		if (player1Health <= 0 || player2Health <= 0) {
 			if (player1Health <= 0) {
 				player2WinnedRounds = player2WinnedRounds + 1;
@@ -363,10 +363,13 @@ public class TGameLogic : MonoBehaviour {
 			//stampare risultato round
 			if (player1Health > 0) {
 				messageText.GetComponent<GUIText>().text = "Player 1 wins the round!";
+				animationLogic.GetComponent<AnimatorLogic>().EndRound("player2");
 			} else if (player2Health > 0) {
 				messageText.GetComponent<GUIText>().text = "Player 2 wins the round!";
+				animationLogic.GetComponent<AnimatorLogic>().EndRound("player1");
 			} else {
 				messageText.GetComponent<GUIText>().text = "Round draw!";
+				animationLogic.GetComponent<AnimatorLogic>().EndRound("draw");
 			}
 			yield return new WaitForSeconds(2f);
 			messageText.GetComponent<GUIText>().text = "";
@@ -380,11 +383,13 @@ public class TGameLogic : MonoBehaviour {
 					StartCoroutine("EndMatch");
 				} else {
 					NewRound();
+					yield return new WaitForSeconds(4f);
 				}
 			}
 			
 			if (round == 1) {
 				NewRound();
+				yield return new WaitForSeconds(4f);
 			}
 		} else {
 			player1.GetComponent<TPlayer>().NewTurn();
@@ -405,6 +410,7 @@ public class TGameLogic : MonoBehaviour {
 	}
 
 	private void NewRound () {
+		animationLogic.GetComponent<AnimatorLogic>().NewRound();
 		round = round + 1;		
 		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
 		player1Health = healthTotal;

@@ -196,7 +196,6 @@ public class SGameLogic : MonoBehaviour {
 				player2Health = player2Health - normalDamage / 2;
 			}
 		}
-		//aggiornamento barre della vita
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
@@ -206,7 +205,6 @@ public class SGameLogic : MonoBehaviour {
 				Player2.GetComponent<SPlayer>().SetForcedMove();
 			}
 		}
-		
 		animationLogic.GetComponent<AnimatorLogic>().EndMinigame(minigameResult);
 		minigameResult = "";
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);
@@ -260,10 +258,7 @@ public class SGameLogic : MonoBehaviour {
 		} else if (player1Move.Equals("D") || player2Move.Equals("D")) {
 			if (!player1Move.Equals("EM") && !player2Move.Equals("EM")) {
 				outcome = "defense";
-			//	defenseGame.SetActive(true);
-			//	defenseGame.GetComponent<DefenseLogic>().SetPlayers(player1Move, player2Move);
 				DisableText();
-			//	Camera.main.transform.position = new Vector3 (0, -15, Camera.main.transform.position.z);
 			}
 		} else if (player1Move.Equals("EM") || player2Move.Equals("EM")) {
 			if (player1Move.Equals("EM")) {
@@ -284,11 +279,7 @@ public class SGameLogic : MonoBehaviour {
 				player2Health = player2Health - (normalDamage / 2);
 			}
 			if (outcome.Equals("conflict")) {
-			//	conflictGame.SetActive(true);
-			//	conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1Move, player2Move);
 				DisableText();
-			//	Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
-			//	conflictGame.GetComponent<ConflictLogic>().StartCountdown();
 			}
 		}
 		animationLogic.GetComponent<AnimatorLogic>().SetMoves(player1Move, player2Move, outcome);
