@@ -92,8 +92,11 @@ public class DefenseLogic : MonoBehaviour {
 			player1.GetComponent<PlayerDefense>().ResetMove();
 			player2.GetComponent<PlayerDefense>().ResetMove();
 		} else {
-			player1.GetComponent<PlayerDefense>().ResetMoveOnline();
-			player2.GetComponent<PlayerDefense>().ResetMoveOnline();			
+			if (amIPlayer1) {
+				player1.GetComponent<PlayerDefense>().ResetMoveOnline();				
+			} else {
+				player2.GetComponent<PlayerDefense>().ResetMoveOnline();
+			}			
 		}
 		text.GetComponent<GUIText>().text = "";
 		this.gameObject.SetActive(false);
