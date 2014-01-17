@@ -76,7 +76,7 @@ public class DefenseLogic : MonoBehaviour {
 	}
 
 	private void ApplyRules () {
-		if (hittenTarget.Equals(attackingPlayer.gameObject.name.ToString()) || hittenTarget.Equals("Defense")) {
+		if (hittenTarget.Equals(attackingPlayer.gameObject.name.ToString()) || hittenTarget.Equals("Defense") || hittenTarget.Equals("DefenseShield(Clone)")) {
 			result.GetComponent<DefenseResult>().SetResult(attackingPlayer.gameObject.name.ToString());
 			text.GetComponent<GUIText>().text = attackingPlayer.gameObject.name.ToString() + " is frozen in the next turn!";
 		} else {

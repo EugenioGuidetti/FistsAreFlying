@@ -62,7 +62,8 @@ public class DefenseAction : MonoBehaviour {
 			direction = new Vector3(direction.x, noiseY - direction.y, direction.z);
 			direction.Normalize();
 		}
-		if (other.gameObject.name.Equals("Defense") || other.gameObject.name.Equals("Player1") || other.gameObject.name.Equals("Player2")) {
+		if (other.gameObject.name.Equals("Defense") || other.gameObject.name.Equals("DefenseShield(Clone)") || 
+		    other.gameObject.name.Equals("Player1") || other.gameObject.name.Equals("Player2")) {
 			direction = Vector3.zero;
 			speed = 0;
 			hittenTarget = other.gameObject.name.ToString();

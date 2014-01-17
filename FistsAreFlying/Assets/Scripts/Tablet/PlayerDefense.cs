@@ -73,26 +73,26 @@ public class PlayerDefense : MonoBehaviour {
 
 	public void SetDefenseOnline() {
 		Network.Instantiate(shieldPrefab, this.transform.position, Quaternion.identity, 0);
-		defensingMove = GameObject.Find("TDefenseShield(Clone)");
+		defensingMove = GameObject.Find("DefenseShield(Clone)");
 		defensingMove.GetComponent<DefenseShield>().SetWalls(wallUpper, wallLower);
 	}
 
 	public void SetAttackOnline (string move) {
 		if (move.Equals("PR")) {
 			Network.Instantiate(punchRightPrefab, this.transform.position, Quaternion.identity, 0);
-			attackingMove = GameObject.Find("TDefensePR(Clone)");
+			attackingMove = GameObject.Find("DefensePR(Clone)");
 		}
 		if (move.Equals("PL")) {
 			Network.Instantiate(punchLeftPrefab, this.transform.position, Quaternion.identity, 0);
-			attackingMove = GameObject.Find("TDefensePL(Clone)");
+			attackingMove = GameObject.Find("DefensePL(Clone)");
 		}
 		if (move.Equals("KR")) {
 			Network.Instantiate(kickRightPrefab, this.transform.position, Quaternion.identity, 0);
-			attackingMove = GameObject.Find("TDefenseKR(Clone)");
+			attackingMove = GameObject.Find("DefenseKR(Clone)");
 		}
 		if (move.Equals("KL")) {
 			Network.Instantiate(kickLeftPrefab, this.transform.position, Quaternion.identity, 0);
-			attackingMove = GameObject.Find("TDefenseKL(Clone)");
+			attackingMove = GameObject.Find("DefenseKL(Clone)");
 		}
 		amIAttacking = true;
 	}
