@@ -29,18 +29,18 @@ public class DefenseLogic : MonoBehaviour {
 		if (attackingPlayer.activeSelf) {
 			if (!online) {
 				LocalRoutine();
-			}
-		} else if (amIPlayer1) {
-			if (attackingPlayer.Equals(player1)) {
-				OnlineAttackRoutine();
+			} else if (amIPlayer1) {
+				if (attackingPlayer.Equals(player1)) {
+					OnlineAttackRoutine();
+				} else {
+					OnlineDefenseRoutine();
+				}
 			} else {
-				OnlineDefenseRoutine();
-			}
-		} else {
-			if (attackingPlayer.Equals(player2)) {
-				OnlineAttackRoutine();
-			} else {
-				OnlineDefenseRoutine();
+				if (attackingPlayer.Equals(player2)) {
+					OnlineAttackRoutine();
+				} else {
+					OnlineDefenseRoutine();
+				}
 			}
 		}
 	}

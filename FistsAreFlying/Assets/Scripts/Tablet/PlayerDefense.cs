@@ -74,6 +74,7 @@ public class PlayerDefense : MonoBehaviour {
 	public void SetDefenseOnline() {
 		Network.Instantiate(shieldPrefab, this.transform.position, Quaternion.identity, 0);
 		defensingMove = GameObject.Find("DefenseShield(Clone)");
+		Debug.Log(defensingMove.ToString());
 		defensingMove.GetComponent<DefenseShield>().SetWalls(wallUpper, wallLower);
 	}
 
