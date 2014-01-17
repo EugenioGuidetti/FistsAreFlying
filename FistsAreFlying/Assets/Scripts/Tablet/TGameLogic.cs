@@ -68,6 +68,7 @@ public class TGameLogic : MonoBehaviour {
 			onlineMatch = true;
 			defenseGame.GetComponent<DefenseLogic>().SetOnline();
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
+			isOpponentReady = true;
 			if (amIPlayer1) {
 				player1.GetComponent<TPlayer>().SetOnline();
 				player2.GetComponent<TPlayer>().PutInHidePosition(false);
@@ -224,6 +225,7 @@ public class TGameLogic : MonoBehaviour {
 			}
 		}
 		if (player1Selected && player2Selected) {
+			isOpponentReady = false;
 			choosePhase = false;
 			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
@@ -245,6 +247,7 @@ public class TGameLogic : MonoBehaviour {
 			}
 		}
 		if (player1Selected && player2Selected) {
+			isOpponentReady = false;
 			choosePhase = false;
 			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
