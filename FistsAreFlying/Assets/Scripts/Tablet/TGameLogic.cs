@@ -6,6 +6,7 @@ public class TGameLogic : MonoBehaviour {
 	private GameObject global;
 	private bool onlineMatch;
 	private bool amIPlayer1;
+	private bool isOpponentReady = false;
 	private bool timeMatch = false;
 	private int time;
 	private int countdown;
@@ -118,14 +119,18 @@ public class TGameLogic : MonoBehaviour {
 	void Update () {
 		if (!onlineMatch) {
 			pauseCheck();
+		} else {
+			pauseCheckOnline();
 		}
 		if (choosePhase) {
 			if (!onlineMatch) {
 				LocalChoosePhase();
-			} else if (amIPlayer1) {
-				OnlineP1ChoosePhase();
-			} else {
-				OnlineP2ChoosePhase();
+			} else if (isOpponentReady) {
+				if (amIPlayer1) {
+					OnlineP1ChoosePhase();
+				} else {
+					OnlineP2ChoosePhase();
+				}
 			}
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf && animationLogic.GetComponent<AnimatorLogic>().isAnmiationEnd()) {
@@ -148,6 +153,12 @@ public class TGameLogic : MonoBehaviour {
 			} else {
 				ResumeGame();
 			}
+		}
+	}
+
+	private void pauseCheckOnline () {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Application.LoadLevel("MainMenu");
 		}
 	}
 	
@@ -436,6 +447,13 @@ public class TGameLogic : MonoBehaviour {
 			tapPlayers = false;
 		}
 		choosePhase=true;
+		if (onlineMatch) {
+			networkView.RPC("ComunicateReady", RPCMode.Others);
+		}
+	}
+
+	[RPC] void ComunicateReady () {
+		isOpponentReady = true;
 	}
 
 	private void NewRound () {
