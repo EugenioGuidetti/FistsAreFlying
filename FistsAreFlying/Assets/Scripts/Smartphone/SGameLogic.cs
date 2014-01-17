@@ -86,8 +86,6 @@ public class SGameLogic : MonoBehaviour {
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
-		Debug.Log(time.ToString());
-		Debug.Log("partita a tempo= " + timeMatch.ToString());
 		if (onlineMatch && timeMatch){
 			turnTimeText.GetComponent<GUIText>().text = time.ToString();
 			if (amIPlayer1) {

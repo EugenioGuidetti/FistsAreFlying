@@ -86,6 +86,10 @@ public class TGameLogic : MonoBehaviour {
 		} else {
 			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
+		if (onlineMatch && timeMatch){
+			turnTimeText.GetComponent<GUIText>().text = time.ToString();
+			StartCoroutine("TurnCountdown");
+		}
 		choosePhase = true;
 		if (!onlineMatch) {
 			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";
@@ -291,11 +295,21 @@ public class TGameLogic : MonoBehaviour {
 			countdown --;
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
-		if (!player1Selected) {
-			player1.GetComponent<TPlayer>().SetForcedMove();
-		}
-		if (!player2Selected) {
-			player2.GetComponent<TPlayer>().SetForcedMove();
+		if (onlineMatch){
+			if (!player1Selected && amIPlayer1) {
+				player1.GetComponent<TPlayer>().SetForcedMove();
+			}
+			if (!player2Selected && !amIPlayer1) {
+				player2.GetComponent<TPlayer>().SetForcedMove();
+			}
+		} else {
+			if (!player1Selected) {
+				player1.GetComponent<TPlayer>().SetForcedMove();
+			}
+			if (!player2Selected) {
+				player2.GetComponent<TPlayer>().SetForcedMove();
+			}
+		
 		}
 	}
 
