@@ -5,7 +5,8 @@ public class SGameLogic : MonoBehaviour {
 	
 	private GameObject global;
 	private bool onlineMatch;
-	private bool amIPlayer1;	
+	private bool amIPlayer1;
+	private bool isOpponentReady = false;
 	private bool timeMatch = false;
 	private int time;
 	private int countdown;
@@ -68,6 +69,7 @@ public class SGameLogic : MonoBehaviour {
 			onlineMatch = true;
 			defenseGame.GetComponent<DefenseLogic>().SetOnline();
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
+			isOpponentReady = true;
 			if (amIPlayer1) {
 				defenseGame.GetComponent<DefenseLogic>().SetPlayer1();
 				player1.GetComponent<SPlayer>().SetOnline();
@@ -122,14 +124,18 @@ public class SGameLogic : MonoBehaviour {
 	void Update () {
 		if (!onlineMatch) {
 			pauseCheck();
+		} else {
+			pauseCheckOnline();
 		}
 		if (choosePhase) {
 			if (!onlineMatch) {
 				LocalChoosePhase();
-			} else if (amIPlayer1) {
-				OnlineP1ChoosePhase();
-			} else {
-				OnlineP2ChoosePhase();
+			} else if (isOpponentReady) {
+				if (amIPlayer1) {
+					OnlineP1ChoosePhase();
+				} else {
+					OnlineP2ChoosePhase();
+				}
 			}
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf && animationLogic.GetComponent<AnimatorLogic>().isAnmiationEnd()) {
@@ -152,6 +158,12 @@ public class SGameLogic : MonoBehaviour {
 			} else {
 				ResumeGame();
 			}
+		}
+	}
+	
+	private void pauseCheckOnline () {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Application.LoadLevel("MainMenu");
 		}
 	}
 
@@ -231,6 +243,7 @@ public class SGameLogic : MonoBehaviour {
 			}
 		}
 		if (player1Selected && player2Selected) {
+			isOpponentReady = false;
 			choosePhase = false;
 			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
@@ -252,6 +265,7 @@ public class SGameLogic : MonoBehaviour {
 			}
 		}
 		if (player1Selected && player2Selected) {
+			isOpponentReady = false;
 			choosePhase = false;
 			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
@@ -284,10 +298,22 @@ public class SGameLogic : MonoBehaviour {
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
-				player1.GetComponent<SPlayer>().SetForcedMove();
+				if (onlineMatch) {
+					if (amIPlayer1) {
+						player1.GetComponent<SPlayer>().SetForcedMove();
+					}
+				} else {
+					player1.GetComponent<SPlayer>().SetForcedMove();
+				}
 			}
 			if (minigameResult.Equals("Player2")) {
-				player2.GetComponent<SPlayer>().SetForcedMove();
+				if (onlineMatch) {
+					if (!amIPlayer1) {
+						player2.GetComponent<SPlayer>().SetForcedMove();
+					}
+				} else {
+					player2.GetComponent<SPlayer>().SetForcedMove();
+				}
 			}
 		}
 		animationLogic.GetComponent<AnimatorLogic>().EndMinigame(minigameResult);
@@ -448,8 +474,13 @@ public class SGameLogic : MonoBehaviour {
 			tapPlayer2 = false;
 		}
 		choosePhase = true;
+		if (onlineMatch) {
+			networkView.RPC("ComunicateReady", RPCMode.Others);
+		}
+	}
 
-
+	[RPC] void ComunicateReady () {
+		isOpponentReady = true;
 	}
 	
 	private void NewRound () {

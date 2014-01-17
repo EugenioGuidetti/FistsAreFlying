@@ -129,7 +129,6 @@ public class SPlayer : MonoBehaviour {
 			touchedMoves.Add(emptyMove);
 		}
 		SelectMove(touchedMoves[0]);
-		forcedMove = false;
 	}
 
 	public void ShowSelectedMove () {
