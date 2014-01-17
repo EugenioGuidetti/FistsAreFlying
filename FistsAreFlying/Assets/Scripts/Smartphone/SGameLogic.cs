@@ -63,12 +63,13 @@ public class SGameLogic : MonoBehaviour {
 		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
-		defenseGame.GetComponent<DefenseLogic>().SetGlobal(global);
 		conflictGame.GetComponent<ConflictLogic>().SetGlobal(global);
 		if (global.GetComponent<Global>().GetOnlineGame()) {
 			onlineMatch = true;
+			defenseGame.GetComponent<DefenseLogic>().SetOnline();
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
 			if (amIPlayer1) {
+				defenseGame.GetComponent<DefenseLogic>().SetPlayer1();
 				player1.GetComponent<SPlayer>().SetOnline();
 				player2.GetComponent<SPlayer>().PutInHidePosition();
 			} else {

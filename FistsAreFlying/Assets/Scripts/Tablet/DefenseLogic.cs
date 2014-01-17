@@ -3,7 +3,8 @@ using System.Collections;
 
 public class DefenseLogic : MonoBehaviour {
 
-	private GameObject global;
+	private bool online = false;
+	private bool amIPlayer1 = false;
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject result;
@@ -15,17 +16,21 @@ public class DefenseLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {}
 
-	public void SetGlobal (GameObject global) {
-		this.global = global;
+	public void SetOnline () {
+		online = true;
+	}
+
+	public void SetPlayer1 () {
+		amIPlayer1 = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (attackingPlayer.activeSelf) {
-			if (!global.GetComponent<Global>().GetOnlineGame()) {
+			if (!online) {
 				LocalRoutine();
 			}
-		} else if (global.GetComponent<Global>().GetAmIPlayer1()) {
+		} else if (amIPlayer1) {
 			if (attackingPlayer.Equals(player1)) {
 				OnlineAttackRoutine();
 			} else {
@@ -53,6 +58,7 @@ public class DefenseLogic : MonoBehaviour {
 			hittenTarget = attackingPlayer.GetComponent<PlayerDefense>().GetHittenTarget();
 			networkView.RPC("HitComunication", RPCMode.Others, hittenTarget);
 			ApplyRules();
+			hittenTarget = "";
 			StartCoroutine("DefenseEnd");
 		}
 	}
@@ -82,27 +88,41 @@ public class DefenseLogic : MonoBehaviour {
 	private IEnumerator DefenseEnd () {
 		yield return new WaitForSeconds(2f);
 		Camera.main.transform.position = new Vector3 (0, 0, Camera.main.transform.position.z);
-		player1.GetComponent<PlayerDefense>().ResetMove();
-		player2.GetComponent<PlayerDefense>().ResetMove();
+		if (!online) {
+			player1.GetComponent<PlayerDefense>().ResetMove();
+			player2.GetComponent<PlayerDefense>().ResetMove();
+		} else {
+			player1.GetComponent<PlayerDefense>().ResetMoveOnline();
+			player2.GetComponent<PlayerDefense>().ResetMoveOnline();			
+		}
 		text.GetComponent<GUIText>().text = "";
 		this.gameObject.SetActive(false);
 	}
 	
 	public void SetPlayers (string player1Move, string player2Move) {
-		if (global.GetComponent<Global>().GetOnlineGame()) {
-			if (global.GetComponent<Global>().GetAmIPlayer1()) {
-				player2.GetComponent<PlayerDefense>().SetOnline();
-			} else {
-				player1.GetComponent<PlayerDefense>().SetOnline();
-			}
-		}
 		if (player1Move.Equals("D")) {
-			player1.GetComponent<PlayerDefense>().SetDefense();
-			player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
+			if (!online) {
+				player1.GetComponent<PlayerDefense>().SetDefense();
+				player2.GetComponent<PlayerDefense>().SetAttack(player2Move);
+			} else {
+				if (amIPlayer1) {
+					player1.GetComponent<PlayerDefense>().SetDefenseOnline();
+				} else {
+					player2.GetComponent<PlayerDefense>().SetAttackOnline(player2Move);
+				}
+			}			
 			attackingPlayer = player2;
-		} else {			
-			player1.GetComponent<PlayerDefense>().SetAttack(player1Move);
-			player2.GetComponent<PlayerDefense>().SetDefense();
+		} else {
+			if (!online) {
+				player1.GetComponent<PlayerDefense>().SetAttack(player1Move);
+				player2.GetComponent<PlayerDefense>().SetDefense();
+			} else {
+				if (amIPlayer1) {
+					player1.GetComponent<PlayerDefense>().SetAttackOnline(player1Move);
+				} else {
+					player2.GetComponent<PlayerDefense>().SetDefenseOnline();
+				}
+			}
 			attackingPlayer = player1;
 		}
 		player1.SetActive(true);

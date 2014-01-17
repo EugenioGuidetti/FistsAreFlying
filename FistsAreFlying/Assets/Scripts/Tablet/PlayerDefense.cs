@@ -8,15 +8,18 @@ public class PlayerDefense : MonoBehaviour {
 	public GameObject punchLeft;
 	public GameObject kickRight;
 	public GameObject kickLeft;
-
-	public GameObject actionPrefab;
-	public GameObject shieldPrefab;
 	public GameObject wallUpper;
 	public GameObject wallLower;
 
-	private bool amIOnline = false;
+	public GameObject punchRightPrefab;
+	public GameObject punchLeftPrefab;
+	public GameObject kickRightPrefab;
+	public GameObject kickLeftPrefab;
+	public GameObject shieldPrefab;
+
 	private bool amIAttacking = false;
 	private GameObject attackingMove;
+	private GameObject defensingMove;
 	private bool haveIHitSomething = false;
 	private string hittenTarget;
 
@@ -47,11 +50,8 @@ public class PlayerDefense : MonoBehaviour {
 	}
 
 	public void SetDefense () {
-		if (amIOnline) {
-			//instanziare scudo online
-		} else {
-			defense.SetActive(true);
-		}
+		defense.SetActive(true);
+		defense.GetComponent<DefenseShield>().SetWalls(wallUpper, wallLower);
 	}
 
 	public void SetAttack (string move) {
@@ -71,6 +71,32 @@ public class PlayerDefense : MonoBehaviour {
 		attackingMove.SetActive(true);
 	}
 
+	public void SetDefenseOnline() {
+		Network.Instantiate(shieldPrefab, this.transform.position, Quaternion.identity, 0);
+		defensingMove = GameObject.Find("TDefenseShield");
+		defensingMove.GetComponent<DefenseShield>().SetWalls(wallUpper, wallLower);
+	}
+
+	public void SetAttackOnline (string move) {
+		if (move.Equals("PR")) {
+			Network.Instantiate(punchRightPrefab, this.transform.position, Quaternion.identity, 0);
+			attackingMove = GameObject.Find("TDefensePR");
+		}
+		if (move.Equals("PL")) {
+			Network.Instantiate(punchLeftPrefab, this.transform.position, Quaternion.identity, 0);
+			attackingMove = GameObject.Find("TDefensePL");
+		}
+		if (move.Equals("KR")) {
+			Network.Instantiate(kickRightPrefab, this.transform.position, Quaternion.identity, 0);
+			attackingMove = GameObject.Find("TDefenseKR");
+		}
+		if (move.Equals("KL")) {
+			Network.Instantiate(kickLeftPrefab, this.transform.position, Quaternion.identity, 0);
+			attackingMove = GameObject.Find("TDefenseKL");
+		}
+		amIAttacking = true;
+	}
+
 	public void ResetMove () {
 		if (amIAttacking) {
 			attackingMove.GetComponent<Transform>().position = this.transform.position;
@@ -80,11 +106,16 @@ public class PlayerDefense : MonoBehaviour {
 			defense.GetComponent<Transform>().position = this.transform.position;
 			defense.SetActive(false);
 		}
-		amIOnline = false;
 		this.gameObject.SetActive(false);
 	}
 
-	public void SetOnline () {
-		amIOnline = true;
+	public void ResetMoveOnline () {
+		if (amIAttacking) {
+			Network.Destroy(attackingMove.GetComponent<NetworkView>().viewID);
+			amIAttacking = false;
+		} else {
+			Network.Destroy(defensingMove.GetComponent<NetworkView>().viewID);
+		}
+		this.gameObject.SetActive(false);
 	}
 }
