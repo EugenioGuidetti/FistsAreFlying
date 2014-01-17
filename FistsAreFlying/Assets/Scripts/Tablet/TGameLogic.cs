@@ -267,10 +267,22 @@ public class TGameLogic : MonoBehaviour {
 		if (defenseResult.GetComponent<DefenseResult>().GetFreshness()) {
 			minigameResult = defenseResult.GetComponent<DefenseResult>().GetResult();
 			if (minigameResult.Equals("Player1")) {
-				player1.GetComponent<TPlayer>().SetForcedMove();
+				if (onlineMatch) {
+					if (amIPlayer1) {
+						player1.GetComponent<TPlayer>().SetForcedMove();
+					}
+				} else {
+					player1.GetComponent<TPlayer>().SetForcedMove();
+				}
 			}
 			if (minigameResult.Equals("Player2")) {
-				player2.GetComponent<TPlayer>().SetForcedMove();
+				if (onlineMatch) {
+					if (!amIPlayer1) {
+						player2.GetComponent<TPlayer>().SetForcedMove();
+					}
+				} else {
+					player2.GetComponent<TPlayer>().SetForcedMove();
+				}
 			}
 		}
 		animationLogic.GetComponent<AnimatorLogic>().EndMinigame(minigameResult);

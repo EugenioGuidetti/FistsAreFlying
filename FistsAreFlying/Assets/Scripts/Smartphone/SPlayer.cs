@@ -109,28 +109,23 @@ public class SPlayer : MonoBehaviour {
 
 
 	public void OnlineSelectMove (string move) {
-		if (!forcedMove) {
-			selectedMove = move;
-			if (selectedMove.Equals("PR")) {
-				touchedMoves.Add(punchRight);
-			}
-			if (selectedMove.Equals("PL")) {
-				touchedMoves.Add(punchLeft);
-			}
-			if (selectedMove.Equals("KR")) {
-				touchedMoves.Add(kickRight);
-			}
-			if (selectedMove.Equals("KL")) {
-				touchedMoves.Add(kickLeft);
-			}
-			if (selectedMove.Equals("D")) {
-				touchedMoves.Add(defense);
-			}
-			if (selectedMove.Equals("EM")) {
-				touchedMoves.Add(emptyMove);
-			}
-		} else {
-			selectedMove = "EM";
+		selectedMove = move;
+		if (selectedMove.Equals("PR")) {
+			touchedMoves.Add(punchRight);
+		}
+		if (selectedMove.Equals("PL")) {
+			touchedMoves.Add(punchLeft);
+		}
+		if (selectedMove.Equals("KR")) {
+			touchedMoves.Add(kickRight);
+		}
+		if (selectedMove.Equals("KL")) {
+			touchedMoves.Add(kickLeft);
+		}
+		if (selectedMove.Equals("D")) {
+			touchedMoves.Add(defense);
+		}
+		if (selectedMove.Equals("EM")) {
 			touchedMoves.Add(emptyMove);
 		}
 		SelectMove(touchedMoves[0]);
