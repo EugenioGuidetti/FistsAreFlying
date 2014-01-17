@@ -232,6 +232,7 @@ public class SGameLogic : MonoBehaviour {
 		if (!player1Selected) {
 			if (player1.GetComponent<SPlayer>().GetHaveIChoosed()) {
 				player1Selected = true;
+				StopCoroutine("TurnCountdownPlayer1");
 				player1Move = player1.GetComponent<SPlayer>().GetSelectedMove();
 				networkView.RPC("Player1Decision", RPCMode.Others, player1Move);
 			}
@@ -245,7 +246,6 @@ public class SGameLogic : MonoBehaviour {
 		if (player1Selected && player2Selected) {
 			isOpponentReady = false;
 			choosePhase = false;
-			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
 		}
 	}
@@ -260,6 +260,7 @@ public class SGameLogic : MonoBehaviour {
 		if (!player2Selected) {
 			if (player2.GetComponent<SPlayer>().GetHaveIChoosed()) {
 				player2Selected = true;
+				StopCoroutine("TurnCountdownPlayer2");
 				player2Move = player2.GetComponent<SPlayer>().GetSelectedMove();
 				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
 			}
