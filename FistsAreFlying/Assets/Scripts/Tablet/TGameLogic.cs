@@ -68,8 +68,10 @@ public class TGameLogic : MonoBehaviour {
 			onlineMatch = true;
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
 			if (amIPlayer1) {
+				player1.GetComponent<TPlayer>().SetOnline();
 				player2.GetComponent<TPlayer>().PutInHidePosition(false);
 			} else {
+				player2.GetComponent<TPlayer>().SetOnline();
 				player1.GetComponent<TPlayer>().PutInHidePosition(true);
 			}
 		} else {

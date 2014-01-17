@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class TPlayer : MonoBehaviour {
 
+	private bool amIOnline = false;
+
 	public GameObject moves;
 	public GameObject punchRight;
 	public GameObject punchLeft;
@@ -93,11 +95,15 @@ public class TPlayer : MonoBehaviour {
 		}
 		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
 			notYetUsedMove.GetComponent<BoxCollider2D>().enabled = false;
-			notYetUsedMove.GetComponent<SpriteRenderer>().enabled = false;
+			if(!amIOnline) {
+				notYetUsedMove.GetComponent<SpriteRenderer>().enabled = false;
+			}
 		}
 		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
 			alreadyUsedMove.GetComponent<BoxCollider2D>().enabled = false;
-			alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = false;
+			if (!amIOnline) {
+				alreadyUsedMove.GetComponent<SpriteRenderer>().enabled = false;
+			}
 		}
 		choosedMove.GetComponent<SpriteRenderer>().enabled = true;
 	}
@@ -179,6 +185,10 @@ public class TPlayer : MonoBehaviour {
 
 	public string GetSelectedMove () {
 		return selectedMove;
+	}
+
+	public void SetOnline () {
+		amIOnline = true;
 	}
 	
 	public void PutInShowPosition () {

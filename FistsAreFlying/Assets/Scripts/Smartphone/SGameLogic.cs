@@ -69,8 +69,10 @@ public class SGameLogic : MonoBehaviour {
 			onlineMatch = true;
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
 			if (amIPlayer1) {
+				player1.GetComponent<SPlayer>().SetOnline();
 				player2.GetComponent<SPlayer>().PutInHidePosition();
 			} else {
+				player2.GetComponent<SPlayer>().SetOnline();
 				player1.GetComponent<SPlayer>().PutInHidePosition();
 			}
 		} else {
