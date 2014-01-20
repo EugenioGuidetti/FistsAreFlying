@@ -182,7 +182,6 @@ public class SGameLogic : MonoBehaviour {
 		if (!player1Selected) {
 			if(!tapPlayer1){
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
-					Debug.Log("tap rilevato");
 					tapPlayer1=true;
 					player1.GetComponent<SPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
@@ -497,7 +496,6 @@ public class SGameLogic : MonoBehaviour {
 	}
 	
 	private IEnumerator EndMatch () {
-		Debug.Log("entrato in EndMatch");
 		StopCoroutine("EndTurnChecks");
 		if (player1WinnedRounds > player2WinnedRounds) {
 			messageText.GetComponent<GUIText>().text = "Player 1 wins the match!";

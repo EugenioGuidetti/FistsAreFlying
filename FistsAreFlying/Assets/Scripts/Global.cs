@@ -20,7 +20,6 @@ public class Global : MonoBehaviour {
 	void Start () {
 		GameObject.DontDestroyOnLoad(this);
 		if (Screen.dpi <= 0) {
-			Debug.Log(Screen.dpi.ToString());
 		} else {
 			width = Screen.width / Screen.dpi;
 			heigth = Screen.height / Screen.dpi;

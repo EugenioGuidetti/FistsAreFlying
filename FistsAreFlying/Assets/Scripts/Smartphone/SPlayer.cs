@@ -26,7 +26,7 @@ public class SPlayer : MonoBehaviour {
 	private Vector3 hidePosition = new Vector3 (7,0,0);
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		ResetMoves();
 		notYetUsedMoves.Add(emptyMove);
 	}
