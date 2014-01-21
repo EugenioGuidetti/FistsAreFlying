@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class TGameLogic : MonoBehaviour {
@@ -23,12 +23,12 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject conflictResult;
 	private string minigameResult;
 	
-	public GameObject roundText;
-	public GameObject turnTimeText;
+	public GameObject roundGUI;
+	public GameObject countDownPlayer1GUI;
+	public GameObject countDownPlayer2GUI;
 	public GameObject messageText;
 	private string oldMessage = "";
-	public GameObject p1WinnedRoundsText;
-	public GameObject p2WinnedRoundsText;
+	public GameObject winRoundsGUI;
 	public GameObject player1HealthBar;
 	public GameObject player2HealthBar;
 	
@@ -44,7 +44,7 @@ public class TGameLogic : MonoBehaviour {
 	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
-	private const int healthTotal = 20;
+	private const int healthTotal = 2;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 	
@@ -59,11 +59,8 @@ public class TGameLogic : MonoBehaviour {
 		healthUnit = 1f / player1Health;
 		scaleUnit = player1HealthBar.transform.localScale.x * healthUnit;
 		round = 1;
-		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
 		player1WinnedRounds = 0;
 		player2WinnedRounds = 0;
-		p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
-		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
 		conflictGame.GetComponent<ConflictLogic>().SetGlobal(global);
 		if (global.GetComponent<Global>().GetSound()) {
@@ -93,14 +90,13 @@ public class TGameLogic : MonoBehaviour {
 			} else {
 				time = global.GetComponent<Global>().GetTime();
 			}
-		} else {
-			turnTimeText.GetComponent<GUIText>().text = "\u221E";
 		}
 		if (onlineMatch && timeMatch){
-			turnTimeText.GetComponent<GUIText>().text = time.ToString();
 			if (amIPlayer1) {
+				countDownPlayer1GUI.GetComponent<CountDownGUI>().SetSprite(time);
 				StartCoroutine("TurnCountdownPlayer1");
 			} else {
+				countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(time);
 				StartCoroutine("TurnCountdownPlayer2");
 			}
 		}
@@ -191,7 +187,7 @@ public class TGameLogic : MonoBehaviour {
 					player1.GetComponent<TPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
 					if (timeMatch){
-						turnTimeText.GetComponent<GUIText>().text = time.ToString();
+						countDownPlayer1GUI.GetComponent<CountDownGUI>().SetSprite(time);
 						StartCoroutine("TurnCountdownPlayer1");
 					}
 				}
@@ -208,7 +204,7 @@ public class TGameLogic : MonoBehaviour {
 					player2.GetComponent<TPlayer>().PutInShowPosition();
 					messageText.GetComponent<GUIText>().text= "";
 					if (timeMatch){
-						turnTimeText.GetComponent<GUIText>().text = time.ToString();
+						countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(time);
 						StartCoroutine("TurnCountdownPlayer2");
 					}
 				}
@@ -344,7 +340,7 @@ public class TGameLogic : MonoBehaviour {
 		while (countdown > 0) {
 			yield return new WaitForSeconds(1f);
 			countdown --;
-			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
+			countDownPlayer1GUI.GetComponent<CountDownGUI>().SetSprite(countdown);
 		}
 		if (!player1Selected) {
 			player1.GetComponent<TPlayer>().SetForcedMove();
@@ -356,7 +352,7 @@ public class TGameLogic : MonoBehaviour {
 		while (countdown > 0) {
 			yield return new WaitForSeconds(1f);
 			countdown --;
-			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
+			countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(countdown);
 		}
 		if (!player2Selected) {
 			player2.GetComponent<TPlayer>().SetForcedMove();
@@ -402,17 +398,9 @@ public class TGameLogic : MonoBehaviour {
 	}
 	
 	private void DisableText () {
-		turnTimeText.SetActive(false);
-		roundText.SetActive(false);
-		p1WinnedRoundsText.SetActive(false);
-		p2WinnedRoundsText.SetActive(false);
 	}
 	
 	private void EnableText () {
-		turnTimeText.SetActive(true);
-		roundText.SetActive(true);
-		p1WinnedRoundsText.SetActive(true);
-		p2WinnedRoundsText.SetActive(true);
 	}
 	
 	private IEnumerator EndTurnChecks () {
@@ -438,8 +426,7 @@ public class TGameLogic : MonoBehaviour {
 			}
 			yield return new WaitForSeconds(2f);
 			messageText.GetComponent<GUIText>().text = "";
-			p1WinnedRoundsText.GetComponent<GUIText>().text = player1WinnedRounds.ToString();
-			p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
+			winRoundsGUI.GetComponent<WinRoundsGUI>().SetRoundPlayers ( player1WinnedRounds, player2WinnedRounds);
 			if (round == 3) {
 				StartCoroutine("EndMatch");
 			} 
@@ -464,11 +451,12 @@ public class TGameLogic : MonoBehaviour {
 		player2Selected = false;
 		if (onlineMatch) {
 			if (timeMatch) {
-				turnTimeText.GetComponent<GUIText>().text = time.ToString();
 				if (amIPlayer1){
+					countDownPlayer1GUI.GetComponent<CountDownGUI>().SetSprite(time);
 					StartCoroutine("TurnCountdownPlayer1");
 				}
 				else {
+					countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(time);
 					StartCoroutine("TurnCountdownPlayer2");
 				}
 			}
@@ -490,8 +478,8 @@ public class TGameLogic : MonoBehaviour {
 	
 	private void NewRound () {
 		animationLogic.GetComponent<AnimatorLogic>().NewRound();
-		round = round + 1;		
-		roundText.GetComponent<GUIText>().text = "Round " + round.ToString();
+		round = round + 1;
+		roundGUI.GetComponent<RoundGUI>().SetSprite (round);
 		player1Health = healthTotal;
 		player2Health = healthTotal;
 		UpdateHealthBar(player1HealthBar.GetComponent<SpriteRenderer>(), player1Health);

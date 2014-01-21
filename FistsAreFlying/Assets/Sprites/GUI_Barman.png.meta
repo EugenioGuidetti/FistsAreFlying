@@ -108,7 +108,7 @@ TextureImporter:
         height: 102
       alignment: 0
       pivot: {x: .5, y: .5}
-    - name: KickLeft
+    - name: KickLeftUsed
       rect:
         serializedVersion: 2
         x: 849
