@@ -26,6 +26,7 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject roundGUI;
 	public GameObject countDownPlayer1GUI;
 	public GameObject countDownPlayer2GUI;
+	public GameObject mainMessagesGUI;
 	public GameObject messageText;
 	private string oldMessage = "";
 	public GameObject winRoundsGUI;
@@ -102,7 +103,7 @@ public class TGameLogic : MonoBehaviour {
 		}
 		choosePhase = true;
 		if(!onlineMatch){
-			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p1Turn");
 		}
 	}
 	
@@ -150,8 +151,6 @@ public class TGameLogic : MonoBehaviour {
 			if(!pauseGUI.activeSelf){
 				Time.timeScale = 0;
 				DisableText();
-				oldMessage = messageText.GetComponent<GUIText>().text;
-				messageText.GetComponent<GUIText>().text = "";
 				player1.SetActive(false);
 				player2.SetActive(false);
 				pauseGUI.SetActive(true);
@@ -171,8 +170,6 @@ public class TGameLogic : MonoBehaviour {
 	private void ResumeGame () {
 		pauseGUI.SetActive(false);
 		EnableText();
-		messageText.GetComponent<GUIText>().text = oldMessage;
-		oldMessage = "";
 		player1.SetActive(true);
 		player2.SetActive(true);
 		Time.timeScale = 1;
@@ -185,7 +182,7 @@ public class TGameLogic : MonoBehaviour {
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
 					tapPlayer1=true;
 					player1.GetComponent<TPlayer>().PutInShowPosition();
-					messageText.GetComponent<GUIText>().text= "";
+					mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
 					if (timeMatch){
 						countDownPlayer1GUI.GetComponent<CountDownGUI>().SetSprite(time);
 						StartCoroutine("TurnCountdownPlayer1");

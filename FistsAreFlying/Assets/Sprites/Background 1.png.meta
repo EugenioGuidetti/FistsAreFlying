@@ -115,8 +115,8 @@ TextureImporter:
         y: 365
         width: 550
         height: 53
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 5
+      pivot: {x: 1, y: .5}
     - name: HealthBar_P2
       rect:
         serializedVersion: 2
@@ -124,7 +124,7 @@ TextureImporter:
         y: 275
         width: 550
         height: 53
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 4
+      pivot: {x: 0, y: .5}
   spritePackingTag: 
   userData: 
