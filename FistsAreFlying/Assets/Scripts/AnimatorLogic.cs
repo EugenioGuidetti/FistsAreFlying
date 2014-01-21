@@ -7,6 +7,7 @@ public class AnimatorLogic : MonoBehaviour {
 	public GameObject avatar2Manager;
 	public GameObject defenseGame;
 	public GameObject conflictGame;
+	public GameObject pauseGUI;
 	
 	private bool animationEnd = false;
 	private bool player1Frozen = false;
@@ -178,6 +179,7 @@ public class AnimatorLogic : MonoBehaviour {
 			yield return new WaitForSeconds(normalDurate);
 			conflictGame.GetComponent<ConflictLogic>().SetPlayerMoves(player1move, player2move);
 			Camera.main.transform.position = new Vector3 (0, 15, Camera.main.transform.position.z);
+			pauseGUI.GetComponent<Transform>().position = new Vector3 ( 0, 15, 0);
 			conflictGame.GetComponent<ConflictLogic>().StartCountdown();
 		}
 		else if (typeAnimation == "defense") {
@@ -189,6 +191,7 @@ public class AnimatorLogic : MonoBehaviour {
 			defenseGame.SetActive(true);
 			defenseGame.GetComponent<DefenseLogic>().SetPlayers(player1move, player2move);
 			Camera.main.transform.position = new Vector3 (0, -15, Camera.main.transform.position.z);
+			pauseGUI.GetComponent<Transform>().position = new Vector3 ( 0, -15, 0);
 		}
 		else if (typeAnimation == "emptyVsDamage") {
 			if (player1move == "EM") {

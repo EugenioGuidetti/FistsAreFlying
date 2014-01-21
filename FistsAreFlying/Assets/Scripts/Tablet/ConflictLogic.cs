@@ -8,6 +8,7 @@ public class ConflictLogic : MonoBehaviour {
 	public GameObject player2;
 	public GameObject result;
 	public GameObject text;
+	public GameObject pauseGUI;
 
 	private float drawOffset = 0.025f;
 	private bool isLegal = false;
@@ -161,6 +162,7 @@ public class ConflictLogic : MonoBehaviour {
 		player1Tapped = false;
 		player2Tapped = false;
 		Camera.main.transform.position = new Vector3 (0, 0, Camera.main.transform.position.z);
+		pauseGUI.GetComponent<Transform>().position = new Vector3 ( 0, 0, 0);
 		player1.GetComponent<PlayerConflict>().ResetMoves();
 		player2.GetComponent<PlayerConflict>().ResetMoves();
 		text.GetComponent<GUIText>().text = "";

@@ -9,6 +9,7 @@ public class DefenseLogic : MonoBehaviour {
 	public GameObject player2;
 	public GameObject result;
 	public GameObject text;
+	public GameObject pauseGUI;
 
 	private GameObject attackingPlayer;
 	private string hittenTarget = "";
@@ -88,6 +89,7 @@ public class DefenseLogic : MonoBehaviour {
 	private IEnumerator DefenseEnd () {
 		yield return new WaitForSeconds(2f);
 		Camera.main.transform.position = new Vector3 (0, 0, Camera.main.transform.position.z);
+		pauseGUI.GetComponent<Transform>().position = new Vector3 ( 0, 0, 0);
 		if (!online) {
 			player1.GetComponent<PlayerDefense>().ResetMove();
 			player2.GetComponent<PlayerDefense>().ResetMove();
