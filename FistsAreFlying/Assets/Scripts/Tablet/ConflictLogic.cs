@@ -7,9 +7,8 @@ public class ConflictLogic : MonoBehaviour {
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject result;
-	public GameObject text;
 	public GameObject pauseGUI;
-
+	public GameObject conflictMessagesGUI;
 	private float drawOffset = 0.025f;
 	private bool isLegal = false;
 	private int randomRange = 0;
@@ -123,13 +122,13 @@ public class ConflictLogic : MonoBehaviour {
 	private void LocalApplyRules () {
 		if (player1Time > player2Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
-			text.GetComponent<GUIText>().text = "Player 2 wins!";
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");
 		} else if (player1Time + drawOffset < player2Time) {
 			result.GetComponent<ConflictResult>().SetResult("player1");
-			text.GetComponent<GUIText>().text = "Player 1 wins!";
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
 		} else {
 			result.GetComponent<ConflictResult>().SetResult("draw");
-			text.GetComponent<GUIText>().text = "Draw";
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("sameTime");
 		}
 		StartCoroutine("ConflictEnd");
 	}
@@ -138,20 +137,20 @@ public class ConflictLogic : MonoBehaviour {
 		if (!isLegal) {
 			if (player1Time < player2Time) {
 				result.GetComponent<ConflictResult>().SetResult("player2");
-				text.GetComponent<GUIText>().text = "Player 2 wins!";				
+				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");			
 			} else {
 				result.GetComponent<ConflictResult>().SetResult("player1");
-				text.GetComponent<GUIText>().text = "Player 1 wins!";
+				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
 			}
 		} else if (player1Time <= legalTime || player1Time > player2Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
-			text.GetComponent<GUIText>().text = "Player 2 wins!";
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");
 		} else if (player2Time <= legalTime || player2Time > player1Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player1");
-			text.GetComponent<GUIText>().text = "Player 1 wins!";
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
 		} else {
 			result.GetComponent<ConflictResult>().SetResult("draw");
-			text.GetComponent<GUIText>().text = "Draw";
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("sameTime");
 		}
 		StartCoroutine("ConflictEnd");
 	}
@@ -165,7 +164,7 @@ public class ConflictLogic : MonoBehaviour {
 		pauseGUI.GetComponent<Transform>().position = new Vector3 ( 0, 0, 0);
 		player1.GetComponent<PlayerConflict>().ResetMoves();
 		player2.GetComponent<PlayerConflict>().ResetMoves();
-		text.GetComponent<GUIText>().text = "";
+		conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("");
 		this.gameObject.SetActive(false);
 	}
 
@@ -196,7 +195,7 @@ public class ConflictLogic : MonoBehaviour {
 		yield return new WaitForSeconds(randomRange);
 		legalTime = Time.time - startTime;
 		isLegal = true;
-		text.GetComponent<GUIText>().text = "Go!";
+		conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("tap");
 	}
 
 	public void SetPlayerMoves (string move1, string move2) {
