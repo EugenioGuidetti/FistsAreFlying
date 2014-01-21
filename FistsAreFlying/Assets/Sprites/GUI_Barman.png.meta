@@ -504,7 +504,7 @@ TextureImporter:
         height: 84
       alignment: 0
       pivot: {x: .5, y: .5}
-    - name: GUI_Barman_89
+    - name: P2Frozen
       rect:
         serializedVersion: 2
         x: 0

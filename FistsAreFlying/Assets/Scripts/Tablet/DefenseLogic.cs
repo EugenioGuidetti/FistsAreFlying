@@ -8,7 +8,7 @@ public class DefenseLogic : MonoBehaviour {
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject result;
-	public GameObject text;
+	public GameObject defenseMessagesGUI;
 	public GameObject pauseGUI;
 
 	private GameObject attackingPlayer;
@@ -79,10 +79,13 @@ public class DefenseLogic : MonoBehaviour {
 	private void ApplyRules () {
 		if (hittenTarget.Equals(attackingPlayer.gameObject.name.ToString()) || hittenTarget.Equals("Defense") || hittenTarget.Equals("DefenseShield(Clone)")) {
 			result.GetComponent<DefenseResult>().SetResult(attackingPlayer.gameObject.name.ToString());
-			text.GetComponent<GUIText>().text = attackingPlayer.gameObject.name.ToString() + " is frozen in the next turn!";
+			if (attackingPlayer.gameObject.name.ToString().Equals("Player1")) {
+				defenseMessagesGUI.GetComponent<DefenseMessagesGUI>().SetP1Frozen();
+			} else {
+				defenseMessagesGUI.GetComponent<DefenseMessagesGUI>().SetP2Frozen();
+			}
 		} else {
-			result.GetComponent<DefenseResult>().SetResult("Fail");					
-			text.GetComponent<GUIText>().text = attackingPlayer.gameObject.name.ToString() + " could act in the next turn!";
+			result.GetComponent<DefenseResult>().SetResult("Fail");
 		}
 	}
 
@@ -100,7 +103,7 @@ public class DefenseLogic : MonoBehaviour {
 				player2.GetComponent<PlayerDefense>().ResetMoveOnline();
 			}			
 		}
-		text.GetComponent<GUIText>().text = "";
+		defenseMessagesGUI.GetComponent<DefenseMessagesGUI>().SetNoSprite();
 		this.gameObject.SetActive(false);
 	}
 	

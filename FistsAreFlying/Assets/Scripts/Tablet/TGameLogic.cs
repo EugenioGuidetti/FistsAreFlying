@@ -27,8 +27,6 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject countDownPlayer1GUI;
 	public GameObject countDownPlayer2GUI;
 	public GameObject mainMessagesGUI;
-	public GameObject messageText;
-	private string oldMessage = "";
 	public GameObject winRoundsGUI;
 	public GameObject player1HealthBar;
 	public GameObject player2HealthBar;
@@ -141,7 +139,6 @@ public class TGameLogic : MonoBehaviour {
 			}
 		}
 		if (endPhase && !defenseGame.activeSelf && !conflictGame.activeSelf && animationLogic.GetComponent<AnimatorLogic>().isAnmiationEnd()) {
-			EnableText();
 			EndTurnPhase();
 		}
 	}
@@ -150,7 +147,6 @@ public class TGameLogic : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Escape)){
 			if(!pauseGUI.activeSelf){
 				Time.timeScale = 0;
-				DisableText();
 				player1.SetActive(false);
 				player2.SetActive(false);
 				pauseGUI.SetActive(true);
@@ -169,7 +165,6 @@ public class TGameLogic : MonoBehaviour {
 	
 	private void ResumeGame () {
 		pauseGUI.SetActive(false);
-		EnableText();
 		player1.SetActive(true);
 		player2.SetActive(true);
 		Time.timeScale = 1;
@@ -192,14 +187,14 @@ public class TGameLogic : MonoBehaviour {
 				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
 				player1Selected = true;
 				player1.GetComponent<TPlayer>().PutInHidePosition(true);
-				messageText.GetComponent<GUIText>().text= "Player 2 turn, tap for begin";
+				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p2Turn");
 			}
 		} else {
 			if (!tapPlayer2) {
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf) {
 					tapPlayer2=true;
 					player2.GetComponent<TPlayer>().PutInShowPosition();
-					messageText.GetComponent<GUIText>().text= "";
+					mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
 					if (timeMatch){
 						countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(time);
 						StartCoroutine("TurnCountdownPlayer2");
@@ -367,7 +362,6 @@ public class TGameLogic : MonoBehaviour {
 		} else if (player1Move.Equals("D") || player2Move.Equals("D")) {
 			if (!player1Move.Equals("EM") && !player2Move.Equals("EM")) {
 				outcome = "defense";
-				DisableText();
 			}
 		} else if (player1Move.Equals("EM") || player2Move.Equals("EM")) {
 			if (player1Move.Equals("EM")) {
@@ -388,16 +382,9 @@ public class TGameLogic : MonoBehaviour {
 				player2Health = player2Health - (normalDamage / 2);
 			}
 			if (outcome.Equals("conflict")) {
-				DisableText();
 			}
 		}
 		animationLogic.GetComponent<AnimatorLogic>().SetMoves(player1Move, player2Move, outcome);
-	}
-	
-	private void DisableText () {
-	}
-	
-	private void EnableText () {
 	}
 	
 	private IEnumerator EndTurnChecks () {
@@ -412,17 +399,17 @@ public class TGameLogic : MonoBehaviour {
 			}
 			//stampare risultato round
 			if (player1Health > 0) {
-				messageText.GetComponent<GUIText>().text = "Player 1 wins the round!";
+				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p1WinRound");
 				animationLogic.GetComponent<AnimatorLogic>().EndRound("player2");
 			} else if (player2Health > 0) {
-				messageText.GetComponent<GUIText>().text = "Player 2 wins the round!";
+				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
 				animationLogic.GetComponent<AnimatorLogic>().EndRound("player1");
 			} else {
-				messageText.GetComponent<GUIText>().text = "Round draw!";
+				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("roundDraw");
 				animationLogic.GetComponent<AnimatorLogic>().EndRound("draw");
 			}
 			yield return new WaitForSeconds(2f);
-			messageText.GetComponent<GUIText>().text = "";
+			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
 			winRoundsGUI.GetComponent<WinRoundsGUI>().SetRoundPlayers ( player1WinnedRounds, player2WinnedRounds);
 			if (round == 3) {
 				StartCoroutine("EndMatch");
@@ -459,7 +446,7 @@ public class TGameLogic : MonoBehaviour {
 			}
 		}
 		else{
-			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p1Turn");
 			tapPlayer1 = false;
 			tapPlayer2 = false;
 		}
@@ -488,14 +475,14 @@ public class TGameLogic : MonoBehaviour {
 	private IEnumerator EndMatch () {
 		StopCoroutine("EndTurnChecks");
 		if (player1WinnedRounds > player2WinnedRounds) {
-			messageText.GetComponent<GUIText>().text = "Player 1 wins the match!";
+			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p1WinMatch");
 		} else if (player2WinnedRounds > player1WinnedRounds) {
-			messageText.GetComponent<GUIText>().text = "Player 2 wins the match!";
+			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p2WinMatch");
 		} else {
-			messageText.GetComponent<GUIText>().text = "Match draw!";
+			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("matchDraw");
 		}
-		yield return new WaitForSeconds(2f);		
-		messageText.GetComponent<GUIText>().text = "";
+		yield return new WaitForSeconds(2f);
+		mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
 		Application.LoadLevel("MainMenu");
 	}
 	
