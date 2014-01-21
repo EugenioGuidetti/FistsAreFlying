@@ -13,7 +13,8 @@ public class TGameLogic : MonoBehaviour {
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
-	
+
+	public GameObject matchLoop;
 	public GameObject animationLogic;
 	public GameObject pauseGUI;
 	public GameObject defenseGame;
@@ -65,6 +66,9 @@ public class TGameLogic : MonoBehaviour {
 		p2WinnedRoundsText.GetComponent<GUIText>().text = player2WinnedRounds.ToString();
 		global = GameObject.Find("GlobalObject");
 		conflictGame.GetComponent<ConflictLogic>().SetGlobal(global);
+		if (global.GetComponent<Global>().GetSound()) {
+			matchLoop.SetActive(true);
+		}
 		if (global.GetComponent<Global>().GetOnlineGame()) {
 			onlineMatch = true;
 			defenseGame.GetComponent<DefenseLogic>().SetOnline();
