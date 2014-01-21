@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class TGameLogic : MonoBehaviour {
-
+	
 	private GameObject global;
 	private bool onlineMatch;
 	private bool amIPlayer1;
@@ -13,7 +13,7 @@ public class TGameLogic : MonoBehaviour {
 	private int round;
 	private bool choosePhase = false;
 	private bool endPhase = false;
-
+	
 	public GameObject animationLogic;
 	public GameObject pauseGUI;
 	public GameObject defenseGame;
@@ -21,7 +21,7 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject conflictGame;
 	public GameObject conflictResult;
 	private string minigameResult;
-
+	
 	public GameObject roundText;
 	public GameObject turnTimeText;
 	public GameObject messageText;
@@ -30,14 +30,15 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject p2WinnedRoundsText;
 	public GameObject player1HealthBar;
 	public GameObject player2HealthBar;
-
+	
 	public GameObject player1;
 	public GameObject player2;
 	private string player1Move = "";
 	private string player2Move = "";
 	private bool player1Selected = false;
 	private bool player2Selected = false;
-	private bool tapPlayers = false;
+	private bool tapPlayer1 = false;
+	private bool tapPlayer2 = false;
 	private int player1Health;
 	private int player2Health;
 	private float healthUnit;
@@ -45,10 +46,10 @@ public class TGameLogic : MonoBehaviour {
 	private const int healthTotal = 20;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
-
+	
 	private int normalDamage = 2;
 	private Hashtable rules = new Hashtable();
-
+	
 	// Use this for initialization
 	void Start () {
 		initializeRules();
@@ -70,16 +71,16 @@ public class TGameLogic : MonoBehaviour {
 			amIPlayer1 = global.GetComponent<Global>().GetAmIPlayer1();
 			isOpponentReady = true;
 			if (amIPlayer1) {
-				player1.GetComponent<TPlayer>().SetOnline();
-				player2.GetComponent<TPlayer>().PutInHidePosition(false);
 				defenseGame.GetComponent<DefenseLogic>().SetPlayer1();
+				player1.GetComponent<TPlayer>().SetOnline();
+				player2.GetComponent<TPlayer>().PutInHidePosition(amIPlayer1);
 			} else {
 				player2.GetComponent<TPlayer>().SetOnline();
-				player1.GetComponent<TPlayer>().PutInHidePosition(true);
+				player1.GetComponent<TPlayer>().PutInHidePosition(amIPlayer1);
 			}
 		} else {
-			player2.GetComponent<TPlayer>().PutInHidePosition(false);
 			player1.GetComponent<TPlayer>().PutInHidePosition(true);
+			player2.GetComponent<TPlayer>().PutInHidePosition(false);
 		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			timeMatch = true;
@@ -93,14 +94,18 @@ public class TGameLogic : MonoBehaviour {
 		}
 		if (onlineMatch && timeMatch){
 			turnTimeText.GetComponent<GUIText>().text = time.ToString();
-			StartCoroutine("TurnCountdown");
+			if (amIPlayer1) {
+				StartCoroutine("TurnCountdownPlayer1");
+			} else {
+				StartCoroutine("TurnCountdownPlayer2");
+			}
 		}
 		choosePhase = true;
-		if (!onlineMatch) {
-			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";
+		if(!onlineMatch){
+			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
 		}
 	}
-
+	
 	private void initializeRules () {
 		rules.Add ("PR.PL", "conflict");
 		rules.Add ("PR.KR", "player2");
@@ -139,7 +144,7 @@ public class TGameLogic : MonoBehaviour {
 			EndTurnPhase();
 		}
 	}
-
+	
 	private void pauseCheck() {
 		if (Input.GetKeyDown(KeyCode.Escape)){
 			if(!pauseGUI.activeSelf){
@@ -156,7 +161,7 @@ public class TGameLogic : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	private void pauseCheckOnline () {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
 			Application.LoadLevel("MainMenu");
@@ -173,47 +178,61 @@ public class TGameLogic : MonoBehaviour {
 		Time.timeScale = 1;
 		/*if (!audio.isPlaying) audio.Play(); */		
 	}
-
+	
 	private void LocalChoosePhase () {
-		if (!tapPlayers) {
-			if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
-				Debug.Log("tap rilevato");
-				tapPlayers = true;
-				player1.GetComponent<TPlayer>().PutInShowPosition();
-				player2.GetComponent<TPlayer>().PutInShowPosition();
-				messageText.GetComponent<GUIText>().text = "";
-				if (timeMatch) {
-					turnTimeText.GetComponent<GUIText>().text = time.ToString();
-					StartCoroutine("TurnCountdown");
+		if (!player1Selected) {
+			if(!tapPlayer1){
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf){
+					tapPlayer1=true;
+					player1.GetComponent<TPlayer>().PutInShowPosition();
+					messageText.GetComponent<GUIText>().text= "";
+					if (timeMatch){
+						turnTimeText.GetComponent<GUIText>().text = time.ToString();
+						StartCoroutine("TurnCountdownPlayer1");
+					}
 				}
+			} else if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
+				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				player1Selected = true;
+				player1.GetComponent<TPlayer>().PutInHidePosition(true);
+				messageText.GetComponent<GUIText>().text= "Player 2 turn, tap for begin";
 			}
 		} else {
-			if (!player1Selected) {
-				if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
-					player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
-					player1Selected = true;
-					player1.GetComponent<TPlayer>().PutInHidePosition(true);
+			if (!tapPlayer2) {
+				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf) {
+					tapPlayer2=true;
+					player2.GetComponent<TPlayer>().PutInShowPosition();
+					messageText.GetComponent<GUIText>().text= "";
+					if (timeMatch){
+						turnTimeText.GetComponent<GUIText>().text = time.ToString();
+						StartCoroutine("TurnCountdownPlayer2");
+					}
 				}
-			}
-			if (!player2Selected) {
+			} else if (!player2Selected) {
 				if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
 					player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
 					player2Selected = true;
 					player2.GetComponent<TPlayer>().PutInHidePosition(false);
 				}
 			}
-			if (player1Selected && player2Selected) {
-				choosePhase = false;
-				StopCoroutine("TurnCountdown");
-				StartCoroutine("MainFlow");
-			}
+		}
+		if (player1Selected) {
+			StopCoroutine("TurnCountdownPlayer1");
+		}
+		if (player2Selected) {
+			StopCoroutine("TurnCountdownPlayer2");
+		}
+		if (player1Selected && player2Selected) {
+			choosePhase = false;
+			StartCoroutine("MainFlow");
 		}
 	}
-
+	
 	private void OnlineP1ChoosePhase () {
 		if (!player1Selected) {
 			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
 				player1Selected = true;
+				StopCoroutine("TurnCountdownPlayer1");
 				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
 				networkView.RPC("Player1Decision", RPCMode.Others, player1Move);
 			}
@@ -227,11 +246,10 @@ public class TGameLogic : MonoBehaviour {
 		if (player1Selected && player2Selected) {
 			isOpponentReady = false;
 			choosePhase = false;
-			StopCoroutine("TurnCountdown");
 			StartCoroutine("MainFlow");
 		}
 	}
-
+	
 	private void OnlineP2ChoosePhase () {
 		if (!player1Selected) {
 			if (player1.GetComponent<TPlayer>().GetHaveIChoosed()) {
@@ -242,6 +260,7 @@ public class TGameLogic : MonoBehaviour {
 		if (!player2Selected) {
 			if (player2.GetComponent<TPlayer>().GetHaveIChoosed()) {
 				player2Selected = true;
+				StopCoroutine("TurnCountdownPlayer2");
 				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
 				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
 			}
@@ -253,16 +272,15 @@ public class TGameLogic : MonoBehaviour {
 			StartCoroutine("MainFlow");
 		}
 	}
-
+	
 	[RPC] void Player1Decision (string move) {
 		player1.GetComponent<TPlayer>().OnlineSelectMove(move);
 	}
-
+	
 	[RPC] void Player2Decision (string move) {
 		player2.GetComponent<TPlayer>().OnlineSelectMove(move);
 	}
-
-
+	
 	private void EndTurnPhase () {
 		endPhase = false;
 		if (conflictResult.GetComponent<ConflictResult>().GetFreshness()) {
@@ -306,7 +324,7 @@ public class TGameLogic : MonoBehaviour {
 		//controllo fine round e fine match
 		StartCoroutine("EndTurnChecks");
 	}
-
+	
 	private IEnumerator MainFlow () {
 		yield return new WaitForSeconds(2f);
 		player1.GetComponent<TPlayer>().ShowSelectedMove();
@@ -316,34 +334,33 @@ public class TGameLogic : MonoBehaviour {
 		ApplyRules();
 		endPhase = true;
 	}
-
-	private IEnumerator TurnCountdown () {
+	
+	private IEnumerator TurnCountdownPlayer1 () {
 		countdown = time;
 		while (countdown > 0) {
 			yield return new WaitForSeconds(1f);
 			countdown --;
 			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
 		}
-		if (onlineMatch){
-			if (!player1Selected && amIPlayer1) {
-				player1.GetComponent<TPlayer>().SetForcedMove();
-			}
-			if (!player2Selected && !amIPlayer1) {
-				player2.GetComponent<TPlayer>().SetForcedMove();
-			}
-		} else {
-			if (!player1Selected) {
-				player1.GetComponent<TPlayer>().SetForcedMove();
-			}
-			if (!player2Selected) {
-				player2.GetComponent<TPlayer>().SetForcedMove();
-			}
-		
+		if (!player1Selected) {
+			player1.GetComponent<TPlayer>().SetForcedMove();
 		}
 	}
-
+	
+	private IEnumerator TurnCountdownPlayer2 () {
+		countdown = time;
+		while (countdown > 0) {
+			yield return new WaitForSeconds(1f);
+			countdown --;
+			turnTimeText.GetComponent<GUIText>().text = countdown.ToString();
+		}
+		if (!player2Selected) {
+			player2.GetComponent<TPlayer>().SetForcedMove();
+		}
+	}
+	
 	private void ApplyRules () {
-		string outcome ="";
+		string outcome = "";
 		if (player1Move.Equals(player2Move)) {
 			if (!player1Move.Equals("EM") && !player1Move.Equals("D")) {
 				outcome = "sameMoves";
@@ -376,25 +393,26 @@ public class TGameLogic : MonoBehaviour {
 			if (outcome.Equals("conflict")) {
 				DisableText();
 			}
-		}	
+		}
 		animationLogic.GetComponent<AnimatorLogic>().SetMoves(player1Move, player2Move, outcome);
 	}
-
+	
 	private void DisableText () {
 		turnTimeText.SetActive(false);
 		roundText.SetActive(false);
 		p1WinnedRoundsText.SetActive(false);
 		p2WinnedRoundsText.SetActive(false);
 	}
-
+	
 	private void EnableText () {
 		turnTimeText.SetActive(true);
 		roundText.SetActive(true);
 		p1WinnedRoundsText.SetActive(true);
 		p2WinnedRoundsText.SetActive(true);
 	}
-
+	
 	private IEnumerator EndTurnChecks () {
+		//attendo che tornino indietro (devo farlo da qui perchè nel caso ci siano minigiochi
 		yield return new WaitForSeconds (1f);
 		if (player1Health <= 0 || player2Health <= 0) {
 			if (player1Health <= 0) {
@@ -426,13 +444,13 @@ public class TGameLogic : MonoBehaviour {
 					StartCoroutine("EndMatch");
 				} else {
 					NewRound();
-					yield return new WaitForSeconds(4f);
+					yield return new WaitForSeconds (4f);
 				}
 			}
 			
 			if (round == 1) {
 				NewRound();
-				yield return new WaitForSeconds(4f);
+				yield return new WaitForSeconds (4f);
 			}
 		} else {
 			player1.GetComponent<TPlayer>().NewTurn();
@@ -443,22 +461,29 @@ public class TGameLogic : MonoBehaviour {
 		if (onlineMatch) {
 			if (timeMatch) {
 				turnTimeText.GetComponent<GUIText>().text = time.ToString();
-				StartCoroutine("TurnCountdown");
+				if (amIPlayer1){
+					StartCoroutine("TurnCountdownPlayer1");
+				}
+				else {
+					StartCoroutine("TurnCountdownPlayer2");
+				}
 			}
-		} else {
-			messageText.GetComponent<GUIText>().text= "Tap to begin the turn.";	
-			tapPlayers = false;
 		}
-		choosePhase=true;
+		else{
+			messageText.GetComponent<GUIText>().text= "Player 1 turn, tap for begin";
+			tapPlayer1 = false;
+			tapPlayer2 = false;
+		}
+		choosePhase = true;
 		if (onlineMatch) {
 			networkView.RPC("ComunicateReady", RPCMode.Others);
 		}
 	}
-
+	
 	[RPC] void ComunicateReady () {
 		isOpponentReady = true;
 	}
-
+	
 	private void NewRound () {
 		animationLogic.GetComponent<AnimatorLogic>().NewRound();
 		round = round + 1;		
@@ -470,9 +495,8 @@ public class TGameLogic : MonoBehaviour {
 		player1.GetComponent<TPlayer>().NewRound();
 		player2.GetComponent<TPlayer>().NewRound();
 	}
-
+	
 	private IEnumerator EndMatch () {
-		Debug.Log("entrato in EndMatch");
 		StopCoroutine("EndTurnChecks");
 		if (player1WinnedRounds > player2WinnedRounds) {
 			messageText.GetComponent<GUIText>().text = "Player 1 wins the match!";
@@ -485,7 +509,7 @@ public class TGameLogic : MonoBehaviour {
 		messageText.GetComponent<GUIText>().text = "";
 		Application.LoadLevel("MainMenu");
 	}
-
+	
 	private void UpdateHealthBar (SpriteRenderer healthBar, int actualHealth) {
 		if (actualHealth < 0) {
 			actualHealth = 0;

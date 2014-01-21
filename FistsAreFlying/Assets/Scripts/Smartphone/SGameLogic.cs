@@ -79,6 +79,7 @@ public class SGameLogic : MonoBehaviour {
 				player1.GetComponent<SPlayer>().PutInHidePosition();
 			}
 		} else {
+			player1.GetComponent<SPlayer>().PutInHidePosition();
 			player2.GetComponent<SPlayer>().PutInHidePosition();
 		}
 		if (global.GetComponent<Global>().GetTimeGame()) {
