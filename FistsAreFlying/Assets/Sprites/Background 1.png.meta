@@ -1,0 +1,130 @@
+fileFormatVersion: 2
+guid: fff2ba0869894fa49b55146fd6365991
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: -2
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Wall
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 1378
+        width: 1977
+        height: 650
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Bar
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 787
+        width: 1977
+        height: 572
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Shelves
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 443
+        width: 953
+        height: 313
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: BeerTaps
+      rect:
+        serializedVersion: 2
+        x: 1028
+        y: 571
+        width: 303
+        height: 189
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Glasses_Left
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 635
+        width: 254
+        height: 124
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: TargetBoard
+      rect:
+        serializedVersion: 2
+        x: 1669
+        y: 559
+        width: 201
+        height: 201
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Glasses_Right
+      rect:
+        serializedVersion: 2
+        x: 1370
+        y: 466
+        width: 214
+        height: 133
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: HealthBar_P1
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 365
+        width: 550
+        height: 53
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: HealthBar_P2
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 275
+        width: 550
+        height: 53
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
