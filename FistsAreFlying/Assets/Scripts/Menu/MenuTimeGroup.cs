@@ -14,6 +14,15 @@ public class MenuTimeGroup : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		global = GameObject.Find("GlobalObject");
+		if (global.GetComponent<Global>().GetTime() == 15) {
+			check1.SetActive(true);	
+		}
+		if (global.GetComponent<Global>().GetTime() == 10) {
+			check2.SetActive(true);	
+		}
+		if (global.GetComponent<Global>().GetTime() == 5) {
+			check3.SetActive(true);	
+		}
 	
 	}
 	

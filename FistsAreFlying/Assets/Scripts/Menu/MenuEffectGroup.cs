@@ -12,6 +12,12 @@ public class MenuEffectGroup : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		global = GameObject.Find("GlobalObject");
+		if (global.GetComponent<Global>().GetEffects()) {
+			checkOn.SetActive(true);
+		}
+		else {
+			checkOff.SetActive(false);
+		}
 	}
 	
 	// Update is called once per frame

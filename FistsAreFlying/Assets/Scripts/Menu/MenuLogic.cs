@@ -6,6 +6,7 @@ public class MenuLogic : MonoBehaviour {
 	private GameObject global;
 	public GameObject networkManager;
 
+	public GameObject menuLoop;
 	public GameObject back;
 	public GameObject mainGroup;
 	public GameObject optionsGroup;
@@ -26,6 +27,9 @@ public class MenuLogic : MonoBehaviour {
 		global.GetComponent<Global>().SetTimeGame(false);
 		actualGroup = mainGroup;
 		lastSelection = "";
+		if (global.GetComponent<Global>().GetSound()){
+			menuLoop.SetActive(true);
+		}
 	}
 	
 	// Update is called once per frame
@@ -183,7 +187,6 @@ public class MenuLogic : MonoBehaviour {
 	private void ManageSearchGroup () {
 		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			actualGroup.SetActive(false);
-			back.SetActive(false);
 			previousGroup.SetActive(true);
 			actualGroup = previousGroup;
 		}
