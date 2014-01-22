@@ -196,7 +196,7 @@ public class AnimatorLogic : MonoBehaviour {
 		else if (typeAnimation == "emptyVsDamage") {
 			if (player1move == "EM") {
 				avatar1Manager.GetComponent<AvatarManager>().setAnimation (player1move);
-				yield return new WaitForSeconds(normalDurate);
+				yield return new WaitForSeconds(normalDurate*3);
 				avatar2Manager.GetComponent<AvatarManager>().setAnimation (player2move);
 				avatar1Manager.GetComponent<AvatarManager>().setAnimation ("HD");
 				yield return new WaitForSeconds(normalDurate);
@@ -205,7 +205,7 @@ public class AnimatorLogic : MonoBehaviour {
 			}
 			else {
 				avatar2Manager.GetComponent<AvatarManager>().setAnimation (player2move);
-				yield return new WaitForSeconds(normalDurate);
+				yield return new WaitForSeconds(normalDurate*3);
 				avatar1Manager.GetComponent<AvatarManager>().setAnimation (player1move);
 				avatar2Manager.GetComponent<AvatarManager>().setAnimation ("HD");
 				yield return new WaitForSeconds(normalDurate);
