@@ -1,0 +1,283 @@
+fileFormatVersion: 2
+guid: 494fc29a8d51cd149802706ee5121614
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: -2
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: Text_Connecting
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1974
+        width: 429
+        height: 65
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: OniricPlatypusLogo
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 1038
+        width: 1000
+        height: 1000
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_WaitingOpponent
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1890
+        width: 894
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_NoHostFound
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1813
+        width: 548
+        height: 71
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_TurnDuration
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1730
+        width: 542
+        height: 71
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_5Seconds
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1652
+        width: 316
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_10Seconds
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1572
+        width: 340
+        height: 71
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_15Seconds
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1488
+        width: 346
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Music
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1411
+        width: 226
+        height: 71
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_SoundEffects
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1328
+        width: 584
+        height: 77
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_On
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1250
+        width: 107
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Off
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1170
+        width: 167
+        height: 71
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_OriginalConcept
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1092
+        width: 662
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Programming
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 1006
+        width: 499
+        height: 77
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: OniricPlatypusText
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 778
+        width: 1150
+        height: 250
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Florence
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 928
+        width: 494
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Davide
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 851
+        width: 351
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Eugenio
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 768
+        width: 511
+        height: 71
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Graphics
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 690
+        width: 351
+        height: 72
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: PolimiGameCollectiveLogo
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 378
+        width: 973
+        height: 389
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_MenteZero
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 601
+        width: 351
+        height: 83
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Music&Sound
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 517
+        width: 928
+        height: 78
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Luigi
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 434
+        width: 429
+        height: 80
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_MatchCreationFailed
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 357
+        width: 852
+        height: 77
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_SpecialThanks
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 276
+        width: 590
+        height: 78
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Text_Agnese
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 187
+        width: 524
+        height: 74
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
