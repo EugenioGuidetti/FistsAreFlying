@@ -14,6 +14,8 @@ public class TGameLogic : MonoBehaviour {
 	private bool choosePhase = false;
 	private bool endPhase = false;
 
+	public AudioClip winJingle;
+	public AudioClip looseJingle;
 	public GameObject matchLoop;
 	public GameObject animationLogic;
 	public GameObject pauseGUI;
@@ -43,7 +45,7 @@ public class TGameLogic : MonoBehaviour {
 	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
-	private const int healthTotal = 15;
+	private const int healthTotal = 2;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 	
@@ -483,12 +485,43 @@ public class TGameLogic : MonoBehaviour {
 		StopCoroutine("EndTurnChecks");
 		if (player1WinnedRounds > player2WinnedRounds) {
 			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p1WinMatch");
+			if (onlineMatch) {
+				if (amIPlayer1) {
+					matchLoop.GetComponent<AudioSource>().Stop();
+					matchLoop.GetComponent<AudioSource>().clip = winJingle;
+					matchLoop.GetComponent<AudioSource>().Play();
+				} else {
+					matchLoop.GetComponent<AudioSource>().Stop();
+					matchLoop.GetComponent<AudioSource>().clip = looseJingle;
+					matchLoop.GetComponent<AudioSource>().Play();
+				}
+			}
+			matchLoop.GetComponent<AudioSource>().Stop();
+			matchLoop.GetComponent<AudioSource>().clip = winJingle;
+			matchLoop.GetComponent<AudioSource>().Play();
 		} else if (player2WinnedRounds > player1WinnedRounds) {
 			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p2WinMatch");
+			if (onlineMatch) {
+				if (!amIPlayer1) {
+					matchLoop.GetComponent<AudioSource>().Stop();
+					matchLoop.GetComponent<AudioSource>().clip = winJingle;
+					matchLoop.GetComponent<AudioSource>().Play();
+				} else {
+					matchLoop.GetComponent<AudioSource>().Stop();
+					matchLoop.GetComponent<AudioSource>().clip = looseJingle;
+					matchLoop.GetComponent<AudioSource>().Play();
+				}
+			}
+			matchLoop.GetComponent<AudioSource>().Stop();
+			matchLoop.GetComponent<AudioSource>().clip = winJingle;
+			matchLoop.GetComponent<AudioSource>().Play();
 		} else {
 			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("matchDraw");
+			matchLoop.GetComponent<AudioSource>().Stop();
+			matchLoop.GetComponent<AudioSource>().clip = looseJingle;
+			matchLoop.GetComponent<AudioSource>().Play();
 		}
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(4f);
 		mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
 		Application.LoadLevel("MainMenu");
 	}
