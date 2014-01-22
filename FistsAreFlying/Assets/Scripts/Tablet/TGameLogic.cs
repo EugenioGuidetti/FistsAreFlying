@@ -73,10 +73,10 @@ public class TGameLogic : MonoBehaviour {
 			if (amIPlayer1) {
 				defenseGame.GetComponent<DefenseLogic>().SetPlayer1();
 				player1.GetComponent<TPlayer>().SetOnline();
-				player2.GetComponent<TPlayer>().PutInHidePosition(amIPlayer1);
+				player2.GetComponent<TPlayer>().PutInHidePosition(false);
 			} else {
 				player2.GetComponent<TPlayer>().SetOnline();
-				player1.GetComponent<TPlayer>().PutInHidePosition(amIPlayer1);
+				player1.GetComponent<TPlayer>().PutInHidePosition(true);
 			}
 		} else {
 			player1.GetComponent<TPlayer>().PutInHidePosition(true);
@@ -255,7 +255,7 @@ public class TGameLogic : MonoBehaviour {
 				player2Selected = true;
 				StopCoroutine("TurnCountdownPlayer2");
 				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
-				player2.GetComponent<TPlayer>().PutInHidePosition(true);
+				player2.GetComponent<TPlayer>().PutInHidePosition(false);
 				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
 			}
 		}
@@ -454,6 +454,11 @@ public class TGameLogic : MonoBehaviour {
 		}
 		choosePhase = true;
 		if (onlineMatch) {
+			if (amIPlayer1) {
+				player1.GetComponent<TPlayer>().PutInShowPosition();
+			} else {
+				player2.GetComponent<TPlayer>().PutInShowPosition();
+			}
 			networkView.RPC("ComunicateReady", RPCMode.Others);
 		}
 	}

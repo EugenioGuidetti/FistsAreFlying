@@ -16,7 +16,7 @@ public class MenuEffectGroup : MonoBehaviour {
 			checkOn.SetActive(true);
 		}
 		else {
-			checkOff.SetActive(false);
+			checkOff.SetActive(true);
 		}
 	}
 	
