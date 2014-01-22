@@ -41,6 +41,10 @@ public class ConflictMessagesGUI : MonoBehaviour {
 			this.GetComponent<SpriteRenderer>().sprite = tap;
 			return;
 		}
+		if (message == "") {
+			this.GetComponent<SpriteRenderer>().sprite = null;
+			return;
+		}
 	}
 
 }

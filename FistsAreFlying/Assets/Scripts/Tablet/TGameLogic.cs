@@ -43,7 +43,7 @@ public class TGameLogic : MonoBehaviour {
 	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
-	private const int healthTotal = 2;
+	private const int healthTotal = 15;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 	
@@ -226,6 +226,7 @@ public class TGameLogic : MonoBehaviour {
 				player1Selected = true;
 				StopCoroutine("TurnCountdownPlayer1");
 				player1Move = player1.GetComponent<TPlayer>().GetSelectedMove();
+				player1.GetComponent<TPlayer>().PutInHidePosition(true);
 				networkView.RPC("Player1Decision", RPCMode.Others, player1Move);
 			}
 		}
@@ -254,6 +255,7 @@ public class TGameLogic : MonoBehaviour {
 				player2Selected = true;
 				StopCoroutine("TurnCountdownPlayer2");
 				player2Move = player2.GetComponent<TPlayer>().GetSelectedMove();
+				player2.GetComponent<TPlayer>().PutInHidePosition(true);
 				networkView.RPC("Player2Decision", RPCMode.Server, player2Move);
 			}
 		}

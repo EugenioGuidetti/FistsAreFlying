@@ -35,7 +35,7 @@ public class MainMessagesGUI : MonoBehaviour {
 			this.GetComponent<SpriteRenderer>().sprite = p2WinRound;
 			return;
 		}
-		if (message.Equals("roundDrow")) {
+		if (message.Equals("roundDraw")) {
 			this.GetComponent<SpriteRenderer>().sprite = roundDraw;
 			return;
 		}
