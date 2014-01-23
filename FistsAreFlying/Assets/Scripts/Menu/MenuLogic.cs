@@ -14,6 +14,7 @@ public class MenuLogic : MonoBehaviour {
 	public GameObject onlineGroup;
 	public GameObject createMatchGroup;
 	public GameObject searchMatchGroup;
+	public GameObject creditsGroup;
 
 	private GameObject actualGroup;
 	private GameObject previousGroup;
@@ -58,11 +59,9 @@ public class MenuLogic : MonoBehaviour {
 			ManageOptions();
 			return;
 		}
-		/*
 		if (actualGroup.Equals(creditsGroup)) {
-			//gestione return
+			ManageCredits();
 		}
-		*/
 	}
 
 	private void ManageMain () {
@@ -79,11 +78,9 @@ public class MenuLogic : MonoBehaviour {
 			if (lastSelection.Equals("options")) {
 				actualGroup = optionsGroup;
 			}
-			/*
 			if (lastSelection.Equals("credits")) {
 				actualGroup = creditsGroup;
 			}
-			*/
 			previousGroup.SetActive(false);
 			actualGroup.SetActive(true);
 			back.SetActive(true);
@@ -196,4 +193,14 @@ public class MenuLogic : MonoBehaviour {
 			actualGroup = previousGroup;
 		}
 	}
+
+	private void ManageCredits () {
+		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
+			actualGroup.SetActive(false);
+			back.SetActive(false);
+			previousGroup.SetActive(true);
+			actualGroup = previousGroup;
+		}
+	}
+	                      
 }
