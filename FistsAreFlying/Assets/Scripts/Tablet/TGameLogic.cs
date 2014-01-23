@@ -16,6 +16,8 @@ public class TGameLogic : MonoBehaviour {
 
 	public AudioClip winJingle;
 	public AudioClip looseJingle;
+	public AudioClip drawJingle;
+
 	public GameObject matchLoop;
 	public GameObject animationLogic;
 	public GameObject pauseGUI;
@@ -520,7 +522,7 @@ public class TGameLogic : MonoBehaviour {
 		} else {
 			mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("matchDraw");
 			matchLoop.GetComponent<AudioSource>().Stop();
-			matchLoop.GetComponent<AudioSource>().clip = looseJingle;
+			matchLoop.GetComponent<AudioSource>().clip = drawJingle;
 			matchLoop.GetComponent<AudioSource>().Play();
 		}
 		yield return new WaitForSeconds(4f);
