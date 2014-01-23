@@ -233,7 +233,7 @@ public class MenuLogic : MonoBehaviour {
 	}
 
 	void OnMasterServerEvent (MasterServerEvent msEvent) {
-		if (msEvent == MasterServerEvent.HostListReceived) {
+		if (msEvent == MasterServerEvent.HostListReceived && !Network.isServer) {
 			hostList = MasterServer.PollHostList();
 			if (hostList.Length > 0) {
 				networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
