@@ -80,7 +80,7 @@ public class NetworkManager : MonoBehaviour {
 		if (Network.isClient && inGame) {
 			gameLogic.SetActive(false);
 			connectionEnded = true;
-			forcedPause.GetComponent<Transform>().position = Camera.main.GetComponent<Transform>().position;
+			forcedPause.GetComponent<Transform>().position = new Vector3(Camera.main.GetComponent<Transform>().position.x, Camera.main.GetComponent<Transform>().position.y, 0);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class NetworkManager : MonoBehaviour {
 		if (inGame) {
 			gameLogic.SetActive(false);
 			connectionEnded = true;
-			forcedPause.GetComponent<Transform>().position = Camera.main.GetComponent<Transform>().position;
+			forcedPause.GetComponent<Transform>().position = new Vector3(Camera.main.GetComponent<Transform>().position.x, Camera.main.GetComponent<Transform>().position.y, 0);
 		}
 	}
 	
