@@ -16,6 +16,15 @@ public class MenuLogic : MonoBehaviour {
 	public GameObject searchMatchGroup;
 	public GameObject creditsGroup;
 
+	public GameObject opponentWaitingText;
+	public GameObject matchCreationFailedText;
+	public GameObject connectingText;
+	public GameObject noHostText;
+	public GameObject connectionFailedText;
+
+	private bool masterServerError = false;
+	private HostData[] hostList = null;
+
 	private GameObject actualGroup;
 	private GameObject previousGroup;
 	private string lastSelection;
@@ -99,17 +108,12 @@ public class MenuLogic : MonoBehaviour {
 				}
 				Application.LoadLevel("TGame");
 			} else {
-				string roomName = "room ";
+				string roomName = "";
 				networkManager.GetComponent<NetworkManager>().RefreshHostList();
-				if (networkManager.GetComponent<NetworkManager>().GetHostList() != null) {
-					roomName = roomName + (networkManager.GetComponent<NetworkManager>().GetHostList().Length + 1).ToString() + ": ";
-				} else {
-					roomName = roomName + "1: ";
-				}
 				if (lastSelection.Equals("timePlay")) {
 					global.GetComponent<Global>().SetTimeGame(true);
 					global.GetComponent<Global>().SetOnlineTime(global.GetComponent<Global>().GetTime());
-					roomName = roomName + "Time Play " + global.GetComponent<Global>().GetTime().ToString() + "s";
+					roomName = roomName + "Time Play: " + global.GetComponent<Global>().GetTime().ToString();
 				}
 				if (lastSelection.Equals("standardPlay")) {
 					roomName = roomName + "Standard Play";
@@ -117,10 +121,12 @@ public class MenuLogic : MonoBehaviour {
 				actualGroup = createMatchGroup;
 				previousGroup.SetActive(false);
 				networkManager.GetComponent<NetworkManager>().StartServer(roomName);
+				opponentWaitingText.SetActive(true);
 				actualGroup.SetActive(true);
 			}
 		} else if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			if (global.GetComponent<Global>().GetOnlineGame()) {
+				networkManager.GetComponent<NetworkManager>().Unregister();
 				global.GetComponent<Global>().SetAmIPlayer1(false);
 				actualGroup.SetActive(false);
 				actualGroup = onlineGroup;
@@ -147,15 +153,10 @@ public class MenuLogic : MonoBehaviour {
 				actualGroup.SetActive(true);
 			}
 			if (lastSelection.Equals("searchMatch")) {
-				HostData[] hostList;
 				actualGroup = searchMatchGroup;
 				previousGroup.SetActive(false);
 				networkManager.GetComponent<NetworkManager>().RefreshHostList();
-				hostList = networkManager.GetComponent<NetworkManager>().GetHostList();
-				if (hostList != null) {					
-					networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
-					//qui vanno creati i bottoni per scegliere l'host a cui collegarsi
-				}
+				connectingText.SetActive(true);
 				actualGroup.SetActive(true);
 			}
 		} else if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
@@ -168,8 +169,14 @@ public class MenuLogic : MonoBehaviour {
 	}
 
 	private void ManageCreateGroup () {
+		if (masterServerError) {
+			opponentWaitingText.SetActive(false);
+			matchCreationFailedText.SetActive(true);
+			masterServerError = false;
+		}
 		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			MasterServer.UnregisterHost();
+			Network.Disconnect();
 			global.GetComponent<Global>().SetTimeGame(false);
 			actualGroup.SetActive(false);
 			previousGroup.SetActive(true);
@@ -178,8 +185,19 @@ public class MenuLogic : MonoBehaviour {
 	}
 
 	private void ManageSearchGroup () {
+		if (hostList != null) {
+			if (hostList.Length > 0) {
+				networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
+			} else {
+				connectingText.SetActive(false);
+				noHostText.SetActive(true);
+			}
+		}
 		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
-			actualGroup.SetActive(false);
+			actualGroup.SetActive(false);			
+			connectingText.SetActive(false);
+			noHostText.SetActive(false);
+			connectionFailedText.SetActive(false);
 			previousGroup.SetActive(true);
 			actualGroup = previousGroup;
 		}
@@ -200,6 +218,27 @@ public class MenuLogic : MonoBehaviour {
 			back.SetActive(false);
 			previousGroup.SetActive(true);
 			actualGroup = previousGroup;
+		}
+	}
+
+	void OnFailedToConnect () {
+		connectingText.SetActive(false);
+		connectionFailedText.SetActive(true);
+	}
+
+	void OnFailedToConnectToMasterServer () {
+		if (Network.isServer) {
+			masterServerError = true;
+		} else {
+			connectingText.SetActive(false);
+			noHostText.SetActive(true);
+			return;
+		}
+	}
+
+	void OnMasterServerEvent (MasterServerEvent msEvent) {
+		if (msEvent == MasterServerEvent.HostListReceived) {
+			hostList = MasterServer.PollHostList();
 		}
 	}
 	                      

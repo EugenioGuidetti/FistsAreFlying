@@ -255,12 +255,12 @@ TextureImporter:
     - name: Text_MatchCreationFailed
       rect:
         serializedVersion: 2
-        x: 5
+        x: 7
         y: 357
         width: 852
         height: 77
-      alignment: 4
-      pivot: {x: 0, y: .5}
+      alignment: 0
+      pivot: {x: .5, y: .5}
     - name: Text_SpecialThanks
       rect:
         serializedVersion: 2

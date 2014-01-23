@@ -163,6 +163,7 @@ public class TGameLogic : MonoBehaviour {
 	
 	private void pauseCheckOnline () {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Network.Disconnect();
 			Application.LoadLevel("MainMenu");
 		}
 	}
@@ -527,6 +528,9 @@ public class TGameLogic : MonoBehaviour {
 		}
 		yield return new WaitForSeconds(4f);
 		mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
+		if (onlineMatch) {
+			Network.Disconnect();
+		}
 		Application.LoadLevel("MainMenu");
 	}
 	
