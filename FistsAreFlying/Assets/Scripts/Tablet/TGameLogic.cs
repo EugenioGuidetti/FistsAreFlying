@@ -21,6 +21,7 @@ public class TGameLogic : MonoBehaviour {
 	public GameObject matchLoop;
 	public GameObject animationLogic;
 	public GameObject pauseGUI;
+	public GameObject forcedPause;
 	public GameObject defenseGame;
 	public GameObject defenseResult;
 	public GameObject conflictGame;
@@ -130,6 +131,9 @@ public class TGameLogic : MonoBehaviour {
 			pauseCheck();
 		} else {
 			pauseCheckOnline();
+			if (forcedPause.activeSelf) {
+				ForcedPauseCheck();
+			}
 		}
 		if (choosePhase) {
 			if (!onlineMatch) {
@@ -163,6 +167,13 @@ public class TGameLogic : MonoBehaviour {
 	
 	private void pauseCheckOnline () {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Network.Disconnect();
+			Application.LoadLevel("MainMenu");
+		}
+	}
+
+	private void ForcedPauseCheck () {
+		if (forcedPause.GetComponent<MenuConnectionEndedGroup>().GetQuitSelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			Network.Disconnect();
 			Application.LoadLevel("MainMenu");
 		}
@@ -540,5 +551,15 @@ public class TGameLogic : MonoBehaviour {
 		}
 		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - actualHealth * healthUnit);
 		healthBar.transform.localScale = new Vector3(scaleUnit * actualHealth, healthBar.transform.localScale.y, healthBar.transform.localScale.z);
+	}
+	
+	void OnDisconnectedFromServer () {
+		if (Network.isClient) {
+			forcedPause.SetActive(true);
+		}
+	}
+	
+	void OnPlayerDisconnected () {
+		forcedPause.SetActive(true);
 	}
 }

@@ -4,45 +4,16 @@ using System.Collections;
 public class NetworkManager : MonoBehaviour {
 
 	private GameObject global;
-	private GameObject gameLogic;
-	private GameObject forcedPause;
-	private bool inGame = false;
-	private bool connectionEnded = false;
 
 	private const string gameName = "FistsAreFlying";
-	//se un giocatore crea il match deve avere la possibilità di scegliere gameName
-	//private const string roomName = "";
 
 	// Use this for initialization
 	void Start () {
 		global = GameObject.Find("GlobalObject");
-		GameObject.DontDestroyOnLoad(this);
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (!inGame) {
-			if (Application.loadedLevelName.Equals("TGame")) {
-				inGame = true;
-				gameLogic = GameObject.Find("GameLogic");
-				forcedPause = GameObject.Find("ConnectionEnded");
-			}
-		}
-		if (inGame) {
-			if (Application.loadedLevelName.Equals("MainMenu")) {
-				inGame = false;
-			}
-		}
-		if (connectionEnded) {
-			if (forcedPause.GetComponent<MenuConnectionEndedGroup>().GetQuitSelected() || Input.GetKeyDown(KeyCode.Escape)) {
-				connectionEnded = false;
-				inGame = false;
-				gameLogic = null;
-				forcedPause = null;
-				Application.LoadLevel("MainMenu");
-			}
-		}
-	}
+	void Update () {}
 
 	public void StartServer (string roomName) {
 		Network.InitializeServer(2, 25000, !Network.HavePublicAddress());
@@ -68,7 +39,7 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	void OnPlayerConnected () {
-		Debug.Log("Opponent connected.");
+		Debug.Log("Client connected.");
 		Unregister();
 		if (global.GetComponent<Global>().GetTimeGame()) {
 			networkView.RPC("ComunicateTimeGame", RPCMode.Others);
@@ -79,22 +50,6 @@ public class NetworkManager : MonoBehaviour {
 
 	public void Unregister () {
 		MasterServer.UnregisterHost();
-	}
-
-	void OnDisconnectedFromServer () {
-		if (Network.isClient && inGame) {
-			gameLogic.SetActive(false);
-			connectionEnded = true;
-			forcedPause.GetComponent<Transform>().position = new Vector3(Camera.main.GetComponent<Transform>().position.x, Camera.main.GetComponent<Transform>().position.y, 0);
-		}
-	}
-
-	void OnPlayerDisconnected () {
-		if (inGame) {
-			gameLogic.SetActive(false);
-			connectionEnded = true;
-			forcedPause.GetComponent<Transform>().position = new Vector3(Camera.main.GetComponent<Transform>().position.x, Camera.main.GetComponent<Transform>().position.y, 0);
-		}
 	}
 	
 	
