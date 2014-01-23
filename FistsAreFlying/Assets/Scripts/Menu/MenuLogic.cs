@@ -4,7 +4,7 @@ using System.Collections;
 public class MenuLogic : MonoBehaviour {
 
 	private GameObject global;
-	public GameObject networkManager;
+	private GameObject networkManager;
 
 	public GameObject menuLoop;
 	public GameObject back;
@@ -32,6 +32,7 @@ public class MenuLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		global = GameObject.Find("GlobalObject");
+		networkManager = GameObject.Find("NetworkManager");
 		global.GetComponent<Global>().SetOnlineGame(false);
 		global.GetComponent<Global>().SetAmIPlayer1(false);
 		global.GetComponent<Global>().SetTimeGame(false);
