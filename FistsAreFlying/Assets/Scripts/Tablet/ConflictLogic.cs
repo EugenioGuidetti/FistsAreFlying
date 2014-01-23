@@ -134,20 +134,41 @@ public class ConflictLogic : MonoBehaviour {
 	}
 
 	private void OnlineApplyRules () {
-		if (!isLegal) {
+		if (player1Time < randomRange && player2Time < randomRange) {
 			if (player1Time < player2Time) {
 				result.GetComponent<ConflictResult>().SetResult("player2");
-				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Dirty");			
+				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Dirty");
+				StartCoroutine("ConflictEnd");
+				return;
 			} else {
 				result.GetComponent<ConflictResult>().SetResult("player1");
 				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Dirty");
+				StartCoroutine("ConflictEnd");
+				return;
 			}
-		} else if (player1Time <= legalTime || player1Time > player2Time + drawOffset) {
+		}
+		if (player1Time < randomRange) {
+			result.GetComponent<ConflictResult>().SetResult("player2");
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Dirty");
+			StartCoroutine("ConflictEnd");
+			return;
+		}
+		if (player2Time < randomRange) {
+			result.GetComponent<ConflictResult>().SetResult("player1");
+			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Dirty");
+			StartCoroutine("ConflictEnd");
+			return;
+		}
+		if (player1Time > player2Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");
-		} else if (player2Time <= legalTime || player2Time > player1Time + drawOffset) {
+			StartCoroutine("ConflictEnd");
+			return;
+		} else if (player2Time > player1Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player1");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
+			StartCoroutine("ConflictEnd");
+			return;
 		} else {
 			result.GetComponent<ConflictResult>().SetResult("draw");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("sameTime");
@@ -193,7 +214,7 @@ public class ConflictLogic : MonoBehaviour {
 	private IEnumerator Countdown () {
 		startTime = Time.time;
 		yield return new WaitForSeconds(randomRange);
-		legalTime = Time.time - startTime;
+		//legalTime = Time.time - startTime;
 		isLegal = true;
 		conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("tap");
 	}
