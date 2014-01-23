@@ -235,12 +235,12 @@ public class MenuLogic : MonoBehaviour {
 	void OnMasterServerEvent (MasterServerEvent msEvent) {
 		if (msEvent == MasterServerEvent.HostListReceived) {
 			hostList = MasterServer.PollHostList();
-		}
-		if (hostList.Length > 0) {
-			networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
-		} else {
-			connectingText.SetActive(false);
-			noHostText.SetActive(true);
+			if (hostList.Length > 0) {
+				networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
+			} else {
+				connectingText.SetActive(false);
+				noHostText.SetActive(true);
+			}
 		}
 	}
 	                      
