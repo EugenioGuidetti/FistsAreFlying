@@ -28,6 +28,11 @@ public class NetworkManager : MonoBehaviour {
 				forcedPause = GameObject.Find("ConnectionEnded");
 			}
 		}
+		if (inGame) {
+			if (Application.loadedLevelName.Equals("MainMenu")) {
+				inGame = false;
+			}
+		}
 		if (connectionEnded) {
 			if (forcedPause.GetComponent<MenuConnectionEndedGroup>().GetQuitSelected() || Input.GetKeyDown(KeyCode.Escape)) {
 				connectionEnded = false;
