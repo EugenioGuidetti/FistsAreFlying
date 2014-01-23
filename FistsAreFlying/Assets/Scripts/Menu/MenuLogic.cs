@@ -188,14 +188,6 @@ public class MenuLogic : MonoBehaviour {
 	}
 
 	private void ManageSearchGroup () {
-		if (hostList != null) {
-			if (hostList.Length > 0) {
-				networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
-			} else {
-				connectingText.SetActive(false);
-				noHostText.SetActive(true);
-			}
-		}
 		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
 			actualGroup.SetActive(false);			
 			connectingText.SetActive(false);
@@ -241,8 +233,16 @@ public class MenuLogic : MonoBehaviour {
 	}
 
 	void OnMasterServerEvent (MasterServerEvent msEvent) {
-		if (msEvent == MasterServerEvent.HostListReceived) {
-			hostList = MasterServer.PollHostList();
+		if (Network.isClient) {
+			if (msEvent == MasterServerEvent.HostListReceived) {
+				hostList = MasterServer.PollHostList();
+			}
+			if (hostList.Length > 0) {
+				networkManager.GetComponent<NetworkManager>().JoinServer(hostList[0]);
+			} else {
+				connectingText.SetActive(false);
+				noHostText.SetActive(true);
+			}
 		}
 	}
 	                      
