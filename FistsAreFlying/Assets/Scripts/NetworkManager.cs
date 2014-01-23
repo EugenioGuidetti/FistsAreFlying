@@ -49,11 +49,7 @@ public class NetworkManager : MonoBehaviour {
 
 	void OnConnectedToServer () {
 		Debug.Log("Server joined.");
-		if (global.GetComponent<Global>().GetTablet()) {
-			Application.LoadLevel("TGame");
-		} else {
-			Application.LoadLevel("SGame");
-		}
+		Application.LoadLevel("TGame");
 	}
 
 	void OnPlayerConnected () {
@@ -63,11 +59,7 @@ public class NetworkManager : MonoBehaviour {
 			networkView.RPC("ComunicateTimeGame", RPCMode.Others);
 			networkView.RPC("ComunicateTime", RPCMode.Others, global.GetComponent<Global>().GetTime());
 		}
-		if (global.GetComponent<Global>().GetTablet()) {
-			Application.LoadLevel("TGame");
-		} else {
-			Application.LoadLevel("SGame");
-		}
+		Application.LoadLevel("TGame");
 	}
 	
 	

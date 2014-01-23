@@ -100,11 +100,7 @@ public class MenuLogic : MonoBehaviour {
 				if (lastSelection.Equals("timePlay")) {
 					global.GetComponent<Global>().SetTimeGame(true);
 				}
-				if (global.GetComponent<Global>().GetTablet()){
-					Application.LoadLevel("TGame");
-				} else {
-					Application.LoadLevel("SGame");
-				}
+				Application.LoadLevel("TGame");
 			} else {
 				string roomName = "room ";
 				networkManager.GetComponent<NetworkManager>().RefreshHostList();
