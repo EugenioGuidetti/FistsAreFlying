@@ -417,10 +417,12 @@ public class TGameLogic : MonoBehaviour {
 			winRoundsGUI.GetComponent<WinRoundsGUI>().SetRoundPlayers ( player1WinnedRounds, player2WinnedRounds);
 			if (round == 3) {
 				StartCoroutine("EndMatch");
+				yield return null;
 			} 
 			if (round == 2) {
 				if ((player1WinnedRounds == 2 && player2WinnedRounds == 0) || (player1WinnedRounds == 0 && player2WinnedRounds == 2)) {
 					StartCoroutine("EndMatch");
+					yield return null;
 				} else {
 					NewRound();
 					yield return new WaitForSeconds (4f);
