@@ -77,17 +77,19 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	void OnDisconnectedFromServer () {
-		if (Network.isClient) {
+		if (Network.isClient && inGame) {
 			gameLogic.SetActive(false);
 			connectionEnded = true;
-			forcedPause.SetActive(true);
+			forcedPause.GetComponent<Transform>().position = Camera.main.GetComponent<Transform>().position;
 		}
 	}
 
-	void OnPlayerDisconnected () {		
-		gameLogic.SetActive(false);
-		connectionEnded = true;
-		forcedPause.SetActive(true);
+	void OnPlayerDisconnected () {
+		if (inGame) {
+			gameLogic.SetActive(false);
+			connectionEnded = true;
+			forcedPause.GetComponent<Transform>().position = Camera.main.GetComponent<Transform>().position;
+		}
 	}
 	
 	

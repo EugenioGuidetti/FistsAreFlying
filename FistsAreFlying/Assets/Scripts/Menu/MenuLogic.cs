@@ -180,6 +180,8 @@ public class MenuLogic : MonoBehaviour {
 			Network.Disconnect();
 			global.GetComponent<Global>().SetTimeGame(false);
 			actualGroup.SetActive(false);
+			opponentWaitingText.SetActive(false);
+			matchCreationFailedText.SetActive(false);
 			previousGroup.SetActive(true);
 			actualGroup = previousGroup;
 		}
