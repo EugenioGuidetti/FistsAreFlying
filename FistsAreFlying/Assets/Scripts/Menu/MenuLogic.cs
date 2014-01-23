@@ -199,6 +199,7 @@ public class MenuLogic : MonoBehaviour {
 			connectingText.SetActive(false);
 			noHostText.SetActive(false);
 			connectionFailedText.SetActive(false);
+			hostList = null;
 			previousGroup.SetActive(true);
 			actualGroup = previousGroup;
 		}

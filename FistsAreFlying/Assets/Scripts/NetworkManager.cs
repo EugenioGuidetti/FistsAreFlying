@@ -77,9 +77,11 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	void OnDisconnectedFromServer () {
-		gameLogic.SetActive(false);
-		connectionEnded = true;
-		forcedPause.SetActive(true);
+		if (Network.isClient) {
+			gameLogic.SetActive(false);
+			connectionEnded = true;
+			forcedPause.SetActive(true);
+		}
 	}
 
 	void OnPlayerDisconnected () {		
