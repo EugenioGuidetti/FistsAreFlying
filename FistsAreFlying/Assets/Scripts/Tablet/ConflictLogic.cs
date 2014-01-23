@@ -19,9 +19,7 @@ public class ConflictLogic : MonoBehaviour {
 	private float player1Time = 0f;
 	private float player2Time = 0f;
 	private float startTime = 0f;
-	private float legalTime = 0f;
 	private Vector3 touchPosition = Vector3.zero;
-	private 
 
 	// Use this for initialization
 	void Start () {}
@@ -214,7 +212,6 @@ public class ConflictLogic : MonoBehaviour {
 	private IEnumerator Countdown () {
 		startTime = Time.time;
 		yield return new WaitForSeconds(randomRange);
-		//legalTime = Time.time - startTime;
 		isLegal = true;
 		conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("tap");
 	}
