@@ -48,7 +48,7 @@ public class TGameLogic : MonoBehaviour {
 	private int player2Health;
 	private float healthUnit;
 	private float scaleUnit;
-	private const int healthTotal = 2;
+	private const int healthTotal = 13;
 	private int player1WinnedRounds;
 	private int player2WinnedRounds;
 	
