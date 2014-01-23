@@ -137,10 +137,10 @@ public class ConflictLogic : MonoBehaviour {
 		if (!isLegal) {
 			if (player1Time < player2Time) {
 				result.GetComponent<ConflictResult>().SetResult("player2");
-				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");			
+				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Dirty");			
 			} else {
 				result.GetComponent<ConflictResult>().SetResult("player1");
-				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
+				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Dirty");
 			}
 		} else if (player1Time <= legalTime || player1Time > player2Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
