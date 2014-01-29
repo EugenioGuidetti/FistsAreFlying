@@ -191,7 +191,7 @@ public class TGameLogic : MonoBehaviour {
 		if (!player1Selected) {
 			if(!tapPlayer1){
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf) {
-					Vector3 touch = main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 10));
+					Vector3 touch = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 10));
 					if (touch.x >= -3.5 && touch.x <= 3.5 && touch.y >= -3.5) {
 						tapPlayer1=true;
 						player1.GetComponent<TPlayer>().PutInShowPosition();
