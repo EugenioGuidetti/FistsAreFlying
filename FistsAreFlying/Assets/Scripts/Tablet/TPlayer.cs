@@ -27,7 +27,7 @@ public class TPlayer : MonoBehaviour {
 	private Vector3 hidePosition2 = new Vector3(10, 0, 0);
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		ResetMoves();
 		notYetUsedMoves.Add(emptyMove);
 	}

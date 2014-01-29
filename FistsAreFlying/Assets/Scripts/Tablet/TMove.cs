@@ -13,7 +13,7 @@ public class TMove : MonoBehaviour {
 	private Vector3 touchCoordinates;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		position = new Vector2(transform.position.x, transform.position.y);
 		offset = new Vector2(0.5f, 0.5f);
 		mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();

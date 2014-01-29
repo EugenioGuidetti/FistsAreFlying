@@ -211,12 +211,15 @@ public class TGameLogic : MonoBehaviour {
 		} else {
 			if (!tapPlayer2) {
 				if(Input.touches.Length == 1 && Input.GetTouch(0).phase == TouchPhase.Began && !pauseGUI.activeSelf) {
-					tapPlayer2=true;
-					player2.GetComponent<TPlayer>().PutInShowPosition();
-					mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
-					if (timeMatch){
-						countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(time);
-						StartCoroutine("TurnCountdownPlayer2");
+					Vector3 touch = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 10));
+					if (touch.x >= -3.5 && touch.x <= 3.5 && touch.y >= -3.5){
+						tapPlayer2=true;
+						player2.GetComponent<TPlayer>().PutInShowPosition();
+						mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
+						if (timeMatch){
+							countDownPlayer2GUI.GetComponent<CountDownGUI>().SetSprite(time);
+							StartCoroutine("TurnCountdownPlayer2");
+						}
 					}
 				}
 			} else if (!player2Selected) {
