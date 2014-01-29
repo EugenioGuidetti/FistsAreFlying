@@ -1,0 +1,589 @@
+fileFormatVersion: 2
+guid: 4fca1e073a6ed6a4c9ab04f44db1c2bb
+TextureImporter:
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -2
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 1
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings:
+  - buildTarget: iPhone
+    maxTextureSize: 1024
+    textureFormat: -2
+    compressionQuality: 50
+  spriteSheet:
+    sprites:
+    - name: MenteZero_LogoBig
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 227
+        width: 800
+        height: 800
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: FistsAreFlying_Icon
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 31
+        width: 144
+        height: 144
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: PunchRight
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: PunchRight_Used
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: PunchLeft
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: PunchLeft_Used
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: KickRight
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: KickRight_Used
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: KickLeft
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: KickLeft_Used
+      rect:
+        serializedVersion: 2
+        x: 850
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Defense
+      rect:
+        serializedVersion: 2
+        x: 970
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Defense_Used
+      rect:
+        serializedVersion: 2
+        x: 1090
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: EmptyMove
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: CoveredMove
+      rect:
+        serializedVersion: 2
+        x: 1330
+        y: 1938
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AdvantageUp
+      rect:
+        serializedVersion: 2
+        x: 1447
+        y: 1939
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AdvantageRight
+      rect:
+        serializedVersion: 2
+        x: 1569
+        y: 1941
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AdvantageLeft
+      rect:
+        serializedVersion: 2
+        x: 1689
+        y: 1941
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: AdvantageDown
+      rect:
+        serializedVersion: 2
+        x: 1807
+        y: 1939
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 0
+      rect:
+        serializedVersion: 2
+        x: 1980
+        y: 1971
+        width: 49
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: LifeBar
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 1576
+        width: 1600
+        height: 350
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: RoundP1
+      rect:
+        serializedVersion: 2
+        x: 1626
+        y: 1849
+        width: 60
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: RoundP1_Wins
+      rect:
+        serializedVersion: 2
+        x: 1700
+        y: 1849
+        width: 60
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: RoundP2
+      rect:
+        serializedVersion: 2
+        x: 1774
+        y: 1849
+        width: 60
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: RoundP2_Wins
+      rect:
+        serializedVersion: 2
+        x: 1850
+        y: 1849
+        width: 60
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 1
+      rect:
+        serializedVersion: 2
+        x: 1985
+        y: 1889
+        width: 39
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 2
+      rect:
+        serializedVersion: 2
+        x: 1977
+        y: 1806
+        width: 57
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 3
+      rect:
+        serializedVersion: 2
+        x: 1974
+        y: 1722
+        width: 63
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 4
+      rect:
+        serializedVersion: 2
+        x: 1973
+        y: 1639
+        width: 62
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 5
+      rect:
+        serializedVersion: 2
+        x: 1976
+        y: 1556
+        width: 59
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: HealthBar_P1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 1494
+        width: 550
+        height: 55
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: HealthBar_P2
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 1494
+        width: 550
+        height: 55
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 6
+      rect:
+        serializedVersion: 2
+        x: 1980
+        y: 1473
+        width: 47
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Player1Turn
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1395
+        width: 601
+        height: 81
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Barman1
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 1057
+        width: 225
+        height: 392
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Barman2
+      rect:
+        serializedVersion: 2
+        x: 1391
+        y: 1057
+        width: 225
+        height: 392
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Barman3
+      rect:
+        serializedVersion: 2
+        x: 1641
+        y: 1057
+        width: 225
+        height: 392
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 7
+      rect:
+        serializedVersion: 2
+        x: 1971
+        y: 1388
+        width: 69
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: Player2Turn
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1313
+        width: 616
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 8
+      rect:
+        serializedVersion: 2
+        x: 1977
+        y: 1308
+        width: 55
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P1WinsRound
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1231
+        width: 1061
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 9
+      rect:
+        serializedVersion: 2
+        x: 1979
+        y: 1223
+        width: 53
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P2WinsRound
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1150
+        width: 1076
+        height: 81
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 10
+      rect:
+        serializedVersion: 2
+        x: 1965
+        y: 1141
+        width: 79
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: RoundDraw
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1068
+        width: 541
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 11
+      rect:
+        serializedVersion: 2
+        x: 1970
+        y: 1058
+        width: 69
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P1WinsMatch
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 980
+        width: 1046
+        height: 88
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 12
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 975
+        width: 86
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P2WinsMatch
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 897
+        width: 1061
+        height: 83
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 13
+      rect:
+        serializedVersion: 2
+        x: 1963
+        y: 892
+        width: 85
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: MatchDraw
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 816
+        width: 527
+        height: 81
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 14
+      rect:
+        serializedVersion: 2
+        x: 1960
+        y: 809
+        width: 88
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P1Frozen
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 735
+        width: 875
+        height: 81
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: 15
+      rect:
+        serializedVersion: 2
+        x: 1962
+        y: 726
+        width: 86
+        height: 70
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P2Frozen
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 650
+        width: 891
+        height: 85
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: TapNow
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 572
+        width: 363
+        height: 78
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P1PlaysDirty
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 482
+        width: 935
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P2PlaysDirty
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 401
+        width: 950
+        height: 81
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P1HitsFaster
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 319
+        width: 943
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: P2HitsFaster
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 237
+        width: 957
+        height: 82
+      alignment: 0
+      pivot: {x: .5, y: .5}
+    - name: SameTime
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 156
+        width: 749
+        height: 78
+      alignment: 0
+      pivot: {x: .5, y: .5}
+  spritePackingTag: 
+  userData: 
