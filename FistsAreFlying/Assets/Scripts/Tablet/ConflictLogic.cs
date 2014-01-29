@@ -42,14 +42,7 @@ public class ConflictLogic : MonoBehaviour {
 			}
 		} else {
 			StopCoroutine("Countdown");
-			OnlineApplyRules();
-			/*
-			if (!global.GetComponent<Global>().GetOnlineGame()) {
-				LocalApplyRules();
-			} else {
-				OnlineApplyRules();
-			}
-			*/
+			ApplyRules();
 		}
 	}
 
@@ -116,23 +109,7 @@ public class ConflictLogic : MonoBehaviour {
 		player2Tapped = true;
 	}
 
-	/*
-	private void LocalApplyRules () {
-		if (player1Time > player2Time + drawOffset) {
-			result.GetComponent<ConflictResult>().SetResult("player2");
-			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");
-		} else if (player1Time + drawOffset < player2Time) {
-			result.GetComponent<ConflictResult>().SetResult("player1");
-			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
-		} else {
-			result.GetComponent<ConflictResult>().SetResult("draw");
-			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("sameTime");
-		}
-		StartCoroutine("ConflictEnd");
-	}
-	*/
-
-	private void OnlineApplyRules () {
+	private void ApplyRules () {
 		if (player1Time < randomRange && player2Time < randomRange) {
 			if (player1Time < player2Time) {
 				result.GetComponent<ConflictResult>().SetResult("player2");
