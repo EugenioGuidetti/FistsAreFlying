@@ -42,11 +42,14 @@ public class ConflictLogic : MonoBehaviour {
 			}
 		} else {
 			StopCoroutine("Countdown");
+			OnlineApplyRules();
+			/*
 			if (!global.GetComponent<Global>().GetOnlineGame()) {
 				LocalApplyRules();
 			} else {
 				OnlineApplyRules();
 			}
+			*/
 		}
 	}
 
@@ -54,25 +57,21 @@ public class ConflictLogic : MonoBehaviour {
 		foreach (Touch touch in Input.touches) {
 			touchPosition = Camera.main.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, 10));
 			if (touchPosition.x < this.transform.position.x && !player1Tapped) {
+				player1Time = Time.time - startTime;
 				player1Tapped = true;
 				player1.GetComponent<PlayerConflict>().ShowMove(player1Move);
-				if (isLegal) {
-					player1Time = Time.time - startTime;
-				} else {
+				if (!isLegal) {
+					player2Time = randomRange + 1;
 					player2Tapped = true;
-					player1Time = 1000;
-					player2Time = 1;
 				}
 			}
 			if (touchPosition.x > this.transform.position.x && !player2Tapped) {
+				player2Time = Time.time - startTime;
 				player2Tapped = true;
 				player2.GetComponent<PlayerConflict>().ShowMove(player2Move);
-				if(isLegal) {
-					player2Time = Time.time - startTime;
-				} else {
+				if(!isLegal) {
+					player1Time = randomRange + 1;
 					player1Tapped = true;
-					player1Time = 1;
-					player2Time = 1000;
 				}
 			}
 		}
@@ -117,6 +116,7 @@ public class ConflictLogic : MonoBehaviour {
 		player2Tapped = true;
 	}
 
+	/*
 	private void LocalApplyRules () {
 		if (player1Time > player2Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
@@ -130,43 +130,29 @@ public class ConflictLogic : MonoBehaviour {
 		}
 		StartCoroutine("ConflictEnd");
 	}
+	*/
 
 	private void OnlineApplyRules () {
 		if (player1Time < randomRange && player2Time < randomRange) {
 			if (player1Time < player2Time) {
 				result.GetComponent<ConflictResult>().SetResult("player2");
 				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Dirty");
-				StartCoroutine("ConflictEnd");
-				return;
 			} else {
 				result.GetComponent<ConflictResult>().SetResult("player1");
 				conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Dirty");
-				StartCoroutine("ConflictEnd");
-				return;
 			}
-		}
-		if (player1Time < randomRange) {
+		} else if (player1Time < randomRange) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Dirty");
-			StartCoroutine("ConflictEnd");
-			return;
-		}
-		if (player2Time < randomRange) {
+		} else if (player2Time < randomRange) {
 			result.GetComponent<ConflictResult>().SetResult("player1");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Dirty");
-			StartCoroutine("ConflictEnd");
-			return;
-		}
-		if (player1Time > player2Time + drawOffset) {
+		} else if (player1Time > player2Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player2");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p2Faster");
-			StartCoroutine("ConflictEnd");
-			return;
 		} else if (player2Time > player1Time + drawOffset) {
 			result.GetComponent<ConflictResult>().SetResult("player1");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("p1Faster");
-			StartCoroutine("ConflictEnd");
-			return;
 		} else {
 			result.GetComponent<ConflictResult>().SetResult("draw");
 			conflictMessagesGUI.GetComponent<ConflictMessagesGUI>().SetSprite("sameTime");
