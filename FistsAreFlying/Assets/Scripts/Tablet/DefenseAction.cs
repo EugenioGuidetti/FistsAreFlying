@@ -10,7 +10,8 @@ public class DefenseAction : MonoBehaviour {
 	private float endTime = 0f;
 	private float totalTime = 0f;
 	private float speed = 0f;
-	private float maxSpeed = 25f;
+	private const float minSpeed = 5f;
+	private const float maxSpeed = 25f;
 	private Vector3 direction = Vector3.zero;
 	private Vector3 startPosition = Vector3.zero;
 	private Vector3 endPosition = Vector3.zero;
@@ -47,7 +48,9 @@ public class DefenseAction : MonoBehaviour {
 					if (speed > maxSpeed) {
 						speed = maxSpeed;
 					}
-					isMoving = true;
+					if (speed > minSpeed) {
+						isMoving = true;
+					}
 				}
 			}
 		} else {
