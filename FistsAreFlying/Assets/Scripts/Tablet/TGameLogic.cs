@@ -426,7 +426,7 @@ public class TGameLogic : MonoBehaviour {
 				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p1WinRound");
 				animationLogic.GetComponent<AnimatorLogic>().EndRound("player2");
 			} else if (player2Health > 0) {
-				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("");
+				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("p2WinRound");
 				animationLogic.GetComponent<AnimatorLogic>().EndRound("player1");
 			} else {
 				mainMessagesGUI.GetComponent<MainMessagesGUI>().SetSprite("roundDraw");
