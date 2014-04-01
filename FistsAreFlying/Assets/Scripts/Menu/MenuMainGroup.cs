@@ -7,6 +7,7 @@ public class MenuMainGroup : MonoBehaviour {
 	public GameObject playOnline;
 	public GameObject options;
 	public GameObject credits;
+	public GameObject hotToPlay;
 
 	private bool haveISelected;
 	private string selectedButton;
@@ -38,7 +39,12 @@ public class MenuMainGroup : MonoBehaviour {
 			if (credits.GetComponent<MenuButton>().GetAmISelected()) {
 				selectedButton = "credits";
 				haveISelected = true;
-			}			
+				return;
+			}
+			if (hotToPlay.GetComponent<MenuButton>().GetAmISelected()) {
+				selectedButton = "howToPlay";
+				haveISelected = true;
+			}
 		}
 	}
 

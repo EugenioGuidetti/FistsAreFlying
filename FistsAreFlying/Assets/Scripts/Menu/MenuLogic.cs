@@ -15,6 +15,8 @@ public class MenuLogic : MonoBehaviour {
 	public GameObject createMatchGroup;
 	public GameObject searchMatchGroup;
 	public GameObject creditsGroup;
+	public GameObject tutorialGroup;
+	public GameObject title;
 
 	public GameObject opponentWaitingText;
 	public GameObject matchCreationFailedText;
@@ -70,6 +72,10 @@ public class MenuLogic : MonoBehaviour {
 		}
 		if (actualGroup.Equals(creditsGroup)) {
 			ManageCredits();
+			return;
+		}
+		if (actualGroup.Equals(tutorialGroup)) {
+			ManageTutorial();
 		}
 	}
 
@@ -89,6 +95,10 @@ public class MenuLogic : MonoBehaviour {
 			}
 			if (lastSelection.Equals("credits")) {
 				actualGroup = creditsGroup;
+			}
+			if (lastSelection.Equals("howToPlay")) {
+				actualGroup = tutorialGroup;
+				title.SetActive(false);
 			}
 			previousGroup.SetActive(false);
 			actualGroup.SetActive(true);
@@ -212,6 +222,17 @@ public class MenuLogic : MonoBehaviour {
 			actualGroup.SetActive(false);
 			back.SetActive(false);
 			previousGroup.SetActive(true);
+			actualGroup = previousGroup;
+		}
+	}
+
+	private void ManageTutorial () {
+		if (back.GetComponent<MenuButton>().GetAmISelected() || Input.GetKeyDown(KeyCode.Escape)) {
+			actualGroup.SetActive(false);
+			back.SetActive(false);
+			previousGroup.SetActive(true);
+			title.SetActive(true);
+			actualGroup.GetComponent<MenuTutorialGroup>().Reset();
 			actualGroup = previousGroup;
 		}
 	}

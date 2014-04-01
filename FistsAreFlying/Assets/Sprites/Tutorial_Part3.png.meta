@@ -52,8 +52,8 @@ TextureImporter:
         y: 1022
         width: 1380
         height: 1026
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 1
+      pivot: {x: 0, y: 1}
     - name: Tutorial_6
       rect:
         serializedVersion: 2
@@ -61,7 +61,7 @@ TextureImporter:
         y: 0
         width: 1380
         height: 990
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 1
+      pivot: {x: 0, y: 1}
   spritePackingTag: 
   userData: 
