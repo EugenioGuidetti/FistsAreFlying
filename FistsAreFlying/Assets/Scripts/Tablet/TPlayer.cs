@@ -25,6 +25,7 @@ public class TPlayer : MonoBehaviour {
 	private Vector3 showPosition = new Vector3(0, 0, 0);
 	private Vector3 hidePosition1 = new Vector3(-10, 0, 0);
 	private Vector3 hidePosition2 = new Vector3(10, 0, 0);
+	private bool notShow = false;
 
 	// Use this for initialization
 	void Awake () {
@@ -181,6 +182,7 @@ public class TPlayer : MonoBehaviour {
 
 	public void SetForcedMove () {
 		forcedMove = true;
+		notShow = true;
 	}
 
 	public string GetSelectedMove () {
@@ -192,12 +194,16 @@ public class TPlayer : MonoBehaviour {
 	}
 	
 	public void PutInShowPosition () {
-		moves.transform.position = showPosition;
-		foreach (GameObject notYetUsedMove in notYetUsedMoves) {
-			notYetUsedMove.GetComponent<TMove>().SetPosition();
-		}
-		foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
-			alreadyUsedMove.GetComponent<TMove>().SetPosition();
+		if (!notShow) {			
+			moves.transform.position = showPosition;
+			foreach (GameObject notYetUsedMove in notYetUsedMoves) {
+				notYetUsedMove.GetComponent<TMove>().SetPosition();
+			}
+			foreach (GameObject alreadyUsedMove in alreadyUsedMoves) {
+				alreadyUsedMove.GetComponent<TMove>().SetPosition();
+			}
+		} else {
+			notShow = false;
 		}
 	}
 	
